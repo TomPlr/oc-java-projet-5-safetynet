@@ -9,14 +9,14 @@ import java.util.List;
 @Repository
 public class ItemRepositoryImpl implements ItemRepository {
 
-	private List<Item> items = List.of(Item.builder()
+	private final List<Item> items = List.of(Item.builder()
 			.id(1)
 			.name("name1")
 			.utility("utility1")
 			.build());
 
 	@Override
-	public List<Item> findAll(){
+	public List<Item> createItems(){
 		return items;
 	}
 }
