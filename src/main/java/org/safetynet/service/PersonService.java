@@ -1,13 +1,17 @@
 package org.safetynet.service;
 
-import org.safetynet.entity.Person;
+import org.safetynet.domain.Person;
+import org.safetynet.entity.PersonEntity;
+import org.safetynet.model.GenericResponseModel;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.List;
 
 @Service
 public interface PersonService {
-	List<Person> findAllPersons() throws IOException;
+	List<PersonEntity> findAll() throws IOException;
+	PersonEntity save(PersonEntity person) throws IOException;
+	GenericResponseModel delete(String firstName, String lastName) throws IOException;
+	Person update(Person person)throws IOException;
 }

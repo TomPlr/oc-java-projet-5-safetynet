@@ -1,25 +1,43 @@
 package org.safetynet.service.impl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import lombok.AllArgsConstructor;
-import org.safetynet.entity.Data;
-import org.safetynet.entity.Person;
+
+import org.safetynet.domain.Person;
+import org.safetynet.entity.PersonEntity;
+import org.safetynet.model.GenericResponseModel;
+import org.safetynet.repository.PersonRepository;
 import org.safetynet.service.PersonService;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
 import java.util.List;
 
 @Service
 @AllArgsConstructor
 public class PersonServiceImpl implements PersonService {
 
-@Override
-public List<Person> findAllPersons() throws IOException {
-	ObjectMapper objectMapper = new ObjectMapper();
-	Data data = objectMapper.readValue(new URL("file:src/main/resources/data.json"), Data.class);
-	return null;
-};
+    private PersonRepository repository;
+
+    @Override
+    public List<PersonEntity> findAll() {
+        return repository.findAll();
+    }
+
+    @Override
+    public PersonEntity save(PersonEntity person) {
+        repository.save(person);
+        return person;
+    }
+
+    @Override
+    public GenericResponseModel delete(String firstName, String lastName) {
+        repository.delete(firstName,lastName);
+        return GenericResponseModel.builder().success(true).details(String.format("%s %s has been successfully deleted !", firstName, lastName)).build();
+    }
+
+    @Override
+    public Person update(Person person) {
+        repository.update(person);
+        return person;
+    }
 }
