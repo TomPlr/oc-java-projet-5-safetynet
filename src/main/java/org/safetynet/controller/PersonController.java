@@ -26,7 +26,7 @@ private final PersonService personService;
 
 	@PostMapping("/person")
 	private ResponseEntity<PersonEntity> createPerson(@Valid @RequestBody PersonEntity person) throws IOException{
-		return new ResponseEntity<>(personService.save(person),HttpStatus.OK);
+		return new ResponseEntity<>(personService.save(person),HttpStatus.CREATED);
 	}
 
 	@DeleteMapping("/person")
