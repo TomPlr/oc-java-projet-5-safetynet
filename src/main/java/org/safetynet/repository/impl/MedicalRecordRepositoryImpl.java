@@ -1,38 +1,47 @@
 package org.safetynet.repository.impl;
 
+import lombok.AllArgsConstructor;
+import org.safetynet.dto.MedicalRecordDto;
 import org.safetynet.entity.MedicalRecordEntity;
+import org.safetynet.mapper.MedicalRecordMapper;
 import org.safetynet.repository.MedicalRecordRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.safetynet.repository.impl.DataLoadJson.MEDICAL_RECORDS_ENTITIES;
 
 @Repository
+@AllArgsConstructor
 public class MedicalRecordRepositoryImpl implements MedicalRecordRepository {
+
+    private final MedicalRecordMapper mapper;
+
     @Override
     public List<MedicalRecordEntity> findAll() {
         return MEDICAL_RECORDS_ENTITIES;
     }
 
     @Override
-    public MedicalRecordEntity save(MedicalRecordEntity medicalRecordEntity) {
+    public MedicalRecordDto save(MedicalRecordEntity medicalRecordEntity) {
         MEDICAL_RECORDS_ENTITIES.add(medicalRecordEntity);
 
-        Optional<MedicalRecordEntity> optionalMedicalRecordEntity = MEDICAL_RECORDS_ENTITIES
+        Optional<MedicalRecordDto> optionalMedicalRecord = MEDICAL_RECORDS_ENTITIES
                 .stream()
                 .filter(medicalRecord -> medicalRecord.equals(medicalRecordEntity))
-                .findFirst();
+                .findFirst()
+                .map(mapper::medicalRecordEntityToDto);
 
-        return optionalMedicalRecordEntity.orElseThrow(() -> new RuntimeException("MedicalRecordEntity not found"));
+        return optionalMedicalRecord.orElseThrow(() -> new NoSuchElementException("MedicalRecordEntity not found"));
     }
 
     @Override
-    public MedicalRecordEntity update(MedicalRecordEntity medicalRecordEntity) {
+    public MedicalRecordDto update(MedicalRecordEntity medicalRecordEntity) {
         Optional<MedicalRecordEntity> optionalMedicalRecordEntity = MEDICAL_RECORDS_ENTITIES
                 .stream()
-                .filter(medicalRecord -> medicalRecord.getFirstName().equals(medicalRecordEntity.getFirstName()) || medicalRecord.getLastName().equals(medicalRecordEntity.getLastName()) )
+                .filter(medicalRecord -> medicalRecord.getFirstName().equals(medicalRecordEntity.getFirstName()) || medicalRecord.getLastName().equals(medicalRecordEntity.getLastName()))
                 .findFirst();
 
         return optionalMedicalRecordEntity
@@ -41,19 +50,16 @@ public class MedicalRecordRepositoryImpl implements MedicalRecordRepository {
                     medicalRecord.setBirthdate(medicalRecordEntity.getBirthdate());
                     medicalRecord.setAllergies(medicalRecordEntity.getAllergies());
 
-                    return medicalRecord;})
-                .orElseThrow(() -> new RuntimeException("MedicalRecordEntity not found"));
+                    return mapper.medicalRecordEntityToDto(medicalRecord);
+                })
+                .orElseThrow(() -> new NoSuchElementException("MedicalRecordEntity not found"));
 
     }
 
     @Override
-    public void delete(String firstName, String lastName) {
-        MEDICAL_RECORDS_ENTITIES
-                .stream()
-                .filter(medicalRecordEntity -> medicalRecordEntity.getFirstName().equals(firstName) || medicalRecordEntity.getLastName().equals(lastName))
-                .findFirst()
-                .ifPresentOrElse(MEDICAL_RECORDS_ENTITIES::remove,
-                        () -> {throw new RuntimeException("MedicalRecordEntity not found");
-                });
+    public boolean delete(String firstName, String lastName) {
+        return MEDICAL_RECORDS_ENTITIES
+                .removeIf(medicalRecord -> medicalRecord.getFirstName().equalsIgnoreCase(firstName) && medicalRecord.getLastName().equalsIgnoreCase(lastName));
+
     }
 }

@@ -1,13 +1,11 @@
-package org.safetynet.domain;
-
+package org.safetynet.dto;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class Person {
-
+public class PersonDto {
     private String firstName;
     private String lastName;
     private String address;
@@ -15,5 +13,4 @@ public class Person {
     private String zip;
     private String phone;
     private String email;
-
 }

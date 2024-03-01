@@ -1,7 +1,9 @@
 package org.safetynet.service.impl;
 
 import lombok.AllArgsConstructor;
+import org.safetynet.dto.MedicalRecordDto;
 import org.safetynet.entity.MedicalRecordEntity;
+import org.safetynet.mapper.MedicalRecordMapper;
 import org.safetynet.model.GenericResponseModel;
 import org.safetynet.repository.MedicalRecordRepository;
 import org.safetynet.service.MedicalRecordService;
@@ -14,7 +16,8 @@ import java.util.List;
 @AllArgsConstructor
 public class MedicalRecordServiceImpl implements MedicalRecordService {
 
-    private MedicalRecordRepository repository;
+    private final MedicalRecordRepository repository;
+    private final MedicalRecordMapper mapper;
 
     @Override
     public List<MedicalRecordEntity> findAll() throws IOException {
@@ -22,22 +25,31 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
     }
 
     @Override
-    public MedicalRecordEntity save(MedicalRecordEntity medicalRecordEntity) throws IOException {
-        return repository.save(medicalRecordEntity);
+    public MedicalRecordDto save(MedicalRecordDto medicalRecord) throws IOException {
+        return repository.save(mapper.medicalRecordDtoToEntity(medicalRecord));
     }
 
     @Override
-    public MedicalRecordEntity update(MedicalRecordEntity medicalRecordEntity) throws IOException {
-        return repository.update(medicalRecordEntity);
+    public MedicalRecordDto update(MedicalRecordDto medicalRecord) throws IOException {
+        return repository.update(mapper.medicalRecordDtoToEntity(medicalRecord));
     }
 
     @Override
     public GenericResponseModel delete(String firstName, String lastName) throws IOException {
-        repository.delete(firstName,lastName);
-        return GenericResponseModel
-                .builder()
-                .success(true)
-                .details(String.format("The medical record for %s %s has been successfully deleted !", firstName,lastName))
-                .build();
+        final boolean isSuccessfullyDeleted = repository.delete(firstName, lastName);
+
+        if (isSuccessfullyDeleted) {
+            return GenericResponseModel
+                    .builder()
+                    .success(true)
+                    .details(String.format("The medical record for %s %s has been successfully deleted !", firstName, lastName))
+                    .build();
+        } else {
+            return GenericResponseModel
+                    .builder()
+                    .success(false)
+                    .details(String.format("Medical record for %s %s not found", firstName, lastName))
+                    .build();
+        }
     }
 }

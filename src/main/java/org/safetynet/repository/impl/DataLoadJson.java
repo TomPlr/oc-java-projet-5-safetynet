@@ -19,7 +19,7 @@ public class DataLoadJson {
     static ObjectMapper objectMapper = new ObjectMapper();
 
     protected static final List<PersonEntity> PERSON_ENTITIES = new ArrayList<>();
-    protected static final List<FireStationEntity> FIRESTATION_ENTITIES = new ArrayList<>();
+    protected static final List<FireStationEntity> FIRE_STATION_ENTITIES = new ArrayList<>();
     protected static final List<MedicalRecordEntity> MEDICAL_RECORDS_ENTITIES = new ArrayList<>();
 
     private static final String JSON_PATH = "src/main/resources/static/data.json";
@@ -29,11 +29,11 @@ public class DataLoadJson {
             final var json = objectMapper.readValue(new File(JSON_PATH), JsonDataModel.class);
 
             PERSON_ENTITIES.clear();
-            FIRESTATION_ENTITIES.clear();
+            FIRE_STATION_ENTITIES.clear();
             MEDICAL_RECORDS_ENTITIES.clear();
 
             PERSON_ENTITIES.addAll(json.persons());
-            FIRESTATION_ENTITIES.addAll(json.firestations());
+            FIRE_STATION_ENTITIES.addAll(json.firestations());
             MEDICAL_RECORDS_ENTITIES.addAll(json.medicalrecords());
 
         } catch (IOException e) {

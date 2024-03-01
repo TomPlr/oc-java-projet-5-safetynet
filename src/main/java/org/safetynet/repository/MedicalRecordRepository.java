@@ -1,5 +1,6 @@
 package org.safetynet.repository;
 
+import org.safetynet.dto.MedicalRecordDto;
 import org.safetynet.entity.MedicalRecordEntity;
 
 import java.util.List;
@@ -7,6 +8,7 @@ import java.util.List;
 public interface MedicalRecordRepository {
     /**
      * Get list of all persons
+     *
      * @return List<MedicalRecordEntity>
      */
     List<MedicalRecordEntity> findAll();
@@ -17,7 +19,7 @@ public interface MedicalRecordRepository {
      * @param medicalRecordEntity medicalRecordEntity
      * @return
      */
-    MedicalRecordEntity save(MedicalRecordEntity medicalRecordEntity);
+    MedicalRecordDto save(MedicalRecordEntity medicalRecordEntity);
 
     /**
      * Update a medical record
@@ -25,13 +27,13 @@ public interface MedicalRecordRepository {
      * @param medicalRecordEntity MedicalRecordEntity
      * @return
      */
-    MedicalRecordEntity update(MedicalRecordEntity medicalRecordEntity);
+    MedicalRecordDto update(MedicalRecordEntity medicalRecordEntity);
 
     /**
      * Delete a medical record
+     *
      * @param firstName String
-     * @param lastName String
+     * @param lastName  String
      */
-    void delete(String firstName, String lastName);
-
+    boolean delete(String firstName, String lastName);
 }

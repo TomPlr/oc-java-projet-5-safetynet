@@ -2,6 +2,7 @@ package org.safetynet.controller;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.safetynet.dto.MedicalRecordDto;
 import org.safetynet.entity.MedicalRecordEntity;
 import org.safetynet.model.GenericResponseModel;
 import org.safetynet.service.MedicalRecordService;
@@ -24,19 +25,18 @@ public class MedicalRecordController {
     }
 
     @PostMapping("/medicalRecord")
-    private ResponseEntity<MedicalRecordEntity> createMedicalRecord(@Valid @RequestBody MedicalRecordEntity medicalRecordEntity) throws IOException {
-        return new ResponseEntity<>(medicalRecordService.save(medicalRecordEntity), HttpStatus.CREATED);
+    private ResponseEntity<MedicalRecordDto> createMedicalRecord(@Valid @RequestBody MedicalRecordDto medicalRecord) throws IOException {
+        return new ResponseEntity<>(medicalRecordService.save(medicalRecord), HttpStatus.CREATED);
     }
 
     @PutMapping("/medicalRecord")
-    private ResponseEntity<MedicalRecordEntity> updateMedicalRecord(@Valid @RequestBody MedicalRecordEntity medicalRecordEntity) throws IOException {
-        return new ResponseEntity<>(medicalRecordService.save(medicalRecordEntity), HttpStatus.OK);
+    private ResponseEntity<MedicalRecordDto> updateMedicalRecord(@Valid @RequestBody MedicalRecordDto medicalRecord) throws IOException {
+        return new ResponseEntity<>(medicalRecordService.save(medicalRecord), HttpStatus.OK);
     }
 
     @DeleteMapping("/medicalRecord")
     private ResponseEntity<GenericResponseModel> deleteMedicalRecord(@RequestParam String firstName,@RequestParam String lastName) throws IOException{
         return new ResponseEntity<>(medicalRecordService.delete(firstName,lastName), HttpStatus.OK);
     }
-
 
 }

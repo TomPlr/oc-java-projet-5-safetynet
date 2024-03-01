@@ -1,22 +1,22 @@
-package org.safetynet.entity;
+package org.safetynet.dto;
 
-import lombok.Builder;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.jackson.Jacksonized;
 
 import java.util.List;
 
-@Jacksonized
 @Getter
 @Setter
-@Builder
-public class MedicalRecordEntity {
+public class MedicalRecordDto {
 
+    @NotBlank
     private String firstName;
+
+    @NotBlank
     private String lastName;
+
     private String birthdate;
     private List<String> medications;
     private List<String> allergies;
-
 }
