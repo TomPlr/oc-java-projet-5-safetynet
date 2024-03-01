@@ -7,13 +7,14 @@ import org.safetynet.entity.MedicalRecordEntity;
 import org.safetynet.entity.PersonEntity;
 import org.safetynet.model.JsonDataModel;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Repository
 public class DataLoadJson {
     static ObjectMapper objectMapper = new ObjectMapper();
 

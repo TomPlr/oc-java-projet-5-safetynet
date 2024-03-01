@@ -17,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 public class PersonController {
 
-private final PersonService personService;
+	private final PersonService personService;
 
 	@GetMapping("/persons")
 	private ResponseEntity<List<PersonEntity>> getPersons() throws IOException {

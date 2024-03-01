@@ -12,8 +12,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-@AllArgsConstructor
 public class FireStationRepositoryImpl implements FireStationRepository {
+
     @Override
     public List<FireStationEntity> findAll() {
         return FIRESTATION_ENTITIES ;

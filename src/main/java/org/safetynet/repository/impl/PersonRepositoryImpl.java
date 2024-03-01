@@ -12,7 +12,6 @@ import java.util.List;
 
 
 @Repository
-@AllArgsConstructor
 public class PersonRepositoryImpl implements PersonRepository {
 
     @Override
