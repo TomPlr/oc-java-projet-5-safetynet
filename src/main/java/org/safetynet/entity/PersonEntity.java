@@ -13,11 +13,11 @@ import lombok.extern.jackson.Jacksonized;
 @Builder
 public class PersonEntity {
 
-	@NotBlank(message = "Firstname is mandatory")
+	@NotBlank(message = "First name is mandatory")
 	@Setter(AccessLevel.NONE)
 	private String firstName;
 
-	@NotBlank(message = "Lastname is mandatory")
+	@NotBlank(message = "Last name is mandatory")
 	@Setter(AccessLevel.NONE)
 	private String lastName;
 

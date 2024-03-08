@@ -14,27 +14,28 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
+@RequestMapping("/persons")
 @AllArgsConstructor
 public class PersonController {
 
     private final PersonService personService;
 
-    @GetMapping("/persons")
+    @GetMapping
     private ResponseEntity<List<PersonEntity>> getPersons() throws IOException {
         return new ResponseEntity<>(personService.findAll(), HttpStatus.OK);
     }
 
-    @PostMapping("/person")
-    private ResponseEntity<PersonDto> createPerson(@Valid @RequestBody PersonDto person) throws IOException {
+    @PostMapping
+    private ResponseEntity<PersonEntity> createPerson(@Valid @RequestBody PersonEntity person) throws IOException {
         return new ResponseEntity<>(personService.save(person), HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/person")
+    @DeleteMapping
     private ResponseEntity<GenericResponseModel> deletePerson(@RequestParam String firstName, @RequestParam String lastName) throws IOException {
         return new ResponseEntity<>(personService.delete(firstName, lastName), HttpStatus.OK);
     }
 
-    @PutMapping("/person")
+    @PutMapping
     private ResponseEntity<PersonDto> updatePerson(@RequestBody PersonDto person) throws IOException {
         return new ResponseEntity<>(personService.update(person), HttpStatus.OK);
     }

@@ -1,17 +1,23 @@
 package org.safetynet.repository.impl;
 
 import lombok.AllArgsConstructor;
+import org.safetynet.domain.Persons;
 import org.safetynet.dto.PersonDto;
+import org.safetynet.entity.FireStationEntity;
+import org.safetynet.entity.MedicalRecordEntity;
 import org.safetynet.entity.PersonEntity;
 import org.safetynet.mapper.PersonMapper;
 import org.safetynet.repository.PersonRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import static org.safetynet.repository.impl.DataLoadJson.PERSON_ENTITIES;
+import static org.safetynet.repository.impl.DataLoadJson.*;
 
 
 @Repository
@@ -26,15 +32,15 @@ public class PersonRepositoryImpl implements PersonRepository {
     }
 
     @Override
-    public PersonDto save(PersonEntity personEntity) {
+    public PersonEntity save(PersonEntity personEntity) {
         PERSON_ENTITIES.add(personEntity);
 
-        Optional<PersonDto> optionalPersonDto = PERSON_ENTITIES
+        Optional<PersonEntity> optionalPersonEntity = PERSON_ENTITIES
                 .stream()
                 .filter(person -> person.equals(personEntity))
-                .findFirst()
-                .map(mapper::personEntityToDto);
-        return optionalPersonDto.orElseThrow(() -> new NoSuchElementException("Person not found"));
+                .findFirst();
+
+        return optionalPersonEntity.orElseThrow(() -> new NoSuchElementException("Person not found"));
     }
 
     @Override
@@ -43,6 +49,7 @@ public class PersonRepositoryImpl implements PersonRepository {
                 .removeIf(personEntity ->
                         personEntity.getFirstName().equalsIgnoreCase(firstName) && personEntity.getLastName().equalsIgnoreCase(lastName));
     }
+
 
     @Override
     public PersonDto update(PersonEntity personEntity) {
@@ -64,5 +71,51 @@ public class PersonRepositoryImpl implements PersonRepository {
                     return mapper.personEntityToDto(personEntity);
                 })
                 .orElseThrow(() -> new NoSuchElementException("Person not found"));
+    }
+
+    @Override
+    public Persons findPersonsByStationNumber(int stationNumber) {
+        final int AGE_OF_MAJORITY = 18;
+
+        Persons personsByStation = new Persons();
+        int totalOver18 = 0;
+        int totalUnderOrEqual18 = 0;
+
+
+        List<String> fireStationsAddresses = FIRE_STATION_ENTITIES.stream()
+                .filter(fireStationEntity -> fireStationEntity.getStation() == stationNumber)
+                .map(FireStationEntity::getAddress)
+                .toList();
+
+        List<PersonDto> persons = PERSON_ENTITIES.stream()
+                .filter(personEntity -> fireStationsAddresses.contains(personEntity.getAddress()))
+                .map(mapper::personEntityToDto)
+                .toList();
+
+        for (PersonDto person : persons) {
+            MedicalRecordEntity medicalRecord = MEDICAL_RECORDS_ENTITIES.stream()
+                    .filter(record -> record.getFirstName().equals(person.getFirstName())
+                            && record.getLastName().equals(person.getLastName()))
+                    .findFirst()
+                    .orElse(null);
+
+            if (medicalRecord != null) {
+                LocalDate birthdate = LocalDate.parse(medicalRecord.getBirthdate(), DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+                long numberOfYear = birthdate.until(LocalDate.now(), ChronoUnit.YEARS);
+
+                if (numberOfYear > AGE_OF_MAJORITY) {
+                    totalOver18++;
+                } else {
+                    totalUnderOrEqual18++;
+                }
+            }
+        }
+
+
+        personsByStation.setPersons(persons);
+        personsByStation.setTotalOver18(totalOver18);
+        personsByStation.setTotalUnderOrEqual18(totalUnderOrEqual18);
+
+        return personsByStation;
     }
 }

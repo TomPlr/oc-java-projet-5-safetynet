@@ -33,4 +33,6 @@ public interface FireStationRepository {
      * @param fireStationEntity FireStationEntity
      */
     boolean delete(FireStationEntity fireStationEntity);
+
+
 }

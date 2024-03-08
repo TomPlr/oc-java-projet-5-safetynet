@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.safetynet.dto.FireStationDto;
 import org.safetynet.entity.FireStationEntity;
 import org.safetynet.mapper.FireStationMapper;
+import org.safetynet.mapper.PersonMapper;
 import org.safetynet.repository.FireStationRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,13 +12,14 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import static org.safetynet.repository.impl.DataLoadJson.FIRE_STATION_ENTITIES;
+import static org.safetynet.repository.impl.DataLoadJson.*;
 
 @Repository
 @AllArgsConstructor
 public class FireStationRepositoryImpl implements FireStationRepository {
 
     private final FireStationMapper mapper;
+    private final PersonMapper personMapper;
 
     @Override
     public List<FireStationEntity> findAll() {
@@ -60,4 +62,6 @@ public class FireStationRepositoryImpl implements FireStationRepository {
                 .removeIf(fireStation ->
                         fireStation.getAddress().equals(fireStationEntity.getAddress()) && fireStation.getStation() == fireStationEntity.getStation());
     }
+
+
 }

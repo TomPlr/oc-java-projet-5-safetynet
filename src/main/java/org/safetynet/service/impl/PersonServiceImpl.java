@@ -2,6 +2,7 @@ package org.safetynet.service.impl;
 
 
 import lombok.AllArgsConstructor;
+import org.safetynet.domain.Persons;
 import org.safetynet.dto.PersonDto;
 import org.safetynet.entity.PersonEntity;
 import org.safetynet.mapper.PersonMapper;
@@ -10,6 +11,7 @@ import org.safetynet.repository.PersonRepository;
 import org.safetynet.service.PersonService;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -25,8 +27,8 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public PersonDto save(PersonDto person) {
-        return repository.save(mapper.PersonDtoToEntity(person));
+    public PersonEntity save(PersonEntity person) {
+        return repository.save(person);
     }
 
     @Override
@@ -44,4 +46,10 @@ public class PersonServiceImpl implements PersonService {
     public PersonDto update(PersonDto person) {
         return repository.update(mapper.PersonDtoToEntity(person));
     }
+
+    @Override
+    public Persons getPersonsCoveredByFireStation(int fireStationNumber) throws IOException {
+        return repository.findPersonsByStationNumber(fireStationNumber);
+    }
+
 }

@@ -1,8 +1,8 @@
 package org.safetynet.repository;
 
+import org.safetynet.domain.Persons;
 import org.safetynet.dto.PersonDto;
 import org.safetynet.entity.PersonEntity;
-import org.safetynet.model.GenericResponseModel;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ public interface PersonRepository {
      *
      * @param personEntity PersonEntity
      */
-    PersonDto save(PersonEntity personEntity);
+    PersonEntity save(PersonEntity personEntity);
 
     /**
      * Update a person
@@ -37,4 +37,10 @@ public interface PersonRepository {
      */
     boolean delete(String firstName, String lastName);
 
+    /**
+     * Get a list of persons covered by a specific station
+     *
+     * @param fireStationNumber int
+     */
+    Persons findPersonsByStationNumber(int fireStationNumber);
 }
