@@ -40,23 +40,14 @@ public class FireStationServiceImpl implements FireStationService {
         final boolean isSuccessfullyDeleted = repository.delete(mapper.fireStationDtoToEntity(fireStation));
 
         if (isSuccessfullyDeleted) {
-            return GenericResponseModel
-                    .builder()
-                    .success(true)
-                    .details(String
-                            .format("Fire station n°%s will no longer operate from the following address: %s", fireStation.getStation(), fireStation.getAddress()))
-                    .build();
+            return new GenericResponseModel(true, String
+                    .format("Fire station n°%s will no longer operate from the following address: %s", fireStation.getStation(), fireStation.getAddress()));
+
         } else {
-            return GenericResponseModel
-                    .builder()
-                    .success(false)
-                    .details(String
-                            .format("Error: Fire station n°%s does not operate from the following address: %s", fireStation.getStation(), fireStation.getAddress()))
-                    .build();
+            return new GenericResponseModel(false, String
+                    .format("Error: Fire station n°%s does not operate from the following address: %s", fireStation.getStation(), fireStation.getAddress()));
 
         }
-
     }
-
 
 }

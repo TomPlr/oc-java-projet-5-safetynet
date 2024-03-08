@@ -14,13 +14,13 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/persons")
+@RequestMapping("/person")
 @AllArgsConstructor
 public class PersonController {
 
     private final PersonService personService;
 
-    @GetMapping
+    @GetMapping("/*")
     private ResponseEntity<List<PersonEntity>> getPersons() throws IOException {
         return new ResponseEntity<>(personService.findAll(), HttpStatus.OK);
     }
@@ -36,7 +36,7 @@ public class PersonController {
     }
 
     @PutMapping
-    private ResponseEntity<PersonDto> updatePerson(@RequestBody PersonDto person) throws IOException {
+    private ResponseEntity<PersonDto> updatePerson(@RequestBody PersonEntity person) throws IOException {
         return new ResponseEntity<>(personService.update(person), HttpStatus.OK);
     }
 }

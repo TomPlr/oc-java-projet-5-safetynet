@@ -1,8 +1,9 @@
 package org.safetynet.repository;
 
-import org.safetynet.domain.Persons;
 import org.safetynet.dto.PersonDto;
 import org.safetynet.entity.PersonEntity;
+import org.safetynet.model.ChildModel;
+import org.safetynet.model.PersonsByStationModel;
 
 import java.util.List;
 
@@ -42,5 +43,13 @@ public interface PersonRepository {
      *
      * @param fireStationNumber int
      */
-    Persons findPersonsByStationNumber(int fireStationNumber);
+    PersonsByStationModel findPersonsByStationNumber(int fireStationNumber);
+
+    /**
+     * Get a list of children living at a specific address
+     *
+     * @param address String
+     */
+    List<ChildModel> findPersonsByAddress(String address);
+
 }

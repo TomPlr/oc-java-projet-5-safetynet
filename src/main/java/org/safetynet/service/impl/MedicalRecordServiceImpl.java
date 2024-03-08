@@ -39,17 +39,10 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
         final boolean isSuccessfullyDeleted = repository.delete(firstName, lastName);
 
         if (isSuccessfullyDeleted) {
-            return GenericResponseModel
-                    .builder()
-                    .success(true)
-                    .details(String.format("The medical record for %s %s has been successfully deleted !", firstName, lastName))
-                    .build();
+            return new GenericResponseModel(true, String.format("The medical record for %s %s has been successfully deleted !", firstName, lastName));
+
         } else {
-            return GenericResponseModel
-                    .builder()
-                    .success(false)
-                    .details(String.format("Medical record for %s %s not found", firstName, lastName))
-                    .build();
+            return new GenericResponseModel(false, String.format("Medical record for %s %s not found", firstName, lastName));
         }
     }
 }

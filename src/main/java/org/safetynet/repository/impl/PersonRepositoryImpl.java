@@ -1,18 +1,21 @@
 package org.safetynet.repository.impl;
 
 import lombok.AllArgsConstructor;
-import org.safetynet.domain.Persons;
 import org.safetynet.dto.PersonDto;
 import org.safetynet.entity.FireStationEntity;
 import org.safetynet.entity.MedicalRecordEntity;
 import org.safetynet.entity.PersonEntity;
 import org.safetynet.mapper.PersonMapper;
+import org.safetynet.model.ChildModel;
+import org.safetynet.model.PersonsByStationModel;
 import org.safetynet.repository.PersonRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -68,16 +71,15 @@ public class PersonRepositoryImpl implements PersonRepository {
                     person.setZip(personEntity.getZip());
                     person.setPhone(personEntity.getPhone());
 
-                    return mapper.personEntityToDto(personEntity);
+                    return  mapper.personEntityToDto(person);
                 })
                 .orElseThrow(() -> new NoSuchElementException("Person not found"));
     }
 
     @Override
-    public Persons findPersonsByStationNumber(int stationNumber) {
+    public PersonsByStationModel findPersonsByStationNumber(int stationNumber) {
         final int AGE_OF_MAJORITY = 18;
 
-        Persons personsByStation = new Persons();
         int totalOver18 = 0;
         int totalUnderOrEqual18 = 0;
 
@@ -111,11 +113,49 @@ public class PersonRepositoryImpl implements PersonRepository {
             }
         }
 
+        return new PersonsByStationModel(persons, totalOver18, totalUnderOrEqual18);
+    }
 
-        personsByStation.setPersons(persons);
-        personsByStation.setTotalOver18(totalOver18);
-        personsByStation.setTotalUnderOrEqual18(totalUnderOrEqual18);
+    @Override
+    public List<ChildModel> findPersonsByAddress(String address) {
+        List<ChildModel> children = new ArrayList<>();
 
-        return personsByStation;
+        List<PersonEntity> persons = PERSON_ENTITIES.stream()
+                .filter(personEntity -> address.contains(personEntity.getAddress()))
+                .toList();
+
+        for (PersonEntity person : persons) {
+            MedicalRecordEntity medicalRecord = MEDICAL_RECORDS_ENTITIES.stream()
+                    .filter(record -> record.getFirstName().equals(person.getFirstName())
+                            && record.getLastName().equals(person.getLastName()))
+                    .findFirst()
+                    .orElse(null);
+
+            if (medicalRecord != null) {
+                LocalDate today = LocalDate.now();
+                LocalDate birthDate = LocalDate.parse(medicalRecord.getBirthdate(), DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+
+                int age = Period.between(birthDate, today).getYears();
+
+
+                if(age < 18){
+                    children.add(mapper.toPersonWithAgeModel(person,age,new ArrayList<>()));
+
+                }
+            }
+        }
+
+        for (ChildModel child : children ) {
+            List<PersonDto> familyMembers = new ArrayList<>();
+
+            persons.stream()
+                            .filter(person -> !child.firstName().equalsIgnoreCase(person.getFirstName())
+                                    || !child.lastName().equalsIgnoreCase(person.getLastName()))
+                                    .forEach(person -> familyMembers.add(mapper.personEntityToDto(person)) );
+
+            familyMembers.forEach(familyMember -> child.familyMembers().add(familyMember));
+        }
+
+        return children;
     }
 }

@@ -2,11 +2,12 @@ package org.safetynet.service.impl;
 
 
 import lombok.AllArgsConstructor;
-import org.safetynet.domain.Persons;
 import org.safetynet.dto.PersonDto;
 import org.safetynet.entity.PersonEntity;
 import org.safetynet.mapper.PersonMapper;
+import org.safetynet.model.ChildModel;
 import org.safetynet.model.GenericResponseModel;
+import org.safetynet.model.PersonsByStationModel;
 import org.safetynet.repository.PersonRepository;
 import org.safetynet.service.PersonService;
 import org.springframework.stereotype.Service;
@@ -36,20 +37,24 @@ public class PersonServiceImpl implements PersonService {
         final boolean isSuccessfullyDeleted = repository.delete(firstName, lastName);
 
         if (isSuccessfullyDeleted) {
-            return GenericResponseModel.builder().success(true).details(String.format("%s %s has been successfully deleted !", firstName, lastName)).build();
+            return new GenericResponseModel(true, String.format("%s %s has been successfully deleted !", firstName, lastName));
         } else {
-            return GenericResponseModel.builder().success(false).details(String.format("Error: %s %s not found!", firstName, lastName)).build();
+            return new GenericResponseModel(false, String.format("Error: %s %s not found!", firstName, lastName));
         }
     }
 
     @Override
-    public PersonDto update(PersonDto person) {
-        return repository.update(mapper.PersonDtoToEntity(person));
+    public PersonDto update(PersonEntity person) {
+        return repository.update(person);
     }
 
     @Override
-    public Persons getPersonsCoveredByFireStation(int fireStationNumber) throws IOException {
+    public PersonsByStationModel getPersonsCoveredByFireStation(int fireStationNumber) throws IOException {
         return repository.findPersonsByStationNumber(fireStationNumber);
     }
 
+    @Override
+    public List<ChildModel> getChildrenByAddress(String address) throws IOException {
+        return repository.findPersonsByAddress(address);
+    }
 }
