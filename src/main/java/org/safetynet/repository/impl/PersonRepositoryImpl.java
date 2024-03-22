@@ -15,10 +15,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 import static org.safetynet.repository.impl.DataLoadJson.*;
 
@@ -71,7 +68,7 @@ public class PersonRepositoryImpl implements PersonRepository {
                     person.setZip(personEntity.getZip());
                     person.setPhone(personEntity.getPhone());
 
-                    return  mapper.personEntityToDto(person);
+                    return mapper.personEntityToDto(person);
                 })
                 .orElseThrow(() -> new NoSuchElementException("Person not found"));
     }
@@ -138,24 +135,35 @@ public class PersonRepositoryImpl implements PersonRepository {
                 int age = Period.between(birthDate, today).getYears();
 
 
-                if(age < 18){
-                    children.add(mapper.toPersonWithAgeModel(person,age,new ArrayList<>()));
+                if (age < 18) {
+                    children.add(mapper.toPersonWithAgeModel(person, age, new ArrayList<>()));
 
                 }
             }
         }
 
-        for (ChildModel child : children ) {
+        for (ChildModel child : children) {
             List<PersonDto> familyMembers = new ArrayList<>();
 
             persons.stream()
-                            .filter(person -> !child.firstName().equalsIgnoreCase(person.getFirstName())
-                                    || !child.lastName().equalsIgnoreCase(person.getLastName()))
-                                    .forEach(person -> familyMembers.add(mapper.personEntityToDto(person)) );
+                    .filter(person -> !child.firstName().equalsIgnoreCase(person.getFirstName())
+                            || !child.lastName().equalsIgnoreCase(person.getLastName()))
+                    .forEach(person -> familyMembers.add(mapper.personEntityToDto(person)));
 
             familyMembers.forEach(familyMember -> child.familyMembers().add(familyMember));
         }
 
         return children;
+    }
+
+    @Override
+    public TreeSet<String> findPersonsPhoneNumbersByAddresses(List<String> addresses) {
+        TreeSet<String> phoneNumbers = new TreeSet<>();
+
+        PERSON_ENTITIES.stream()
+                .filter(person -> addresses.contains(person.getAddress()))
+                .forEach(person -> phoneNumbers.add(person.getPhone()));
+
+        return phoneNumbers;
     }
 }

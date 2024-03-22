@@ -8,6 +8,7 @@ import org.safetynet.model.PersonsByStationModel;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.TreeSet;
 
 public interface PersonService {
     List<PersonEntity> findAll() throws IOException;
@@ -21,5 +22,7 @@ public interface PersonService {
     PersonsByStationModel getPersonsCoveredByFireStation(int fireStationNumber) throws IOException;
 
     List<ChildModel> getChildrenByAddress(String address) throws IOException;
+
+    TreeSet<String> getPersonsPhoneNumberByStation(int station) throws IOException;
 
 }

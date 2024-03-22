@@ -49,5 +49,4 @@ public class FireStationServiceImpl implements FireStationService {
 
         }
     }
-
 }

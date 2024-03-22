@@ -8,6 +8,7 @@ import org.safetynet.mapper.PersonMapper;
 import org.safetynet.repository.FireStationRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -19,7 +20,6 @@ import static org.safetynet.repository.impl.DataLoadJson.*;
 public class FireStationRepositoryImpl implements FireStationRepository {
 
     private final FireStationMapper mapper;
-    private final PersonMapper personMapper;
 
     @Override
     public List<FireStationEntity> findAll() {
@@ -63,5 +63,15 @@ public class FireStationRepositoryImpl implements FireStationRepository {
                         fireStation.getAddress().equals(fireStationEntity.getAddress()) && fireStation.getStation() == fireStationEntity.getStation());
     }
 
+    @Override
+    public List<String> getAddressesByStation(int station) {
+        List<String> addresses = new ArrayList<>();
+        FIRE_STATION_ENTITIES.stream()
+                .filter(fireStation ->
+                    fireStation.getStation() == station
+                )
+                .forEach(fireStation -> addresses.add(fireStation.getAddress()));
 
+        return addresses;
+    }
 }

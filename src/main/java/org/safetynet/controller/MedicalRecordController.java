@@ -20,7 +20,7 @@ public class MedicalRecordController {
 
     private final MedicalRecordService medicalRecordService;
 
-    @GetMapping
+    @GetMapping("/*")
     private ResponseEntity<List<MedicalRecordEntity>> getMedicalRecords() throws IOException {
         return new ResponseEntity<>(medicalRecordService.findAll(), HttpStatus.OK);
     }

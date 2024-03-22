@@ -34,5 +34,12 @@ public interface FireStationRepository {
      */
     boolean delete(FireStationEntity fireStationEntity);
 
+    /**
+     * get addresses by fire station
+     *
+     * @param station int
+     */
+    List<String> getAddressesByStation(int station);
+
 
 }

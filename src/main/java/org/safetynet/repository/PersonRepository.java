@@ -6,6 +6,7 @@ import org.safetynet.model.ChildModel;
 import org.safetynet.model.PersonsByStationModel;
 
 import java.util.List;
+import java.util.TreeSet;
 
 public interface PersonRepository {
 
@@ -51,5 +52,12 @@ public interface PersonRepository {
      * @param address String
      */
     List<ChildModel> findPersonsByAddress(String address);
+
+    /**
+     * Get a list of phone numbers by fire station
+     *
+     * @param addresses List<String>
+     */
+    TreeSet<String> findPersonsPhoneNumbersByAddresses(List<String> addresses);
 
 }
