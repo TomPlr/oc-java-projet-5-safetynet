@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import org.safetynet.dto.FireStationDto;
 import org.safetynet.entity.FireStationEntity;
 import org.safetynet.mapper.FireStationMapper;
-import org.safetynet.mapper.PersonMapper;
 import org.safetynet.repository.FireStationRepository;
 import org.springframework.stereotype.Repository;
 
@@ -73,5 +72,13 @@ public class FireStationRepositoryImpl implements FireStationRepository {
                 .forEach(fireStation -> addresses.add(fireStation.getAddress()));
 
         return addresses;
+    }
+
+    @Override
+    public FireStationEntity getFireStationByAddress(String address) {
+        return FIRE_STATION_ENTITIES.stream()
+                .filter(fireStationEntity -> fireStationEntity.getAddress().equalsIgnoreCase(address))
+                .findFirst()
+                .orElse(null);
     }
 }

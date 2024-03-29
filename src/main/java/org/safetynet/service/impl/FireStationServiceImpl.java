@@ -49,4 +49,9 @@ public class FireStationServiceImpl implements FireStationService {
 
         }
     }
+
+    @Override
+    public int getStationByAddress(String address) throws IOException {
+        return  repository.getFireStationByAddress(address).getStation();
+    }
 }

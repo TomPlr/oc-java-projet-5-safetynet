@@ -3,10 +3,12 @@ package org.safetynet.repository.impl;
 import lombok.AllArgsConstructor;
 import org.safetynet.dto.MedicalRecordDto;
 import org.safetynet.entity.MedicalRecordEntity;
+import org.safetynet.entity.PersonEntity;
 import org.safetynet.mapper.MedicalRecordMapper;
 import org.safetynet.repository.MedicalRecordRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -61,5 +63,22 @@ public class MedicalRecordRepositoryImpl implements MedicalRecordRepository {
         return MEDICAL_RECORDS_ENTITIES
                 .removeIf(medicalRecord -> medicalRecord.getFirstName().equalsIgnoreCase(firstName) && medicalRecord.getLastName().equalsIgnoreCase(lastName));
 
+    }
+
+    @Override
+    public List<MedicalRecordEntity> findMedicalRecordsByPersons(List<PersonEntity> persons) {
+        List<MedicalRecordEntity> medicalRecords = new ArrayList<>();
+
+        for (PersonEntity person : persons) {
+            MedicalRecordEntity medicalRecord = MEDICAL_RECORDS_ENTITIES.stream()
+                    .filter(record -> record.getFirstName().equals(person.getFirstName())
+                            && record.getLastName().equals(person.getLastName()))
+                    .findFirst()
+                    .orElse(null);
+
+            medicalRecords.add(medicalRecord);
+        }
+
+        return medicalRecords;
     }
 }

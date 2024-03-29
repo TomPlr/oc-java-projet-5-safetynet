@@ -2,6 +2,7 @@ package org.safetynet.repository;
 
 import org.safetynet.dto.MedicalRecordDto;
 import org.safetynet.entity.MedicalRecordEntity;
+import org.safetynet.entity.PersonEntity;
 
 import java.util.List;
 
@@ -36,4 +37,11 @@ public interface MedicalRecordRepository {
      * @param lastName  String
      */
     boolean delete(String firstName, String lastName);
+
+    /**
+     * Get medical records of a list of persons
+     *
+     * @param persons List<PersonEntity>
+     */
+    List<MedicalRecordEntity> findMedicalRecordsByPersons(List<PersonEntity> persons);
 }

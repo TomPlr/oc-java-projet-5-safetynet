@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import org.safetynet.dto.FireStationDto;
 import org.safetynet.entity.FireStationEntity;
 import org.safetynet.model.GenericResponseModel;
-import org.safetynet.model.PersonsByStationModel;
+import org.safetynet.model.PersonsWithAgeRepartitionModel;
 import org.safetynet.service.FireStationService;
 import org.safetynet.service.PersonService;
 import org.springframework.http.HttpStatus;
@@ -46,7 +46,7 @@ public class FireStationController {
     }
 
     @GetMapping
-    private ResponseEntity<PersonsByStationModel> getPersonsCoveredByFireStation(@RequestParam("stationNumber") int stationNumber) throws IOException {
+    private ResponseEntity<PersonsWithAgeRepartitionModel> getPersonsCoveredByFireStation(@RequestParam("stationNumber") int stationNumber) throws IOException {
         return new ResponseEntity<>(personService.getPersonsCoveredByFireStation(stationNumber), HttpStatus.OK);
     }
 }

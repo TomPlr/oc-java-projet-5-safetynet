@@ -2,8 +2,7 @@ package org.safetynet.repository;
 
 import org.safetynet.dto.PersonDto;
 import org.safetynet.entity.PersonEntity;
-import org.safetynet.model.ChildModel;
-import org.safetynet.model.PersonsByStationModel;
+import org.safetynet.model.PersonsWithAgeRepartitionModel;
 
 import java.util.List;
 import java.util.TreeSet;
@@ -44,14 +43,14 @@ public interface PersonRepository {
      *
      * @param fireStationNumber int
      */
-    PersonsByStationModel findPersonsByStationNumber(int fireStationNumber);
+    PersonsWithAgeRepartitionModel findPersonsByStationNumber(int fireStationNumber);
 
     /**
      * Get a list of children living at a specific address
      *
      * @param address String
      */
-    List<ChildModel> findPersonsByAddress(String address);
+    List<PersonEntity> findPersonsByAddress(String address);
 
     /**
      * Get a list of phone numbers by fire station

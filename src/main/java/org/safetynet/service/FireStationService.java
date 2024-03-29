@@ -15,4 +15,6 @@ public interface FireStationService {
     FireStationDto update(FireStationDto fireStation) throws IOException;
 
     GenericResponseModel delete(FireStationDto fireStation) throws IOException;
+
+    int getStationByAddress(String address) throws  IOException;
 }
