@@ -75,9 +75,17 @@ public class FireStationRepositoryImpl implements FireStationRepository {
     }
 
     @Override
-    public FireStationEntity getFireStationByAddress(String address) {
+    public FireStationEntity getFireStation(String address) {
         return FIRE_STATION_ENTITIES.stream()
                 .filter(fireStationEntity -> fireStationEntity.getAddress().equalsIgnoreCase(address))
+                .findFirst()
+                .orElse(null);
+    }
+
+    @Override
+    public FireStationEntity getFireStation(int station) {
+        return FIRE_STATION_ENTITIES.stream()
+                .filter(fireStationEntity -> fireStationEntity.getStation() == station)
                 .findFirst()
                 .orElse(null);
     }

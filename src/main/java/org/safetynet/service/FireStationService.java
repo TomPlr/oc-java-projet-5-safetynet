@@ -16,5 +16,8 @@ public interface FireStationService {
 
     GenericResponseModel delete(FireStationDto fireStation) throws IOException;
 
-    int getStationByAddress(String address) throws  IOException;
+    int getStation(String address) throws  IOException;
+
+    String getStation(int station) throws  IOException;
+
 }

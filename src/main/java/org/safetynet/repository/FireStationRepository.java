@@ -46,5 +46,12 @@ public interface FireStationRepository {
      *
      * @param address String
      */
-    FireStationEntity getFireStationByAddress(String address);
+    FireStationEntity getFireStation(String address);
+
+    /**
+     * get fire station by station
+     *
+     * @param station int
+     */
+    FireStationEntity getFireStation(int station);
 }

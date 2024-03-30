@@ -24,6 +24,6 @@ public class FireController {
 
     @GetMapping
     private ResponseEntity<PersonsWithMedicalHistoryByStationModel> getPersonsWithMedicalHistory(@RequestParam String address) throws IOException {
-        return new ResponseEntity<>(new PersonsWithMedicalHistoryByStationModel(personService.getPersonsWithMedicalHistoryByAddress(address), fireStationService.getStationByAddress(address)), HttpStatus.OK);
+        return new ResponseEntity<>(new PersonsWithMedicalHistoryByStationModel(personService.getPersonsWithMedicalHistoryByAddress(address), fireStationService.getStation(address)), HttpStatus.OK);
     }
 }
