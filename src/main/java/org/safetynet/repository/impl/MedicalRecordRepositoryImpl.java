@@ -66,6 +66,15 @@ public class MedicalRecordRepositoryImpl implements MedicalRecordRepository {
     }
 
     @Override
+    public MedicalRecordEntity findMedicalRecordByName(String firstName, String lastName) {
+        return MEDICAL_RECORDS_ENTITIES.stream()
+                .filter(record -> record.getFirstName().equals(firstName)
+                        && record.getLastName().equals(lastName))
+                .findFirst()
+                .orElse(null);
+    }
+
+    @Override
     public List<MedicalRecordEntity> findMedicalRecordsByPersons(List<PersonEntity> persons) {
         List<MedicalRecordEntity> medicalRecords = new ArrayList<>();
 

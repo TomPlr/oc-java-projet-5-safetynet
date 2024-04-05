@@ -109,10 +109,11 @@ public class PersonRepositoryImpl implements PersonRepository {
     }
 
     @Override
-    public List<PersonEntity> findPersonsByName(String firstName, String lastName) {
+    public PersonEntity findPersonByName(String firstName, String lastName) {
         return PERSON_ENTITIES.stream()
                 .filter(person -> person.getFirstName().equalsIgnoreCase(firstName) && person.getLastName().equalsIgnoreCase(lastName))
-                .toList();
+                .findFirst()
+                .orElse(null);
     }
 
     @Override

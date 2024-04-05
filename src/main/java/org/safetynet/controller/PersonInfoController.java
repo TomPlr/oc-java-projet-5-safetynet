@@ -2,6 +2,7 @@ package org.safetynet.controller;
 
 import lombok.AllArgsConstructor;
 import org.safetynet.dto.PersonWithoutPhoneDto;
+import org.safetynet.mapper.PersonMapper;
 import org.safetynet.service.PersonService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +21,10 @@ import java.util.TreeSet;
 public class PersonInfoController {
 
     PersonService personService;
+    PersonMapper personMapper;
 
     @GetMapping
-    private ResponseEntity<List<PersonWithoutPhoneDto>> getPersonInfos(@RequestParam String firstName, @RequestParam String lastName ) throws IOException {
-        return new ResponseEntity<>(personService.getPersonInformation(firstName,lastName), HttpStatus.OK);
+    private ResponseEntity<PersonWithoutPhoneDto> getPersonInfos(@RequestParam String firstName, @RequestParam String lastName ) throws IOException {
+        return new ResponseEntity<>(personMapper.toPersonWithoutPhoneDto(personService.getPerson(firstName,lastName)), HttpStatus.OK);
     }
 }

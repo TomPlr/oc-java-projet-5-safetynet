@@ -20,7 +20,7 @@ public class ChildAlertController {
 
     private final PersonService personService;
 
-    @GetMapping("")
+    @GetMapping
     private ResponseEntity<List<ChildDto>> getChildrenByAddress(@RequestParam String address) throws IOException {
         return new ResponseEntity<>(personService.getChildrenByAddress(address), HttpStatus.OK);
     }

@@ -39,6 +39,15 @@ public interface MedicalRecordRepository {
     boolean delete(String firstName, String lastName);
 
     /**
+     * Get a medical record
+     *
+     * @param  firstName String
+     * @param lastName String
+     *
+     */
+    MedicalRecordEntity findMedicalRecordByName(String firstName, String lastName);
+
+    /**
      * Get medical records of a list of persons
      *
      * @param persons List<PersonEntity>

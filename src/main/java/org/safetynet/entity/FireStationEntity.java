@@ -12,6 +12,5 @@ import lombok.extern.jackson.Jacksonized;
 public class FireStationEntity {
 
     private String address;
-
     private int station;
 }

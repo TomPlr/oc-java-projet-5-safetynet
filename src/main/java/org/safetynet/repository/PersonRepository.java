@@ -65,7 +65,7 @@ public interface PersonRepository {
      * @param firstName String
      * @param lastName  String
      */
-    List<PersonEntity> findPersonsByName(String firstName, String lastName);
+    PersonEntity findPersonByName(String firstName, String lastName);
 
     /**
      * Get persons' email by city

@@ -1,7 +1,6 @@
 package org.safetynet.service.impl;
 
 
-import com.sun.source.tree.Tree;
 import lombok.AllArgsConstructor;
 import org.safetynet.dto.*;
 import org.safetynet.entity.MedicalRecordEntity;
@@ -9,6 +8,7 @@ import org.safetynet.entity.PersonEntity;
 import org.safetynet.mapper.MedicalRecordMapper;
 import org.safetynet.mapper.PersonMapper;
 import org.safetynet.model.GenericResponseModel;
+import org.safetynet.model.PersonModel;
 import org.safetynet.repository.FireStationRepository;
 import org.safetynet.repository.MedicalRecordRepository;
 import org.safetynet.repository.PersonRepository;
@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -67,36 +66,27 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public List<ChildDto> getChildrenByAddress(String address) {
-        List<MedicalRecordEntity> medicalRecords = new ArrayList<>();
         List<ChildDto> children = new ArrayList<>();
 
-        List<PersonEntity> persons = personRepository.findPersonsByAddress(address);
+        List<PersonModel> persons = getPersons(address);
 
-        if (!persons.isEmpty()) {
-            medicalRecords = medicalRecordRepository.findMedicalRecordsByPersons(persons);
-        }
+        for (PersonModel person : persons) {
+            if (person.age() < 18){
 
-        for (MedicalRecordEntity medicalRecord : medicalRecords) {
-            LocalDate today = LocalDate.now();
-            LocalDate birthDate = LocalDate.parse(medicalRecord.getBirthdate(), DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+                List<PersonDto> familyMembers = persons.stream()
+                        .filter(personModel -> !person.equals(personModel))
+                        .map(personModel -> personMapper.toPersonDto(personModel))
+                        .toList();
 
-            int age = Period.between(birthDate, today).getYears();
-
-            PersonEntity personEntity = persons.stream()
-                    .filter(person -> person.getFirstName().equalsIgnoreCase(medicalRecord.getFirstName()) && person.getLastName().equalsIgnoreCase(medicalRecord.getLastName()))
-                    .findFirst()
-                    .orElse(null);
-
-
-            if (age < 18 && personEntity != null) {
-                List<PersonDto> familyMembers = new ArrayList<>();
-                persons.stream().filter(person -> !person.equals(personEntity)).forEach(person -> familyMembers.add(personMapper.toPersonDto(person)));
-                children.add(personMapper.toPersonWithAgeDto(personEntity, age, familyMembers));
+                person.familyMembers().addAll(familyMembers);
+                children.add(personMapper.toChildDto(person));
             }
         }
 
         return children;
     }
+
+
 
     @Override
     public TreeSet<String> getPersonsPhoneNumberByStation(int station) {
@@ -105,10 +95,21 @@ public class PersonServiceImpl implements PersonService {
         return personRepository.findPersonsPhoneNumbersByAddresses(addresses);
     }
 
+
     @Override
-    public List<PersonWithoutAddressAndEmailDto> getPersonsWithMedicalHistoryByAddress(String address) {
+    public PersonModel getPerson(String firstName, String lastName){
+
+        PersonEntity personEntity = personRepository.findPersonByName(firstName,lastName);
+        MedicalRecordEntity medicalRecord = medicalRecordRepository.findMedicalRecordByName(firstName, lastName);
+        long age = calculateAge(medicalRecord);
+
+        return personMapper.toPersonModel(personEntity, age, medicalRecordMapper.toMedicalHistory(medicalRecord),new ArrayList<>());
+    }
+
+    @Override
+    public List<PersonModel> getPersons(String address){
         List<MedicalRecordEntity> medicalRecords = new ArrayList<>();
-        List<PersonWithoutAddressAndEmailDto> persons = new ArrayList<>();
+        List<PersonModel> persons = new ArrayList<>();
 
         List<PersonEntity> personEntities = personRepository.findPersonsByAddress(address);
 
@@ -117,60 +118,35 @@ public class PersonServiceImpl implements PersonService {
         }
 
         for (PersonEntity personEntity : personEntities) {
-            long age = 0;
-            LocalDate birthdate = null;
+            MedicalRecordEntity medicalRecord = getMedicalRecordByPerson(personEntity.getFirstName(), personEntity.getLastName(), medicalRecords);
+            long age = calculateAge(medicalRecord);
 
-            MedicalRecordEntity medicalRecord = medicalRecords.stream()
-                    .filter(medicalRecordEntity -> medicalRecordEntity.getLastName().equalsIgnoreCase(personEntity.getLastName()) && medicalRecordEntity.getFirstName().equalsIgnoreCase(personEntity.getFirstName()))
-                    .findFirst()
-                    .orElse(null);
-
-            if (medicalRecord != null) {
-                birthdate = LocalDate.parse(medicalRecord.getBirthdate(), DateTimeFormatter.ofPattern("MM/dd/yyyy"));
-                age = birthdate.until(LocalDate.now(), ChronoUnit.YEARS);
-            }
-
-            persons.add(personMapper.toPersonWithoutAddressAndEmailDto(personEntity, age, medicalRecordMapper.toMedicalHistory(medicalRecord)));
-
+            persons.add(personMapper.toPersonModel(personEntity, age, medicalRecordMapper.toMedicalHistory(medicalRecord),new ArrayList<>()));
         }
 
         return persons;
     }
 
-    @Override
-    public List<PersonWithoutPhoneDto> getPersonInformation(String firstName, String lastName) {
-        final List<MedicalRecordEntity> medicalRecords = new ArrayList<>();
-
-        List<PersonEntity> personEntities= personRepository.findPersonsByName(firstName, lastName);
-        List<PersonWithoutPhoneDto> persons = new ArrayList<>();
-
-        if (!personEntities.isEmpty()) {
-            medicalRecords.addAll(medicalRecordRepository.findMedicalRecordsByPersons(personEntities)) ;
-        }
-
-        for (PersonEntity personEntity : personEntities) {
-            long age = 0;
-            LocalDate birthdate = null;
-
-            MedicalRecordEntity medicalRecord = medicalRecords.stream()
-                    .filter(medicalRecordEntity -> medicalRecordEntity.getLastName().equalsIgnoreCase(personEntity.getLastName()) && medicalRecordEntity.getFirstName().equalsIgnoreCase(personEntity.getFirstName()))
-                    .findFirst()
-                    .orElse(null);
-
-            if (medicalRecord != null) {
-                birthdate = LocalDate.parse(medicalRecord.getBirthdate(), DateTimeFormatter.ofPattern("MM/dd/yyyy"));
-                age = birthdate.until(LocalDate.now(), ChronoUnit.YEARS);
-            }
-
-            persons.add(personMapper.toPersonWithoutPhoneDto(personEntity, age, medicalRecordMapper.toMedicalHistory(medicalRecord)));
-        }
-
-        return persons;
-    }
 
     @Override
     public TreeSet<String> getPersonsEmail(String city) throws IOException {
         return personRepository.findEmailsByCity(city);
     }
+
+    private MedicalRecordEntity getMedicalRecordByPerson(String firstName, String lastName, List<MedicalRecordEntity> medicalRecords) {
+        return medicalRecords.stream()
+                .filter(medicalRecordEntity -> medicalRecordEntity.getLastName().equalsIgnoreCase(lastName) && medicalRecordEntity.getFirstName().equalsIgnoreCase(firstName))
+                .findFirst()
+                .orElse(null);
+    }
+
+    private long calculateAge(MedicalRecordEntity medicalRecord) {
+        if (medicalRecord == null) {
+            return 0;
+        }
+        LocalDate birthdate = LocalDate.parse(medicalRecord.getBirthdate(), DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+        return birthdate.until(LocalDate.now(), ChronoUnit.YEARS);
+    }
+
 
 }

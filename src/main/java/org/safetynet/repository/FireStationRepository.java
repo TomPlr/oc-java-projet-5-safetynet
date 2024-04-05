@@ -35,21 +35,21 @@ public interface FireStationRepository {
     boolean delete(FireStationEntity fireStationEntity);
 
     /**
-     * get addresses by fire station
+     * Get addresses by fire station
      *
      * @param station int
      */
     List<String> getAddressesByStation(int station);
 
     /**
-     * get fire station by address
+     * Get fire station by address
      *
      * @param address String
      */
     FireStationEntity getFireStation(String address);
 
     /**
-     * get fire station by station
+     * Get fire station by station
      *
      * @param station int
      */
