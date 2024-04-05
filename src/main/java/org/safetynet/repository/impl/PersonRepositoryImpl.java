@@ -2,21 +2,18 @@ package org.safetynet.repository.impl;
 
 import lombok.AllArgsConstructor;
 import org.safetynet.dto.PersonDto;
+import org.safetynet.dto.PersonsWithAgeRepartitionDto;
 import org.safetynet.entity.FireStationEntity;
 import org.safetynet.entity.MedicalRecordEntity;
 import org.safetynet.entity.PersonEntity;
 import org.safetynet.mapper.PersonMapper;
-import org.safetynet.model.PersonsWithAgeRepartitionModel;
 import org.safetynet.repository.PersonRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.TreeSet;
+import java.util.*;
 
 import static org.safetynet.repository.impl.DataLoadJson.*;
 
@@ -59,12 +56,12 @@ public class PersonRepositoryImpl implements PersonRepository {
             person.setZip(personEntity.getZip());
             person.setPhone(personEntity.getPhone());
 
-            return mapper.personEntityToDto(person);
+            return mapper.toPersonDto(person);
         }).orElseThrow(() -> new NoSuchElementException("Person not found"));
     }
 
     @Override
-    public PersonsWithAgeRepartitionModel findPersonsByStationNumber(int stationNumber) {
+    public PersonsWithAgeRepartitionDto findPersonsByStationNumber(int stationNumber) {
         final int AGE_OF_MAJORITY = 18;
 
         int totalOver18 = 0;
@@ -73,10 +70,10 @@ public class PersonRepositoryImpl implements PersonRepository {
 
         List<String> fireStationsAddresses = FIRE_STATION_ENTITIES.stream().filter(fireStationEntity -> fireStationEntity.getStation() == stationNumber).map(FireStationEntity::getAddress).toList();
 
-        List<PersonDto> persons = PERSON_ENTITIES.stream().filter(personEntity -> fireStationsAddresses.contains(personEntity.getAddress())).map(mapper::personEntityToDto).toList();
+        List<PersonDto> persons = PERSON_ENTITIES.stream().filter(personEntity -> fireStationsAddresses.contains(personEntity.getAddress())).map(mapper::toPersonDto).toList();
 
         for (PersonDto person : persons) {
-            MedicalRecordEntity medicalRecord = MEDICAL_RECORDS_ENTITIES.stream().filter(record -> record.getFirstName().equals(person.getFirstName()) && record.getLastName().equals(person.getLastName())).findFirst().orElse(null);
+            MedicalRecordEntity medicalRecord = MEDICAL_RECORDS_ENTITIES.stream().filter(record -> record.getFirstName().equals(person.firstName()) && record.getLastName().equals(person.lastName())).findFirst().orElse(null);
 
             if (medicalRecord != null) {
                 LocalDate birthdate = LocalDate.parse(medicalRecord.getBirthdate(), DateTimeFormatter.ofPattern("MM/dd/yyyy"));
@@ -90,20 +87,31 @@ public class PersonRepositoryImpl implements PersonRepository {
             }
         }
 
-        return new PersonsWithAgeRepartitionModel(persons, totalOver18, totalUnderOrEqual18);
+        return new PersonsWithAgeRepartitionDto(persons, totalOver18, totalUnderOrEqual18);
     }
 
     @Override
     public List<PersonEntity> findPersonsByAddress(String address) {
-        return PERSON_ENTITIES.stream().filter(personEntity -> address.contains(personEntity.getAddress())).toList();
+        return PERSON_ENTITIES.stream()
+                .filter(personEntity -> address.contains(personEntity.getAddress()))
+                .toList();
     }
 
     @Override
     public TreeSet<String> findPersonsPhoneNumbersByAddresses(List<String> addresses) {
         TreeSet<String> phoneNumbers = new TreeSet<>();
 
-        PERSON_ENTITIES.stream().filter(person -> addresses.contains(person.getAddress())).forEach(person -> phoneNumbers.add(person.getPhone()));
+        PERSON_ENTITIES.stream()
+                .filter(person -> addresses.contains(person.getAddress()))
+                .forEach(person -> phoneNumbers.add(person.getPhone()));
 
         return phoneNumbers;
+    }
+
+    @Override
+    public List<PersonEntity> findPersonsByName(String firstName, String lastName) {
+        return PERSON_ENTITIES.stream()
+                .filter(person -> person.getFirstName().equalsIgnoreCase(firstName) && person.getLastName().equalsIgnoreCase(lastName))
+                .toList();
     }
 }

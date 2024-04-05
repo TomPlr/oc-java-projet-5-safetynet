@@ -1,6 +1,6 @@
 package org.safetynet.service;
 
-import org.safetynet.dto.PersonDto;
+import org.safetynet.dto.*;
 import org.safetynet.entity.PersonEntity;
 import org.safetynet.model.*;
 
@@ -17,12 +17,14 @@ public interface PersonService {
 
     PersonDto update(PersonEntity person) throws IOException;
 
-    PersonsWithAgeRepartitionModel getPersonsCoveredByFireStation(int fireStationNumber) throws IOException;
+    PersonsWithAgeRepartitionDto getPersonsCoveredByFireStation(int fireStationNumber) throws IOException;
 
-    List<ChildModel> getChildrenByAddress(String address) throws IOException;
+    List<ChildDto> getChildrenByAddress(String address) throws IOException;
 
     TreeSet<String> getPersonsPhoneNumberByStation(int station) throws IOException;
 
-    List<PersonWithMedicalHistoryModel> getPersonsWithMedicalHistoryByAddress(String address) throws IOException;
+    List<PersonWithoutAddressAndEmailDto> getPersonsWithMedicalHistoryByAddress(String address) throws IOException;
+
+    List<PersonWithoutPhoneDto> getPersonInformation(String firstName, String lastName) throws IOException;
 
 }

@@ -1,6 +1,7 @@
 package org.safetynet.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.safetynet.dto.MedicalRecordDto;
 import org.safetynet.entity.MedicalRecordEntity;
 import org.safetynet.model.MedicalHistoryModel;
@@ -15,5 +16,4 @@ public interface MedicalRecordMapper {
     MedicalRecordEntity medicalRecordDtoToEntity(MedicalRecordDto medicalRecordDto);
 
     MedicalHistoryModel toMedicalHistory(MedicalRecordEntity medicalRecordEntity);
-
 }

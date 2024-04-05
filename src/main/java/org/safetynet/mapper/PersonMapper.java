@@ -2,19 +2,22 @@ package org.safetynet.mapper;
 
 import org.mapstruct.Mapper;
 import org.safetynet.dto.PersonDto;
+import org.safetynet.dto.PersonWithoutPhoneDto;
 import org.safetynet.entity.PersonEntity;
-import org.safetynet.model.ChildModel;
+import org.safetynet.dto.ChildDto;
 import org.safetynet.model.MedicalHistoryModel;
-import org.safetynet.model.PersonWithMedicalHistoryModel;
+import org.safetynet.dto.PersonWithoutAddressAndEmailDto;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface PersonMapper {
 
-    PersonDto personEntityToDto(PersonEntity personEntity);
+    PersonDto toPersonDto(PersonEntity personEntity);
 
-    ChildModel toPersonWithAgeModel(PersonEntity person, int age, List<PersonDto> familyMembers);
+    ChildDto toPersonWithAgeDto(PersonEntity person, int age, List<PersonDto> familyMembers);
 
-    PersonWithMedicalHistoryModel toPersonWithMedicalRecordModel(PersonEntity person, long age, MedicalHistoryModel medicalHistory);
+    PersonWithoutAddressAndEmailDto toPersonWithoutAddressAndEmailDto(PersonEntity person, long age, MedicalHistoryModel medicalHistory);
+
+    PersonWithoutPhoneDto toPersonWithoutPhoneDto(PersonEntity person, long age, MedicalHistoryModel medicalHistory);
 }

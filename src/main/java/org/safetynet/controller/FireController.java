@@ -2,7 +2,7 @@ package org.safetynet.controller;
 
 
 import lombok.AllArgsConstructor;
-import org.safetynet.model.PersonsWithMedicalHistoryByStationModel;
+import org.safetynet.dto.PersonsWithMedicalHistoryByStationDto;
 import org.safetynet.service.FireStationService;
 import org.safetynet.service.PersonService;
 import org.springframework.http.HttpStatus;
@@ -23,7 +23,7 @@ public class FireController {
     private final FireStationService fireStationService;
 
     @GetMapping
-    private ResponseEntity<PersonsWithMedicalHistoryByStationModel> getPersonsWithMedicalHistory(@RequestParam String address) throws IOException {
-        return new ResponseEntity<>(new PersonsWithMedicalHistoryByStationModel(personService.getPersonsWithMedicalHistoryByAddress(address), fireStationService.getStation(address)), HttpStatus.OK);
+    private ResponseEntity<PersonsWithMedicalHistoryByStationDto> getPersonsWithMedicalHistory(@RequestParam String address) throws IOException {
+        return new ResponseEntity<>(new PersonsWithMedicalHistoryByStationDto(personService.getPersonsWithMedicalHistoryByAddress(address), fireStationService.getStation(address)), HttpStatus.OK);
     }
 }

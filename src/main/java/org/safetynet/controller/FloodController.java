@@ -1,7 +1,7 @@
 package org.safetynet.controller;
 
 import lombok.AllArgsConstructor;
-import org.safetynet.model.PersonWithMedicalHistoryModel;
+import org.safetynet.dto.PersonWithoutAddressAndEmailDto;
 import org.safetynet.service.FireStationService;
 import org.safetynet.service.PersonService;
 import org.springframework.http.HttpStatus;
@@ -26,8 +26,8 @@ public class FloodController {
     private final FireStationService fireStationService;
 
     @GetMapping
-    private ResponseEntity<Map<String, List<PersonWithMedicalHistoryModel>>> getPersonsWithMedicalHistory(@RequestParam int[] stations) throws IOException {
-        Map<String, List<PersonWithMedicalHistoryModel>> personsByAddress = new HashMap<>();
+    private ResponseEntity<Map<String, List<PersonWithoutAddressAndEmailDto>>> getPersonsWithMedicalHistory(@RequestParam int[] stations) throws IOException {
+        Map<String, List<PersonWithoutAddressAndEmailDto>> personsByAddress = new HashMap<>();
         List<String> addresses = new ArrayList<>();
 
         for (int station : stations) {
@@ -35,7 +35,7 @@ public class FloodController {
         }
 
         for (String address : addresses) {
-            List<PersonWithMedicalHistoryModel> persons = personService.getPersonsWithMedicalHistoryByAddress(address);
+            List<PersonWithoutAddressAndEmailDto> persons = personService.getPersonsWithMedicalHistoryByAddress(address);
             personsByAddress.put(address, persons);
         }
 
