@@ -1,6 +1,7 @@
 package org.safetynet.service.impl;
 
 
+import com.sun.source.tree.Tree;
 import lombok.AllArgsConstructor;
 import org.safetynet.dto.*;
 import org.safetynet.entity.MedicalRecordEntity;
@@ -14,6 +15,7 @@ import org.safetynet.repository.PersonRepository;
 import org.safetynet.service.PersonService;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
@@ -165,4 +167,10 @@ public class PersonServiceImpl implements PersonService {
 
         return persons;
     }
+
+    @Override
+    public TreeSet<String> getPersonsEmail(String city) throws IOException {
+        return personRepository.findEmailsByCity(city);
+    }
+
 }

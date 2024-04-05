@@ -1,8 +1,8 @@
 package org.safetynet.repository;
 
 import org.safetynet.dto.PersonDto;
-import org.safetynet.entity.PersonEntity;
 import org.safetynet.dto.PersonsWithAgeRepartitionDto;
+import org.safetynet.entity.PersonEntity;
 
 import java.util.List;
 import java.util.TreeSet;
@@ -66,5 +66,12 @@ public interface PersonRepository {
      * @param lastName  String
      */
     List<PersonEntity> findPersonsByName(String firstName, String lastName);
+
+    /**
+     * Get persons' email by city
+     *
+     * @param city String
+     */
+    TreeSet<String> findEmailsByCity(String city);
 
 }

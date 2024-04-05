@@ -114,4 +114,15 @@ public class PersonRepositoryImpl implements PersonRepository {
                 .filter(person -> person.getFirstName().equalsIgnoreCase(firstName) && person.getLastName().equalsIgnoreCase(lastName))
                 .toList();
     }
+
+    @Override
+    public TreeSet<String> findEmailsByCity(String city) {
+        TreeSet<String> emails = new TreeSet<>();
+
+        PERSON_ENTITIES.stream()
+                .filter(personEntity -> personEntity.getCity().equalsIgnoreCase(city))
+                .forEach(personEntity -> emails.add(personEntity.getEmail()));
+
+        return emails;
+    }
 }

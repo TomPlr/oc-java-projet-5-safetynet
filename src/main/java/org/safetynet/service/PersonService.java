@@ -27,4 +27,5 @@ public interface PersonService {
 
     List<PersonWithoutPhoneDto> getPersonInformation(String firstName, String lastName) throws IOException;
 
+    TreeSet<String> getPersonsEmail(String city) throws IOException;
 }
