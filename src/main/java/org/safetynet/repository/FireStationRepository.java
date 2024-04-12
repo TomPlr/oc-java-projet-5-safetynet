@@ -1,6 +1,5 @@
 package org.safetynet.repository;
 
-import org.safetynet.dto.FireStationDto;
 import org.safetynet.entity.FireStationEntity;
 
 import java.util.List;
@@ -18,14 +17,14 @@ public interface FireStationRepository {
      *
      * @param fireStationEntity FireStationEntity
      */
-    FireStationDto save(FireStationEntity fireStationEntity);
+    FireStationEntity save(FireStationEntity fireStationEntity);
 
     /**
      * Update the station number of an address
      *
      * @param fireStationEntity FireStation
      */
-    FireStationDto update(FireStationEntity fireStationEntity);
+    FireStationEntity update(FireStationEntity fireStationEntity);
 
     /**
      * Delete a fire station

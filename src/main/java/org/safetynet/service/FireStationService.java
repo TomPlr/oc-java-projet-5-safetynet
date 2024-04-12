@@ -1,6 +1,6 @@
 package org.safetynet.service;
 
-import org.safetynet.dto.FireStationDto;
+import jakarta.validation.Valid;
 import org.safetynet.entity.FireStationEntity;
 import org.safetynet.model.GenericResponseModel;
 
@@ -10,14 +10,14 @@ import java.util.List;
 public interface FireStationService {
     List<FireStationEntity> findAll() throws IOException;
 
-    FireStationDto save(FireStationDto fireStation) throws IOException;
+    FireStationEntity save(@Valid FireStationEntity fireStation) throws IOException;
 
-    FireStationDto update(FireStationDto fireStation) throws IOException;
+    FireStationEntity update(FireStationEntity fireStation) throws IOException;
 
-    GenericResponseModel delete(FireStationDto fireStation) throws IOException;
+    GenericResponseModel delete(FireStationEntity fireStation) throws IOException;
 
-    int getStation(String address) throws  IOException;
+    int getStation(String address) throws IOException;
 
-    String getStation(int station) throws  IOException;
+    String getStation(int station) throws IOException;
 
 }

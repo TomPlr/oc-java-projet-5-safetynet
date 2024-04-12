@@ -3,10 +3,9 @@ package org.safetynet.controller;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.safetynet.dto.FireStationDto;
+import org.safetynet.dto.PersonsWithAgeRepartitionDto;
 import org.safetynet.entity.FireStationEntity;
 import org.safetynet.model.GenericResponseModel;
-import org.safetynet.dto.PersonsWithAgeRepartitionDto;
 import org.safetynet.service.FireStationService;
 import org.safetynet.service.PersonService;
 import org.springframework.http.HttpStatus;
@@ -31,17 +30,17 @@ public class FireStationController {
     }
 
     @PostMapping
-    private ResponseEntity<FireStationDto> createFireStation(@Valid @RequestBody FireStationDto fireStation) throws IOException {
+    private ResponseEntity<FireStationEntity> createFireStation(@Valid @RequestBody FireStationEntity fireStation) throws IOException {
         return new ResponseEntity<>(fireStationService.save(fireStation), HttpStatus.CREATED);
     }
 
     @PutMapping
-    private ResponseEntity<FireStationDto> updateFireStation(@Valid @RequestBody FireStationDto fireStation) throws IOException {
+    private ResponseEntity<FireStationEntity> updateFireStation(@Valid @RequestBody FireStationEntity fireStation) throws IOException {
         return new ResponseEntity<>(fireStationService.update(fireStation), HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping
-    private ResponseEntity<GenericResponseModel> deleteFireStation(@RequestBody FireStationDto fireStation) throws IOException {
+    private ResponseEntity<GenericResponseModel> deleteFireStation(@RequestBody FireStationEntity fireStation) throws IOException {
         return new ResponseEntity<>(fireStationService.delete(fireStation), HttpStatus.OK);
     }
 

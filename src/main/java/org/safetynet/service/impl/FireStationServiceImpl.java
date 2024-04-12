@@ -1,9 +1,8 @@
 package org.safetynet.service.impl;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.safetynet.dto.FireStationDto;
 import org.safetynet.entity.FireStationEntity;
-import org.safetynet.mapper.FireStationMapper;
 import org.safetynet.model.GenericResponseModel;
 import org.safetynet.repository.FireStationRepository;
 import org.safetynet.service.FireStationService;
@@ -17,7 +16,6 @@ import java.util.List;
 public class FireStationServiceImpl implements FireStationService {
 
     private FireStationRepository repository;
-    private FireStationMapper mapper;
 
     @Override
     public List<FireStationEntity> findAll() throws IOException {
@@ -25,19 +23,19 @@ public class FireStationServiceImpl implements FireStationService {
     }
 
     @Override
-    public FireStationDto save(FireStationDto fireStation) throws IOException {
-        return repository.save(mapper.fireStationDtoToEntity(fireStation));
+    public FireStationEntity save(@Valid FireStationEntity fireStation) throws IOException {
+        return repository.save(fireStation);
     }
 
     @Override
-    public FireStationDto update(FireStationDto fireStation) throws IOException {
-        return repository.update(mapper.fireStationDtoToEntity(fireStation));
+    public FireStationEntity update(FireStationEntity fireStation) throws IOException {
+        return repository.update(fireStation);
 
     }
 
     @Override
-    public GenericResponseModel delete(FireStationDto fireStation) throws IOException {
-        final boolean isSuccessfullyDeleted = repository.delete(mapper.fireStationDtoToEntity(fireStation));
+    public GenericResponseModel delete(FireStationEntity fireStation) throws IOException {
+        final boolean isSuccessfullyDeleted = repository.delete(fireStation);
 
         if (isSuccessfullyDeleted) {
             return new GenericResponseModel(true, String
@@ -52,11 +50,11 @@ public class FireStationServiceImpl implements FireStationService {
 
     @Override
     public int getStation(String address) throws IOException {
-        return  repository.getFireStation(address).getStation();
+        return repository.getFireStation(address).getStation();
     }
 
     @Override
     public String getStation(int station) throws IOException {
-        return  repository.getFireStation(station).getAddress();
+        return repository.getFireStation(station).getAddress();
     }
 }
