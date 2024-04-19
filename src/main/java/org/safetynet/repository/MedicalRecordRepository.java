@@ -1,6 +1,5 @@
 package org.safetynet.repository;
 
-import org.safetynet.dto.MedicalRecordDto;
 import org.safetynet.entity.MedicalRecordEntity;
 import org.safetynet.entity.PersonEntity;
 
@@ -20,7 +19,7 @@ public interface MedicalRecordRepository {
      * @param medicalRecordEntity medicalRecordEntity
      * @return
      */
-    MedicalRecordDto save(MedicalRecordEntity medicalRecordEntity);
+    MedicalRecordEntity save(MedicalRecordEntity medicalRecordEntity);
 
     /**
      * Update a medical record
@@ -28,7 +27,7 @@ public interface MedicalRecordRepository {
      * @param medicalRecordEntity MedicalRecordEntity
      * @return
      */
-    MedicalRecordDto update(MedicalRecordEntity medicalRecordEntity);
+    MedicalRecordEntity update(MedicalRecordEntity medicalRecordEntity);
 
     /**
      * Delete a medical record

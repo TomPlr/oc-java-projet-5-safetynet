@@ -1,7 +1,6 @@
 package org.safetynet.service.impl;
 
 import lombok.AllArgsConstructor;
-import org.safetynet.dto.MedicalRecordDto;
 import org.safetynet.entity.MedicalRecordEntity;
 import org.safetynet.mapper.MedicalRecordMapper;
 import org.safetynet.model.GenericResponseModel;
@@ -17,7 +16,6 @@ import java.util.List;
 public class MedicalRecordServiceImpl implements MedicalRecordService {
 
     private final MedicalRecordRepository repository;
-    private final MedicalRecordMapper mapper;
 
     @Override
     public List<MedicalRecordEntity> findAll() throws IOException {
@@ -25,13 +23,13 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
     }
 
     @Override
-    public MedicalRecordDto save(MedicalRecordDto medicalRecord) throws IOException {
-        return repository.save(mapper.medicalRecordDtoToEntity(medicalRecord));
+    public MedicalRecordEntity save(MedicalRecordEntity medicalRecord) throws IOException {
+        return repository.save(medicalRecord);
     }
 
     @Override
-    public MedicalRecordDto update(MedicalRecordDto medicalRecord) throws IOException {
-        return repository.update(mapper.medicalRecordDtoToEntity(medicalRecord));
+    public MedicalRecordEntity update(MedicalRecordEntity medicalRecord) throws IOException {
+        return repository.update(medicalRecord);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package org.safetynet.repository.impl;
 
 import lombok.AllArgsConstructor;
-import org.safetynet.dto.MedicalRecordDto;
 import org.safetynet.entity.MedicalRecordEntity;
 import org.safetynet.entity.PersonEntity;
 import org.safetynet.mapper.MedicalRecordMapper;
@@ -27,20 +26,20 @@ public class MedicalRecordRepositoryImpl implements MedicalRecordRepository {
     }
 
     @Override
-    public MedicalRecordDto save(MedicalRecordEntity medicalRecordEntity) {
+    public MedicalRecordEntity save(MedicalRecordEntity medicalRecordEntity) {
         MEDICAL_RECORDS_ENTITIES.add(medicalRecordEntity);
 
-        Optional<MedicalRecordDto> optionalMedicalRecord = MEDICAL_RECORDS_ENTITIES
+        Optional<MedicalRecordEntity> optionalMedicalRecord = MEDICAL_RECORDS_ENTITIES
                 .stream()
                 .filter(medicalRecord -> medicalRecord.equals(medicalRecordEntity))
-                .findFirst()
-                .map(mapper::medicalRecordEntityToDto);
+                .findFirst();
+
 
         return optionalMedicalRecord.orElseThrow(() -> new NoSuchElementException("MedicalRecordEntity not found"));
     }
 
     @Override
-    public MedicalRecordDto update(MedicalRecordEntity medicalRecordEntity) {
+    public MedicalRecordEntity update(MedicalRecordEntity medicalRecordEntity) {
         Optional<MedicalRecordEntity> optionalMedicalRecordEntity = MEDICAL_RECORDS_ENTITIES
                 .stream()
                 .filter(medicalRecord -> medicalRecord.getFirstName().equals(medicalRecordEntity.getFirstName()) || medicalRecord.getLastName().equals(medicalRecordEntity.getLastName()))
@@ -52,7 +51,7 @@ public class MedicalRecordRepositoryImpl implements MedicalRecordRepository {
                     medicalRecord.setBirthdate(medicalRecordEntity.getBirthdate());
                     medicalRecord.setAllergies(medicalRecordEntity.getAllergies());
 
-                    return mapper.medicalRecordEntityToDto(medicalRecord);
+                    return medicalRecord;
                 })
                 .orElseThrow(() -> new NoSuchElementException("MedicalRecordEntity not found"));
 

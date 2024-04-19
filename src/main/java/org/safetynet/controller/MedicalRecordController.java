@@ -2,7 +2,6 @@ package org.safetynet.controller;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.safetynet.dto.MedicalRecordDto;
 import org.safetynet.entity.MedicalRecordEntity;
 import org.safetynet.model.GenericResponseModel;
 import org.safetynet.service.MedicalRecordService;
@@ -26,12 +25,12 @@ public class MedicalRecordController {
     }
 
     @PostMapping
-    private ResponseEntity<MedicalRecordDto> createMedicalRecord(@Valid @RequestBody MedicalRecordDto medicalRecord) throws IOException {
+    private ResponseEntity<MedicalRecordEntity> createMedicalRecord(@Valid @RequestBody MedicalRecordEntity medicalRecord) throws IOException {
         return new ResponseEntity<>(medicalRecordService.save(medicalRecord), HttpStatus.CREATED);
     }
 
     @PutMapping
-    private ResponseEntity<MedicalRecordDto> updateMedicalRecord(@Valid @RequestBody MedicalRecordDto medicalRecord) throws IOException {
+    private ResponseEntity<MedicalRecordEntity> updateMedicalRecord(@Valid @RequestBody MedicalRecordEntity medicalRecord) throws IOException {
         return new ResponseEntity<>(medicalRecordService.save(medicalRecord), HttpStatus.OK);
     }
 
