@@ -84,6 +84,7 @@
             <version>3.25.3</version>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
 
     <build>
@@ -91,6 +92,31 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.7</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>jacoco-report</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions> <configuration>
+                <excludes>
+                    <exclude>org/safetynet/dto/*</exclude>
+                    <exclude>org/safetynet/entity/*</exclude>
+                    <exclude>**/config/*</exclude>
+                </excludes>
+            </configuration>
             </plugin>
         </plugins>
     </build>

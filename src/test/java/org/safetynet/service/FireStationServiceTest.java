@@ -1,9 +1,10 @@
 package org.safetynet.service;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.safetynet.entity.FireStationEntity;
 import org.safetynet.model.GenericResponseModel;
 import org.safetynet.repository.FireStationRepository;
@@ -17,20 +18,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class FireStationServiceTest {
 
-    private static FireStationService fireStationService;
-
+    @InjectMocks
+    private FireStationServiceImpl fireStationService;
     @Mock
     private FireStationRepository fireStationRepository;
 
-
-    @BeforeEach
-    public void setUpPerTest() {
-        MockitoAnnotations.openMocks(this);
-        fireStationService = new FireStationServiceImpl(fireStationRepository) {
-        };
-    }
 
     @Test
     public void testFindAll() throws IOException {

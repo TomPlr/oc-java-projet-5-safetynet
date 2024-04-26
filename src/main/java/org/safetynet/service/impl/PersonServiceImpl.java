@@ -133,20 +133,18 @@ public class PersonServiceImpl implements PersonService {
         return personRepository.findEmailsByCity(city);
     }
 
-    private MedicalRecordEntity getMedicalRecordByPerson(String firstName, String lastName, List<MedicalRecordEntity> medicalRecords) {
+    public MedicalRecordEntity getMedicalRecordByPerson(String firstName, String lastName, List<MedicalRecordEntity> medicalRecords) {
         return medicalRecords.stream()
                 .filter(medicalRecordEntity -> medicalRecordEntity.getLastName().equalsIgnoreCase(lastName) && medicalRecordEntity.getFirstName().equalsIgnoreCase(firstName))
                 .findFirst()
                 .orElse(null);
     }
 
-    private long calculateAge(MedicalRecordEntity medicalRecord) {
+    public long calculateAge(MedicalRecordEntity medicalRecord) {
         if (medicalRecord == null) {
             return 0;
         }
         LocalDate birthdate = LocalDate.parse(medicalRecord.getBirthdate(), DateTimeFormatter.ofPattern("MM/dd/yyyy"));
         return birthdate.until(LocalDate.now(), ChronoUnit.YEARS);
     }
-
-
 }
