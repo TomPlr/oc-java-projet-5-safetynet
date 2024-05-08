@@ -3,7 +3,6 @@ package org.safetynet.controller;
 import lombok.AllArgsConstructor;
 import org.safetynet.dto.PersonWithoutAddressAndEmailDto;
 import org.safetynet.mapper.PersonMapper;
-import org.safetynet.model.PersonModel;
 import org.safetynet.service.FireStationService;
 import org.safetynet.service.PersonService;
 import org.springframework.http.HttpStatus;

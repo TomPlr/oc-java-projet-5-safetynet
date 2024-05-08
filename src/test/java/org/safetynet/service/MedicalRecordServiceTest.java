@@ -6,7 +6,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.safetynet.entity.MedicalRecordEntity;
-import org.safetynet.model.GenericResponseModel;
+import org.safetynet.dto.GenericResponseDto;
 import org.safetynet.repository.MedicalRecordRepository;
 import org.safetynet.service.impl.MedicalRecordServiceImpl;
 
@@ -63,7 +63,7 @@ public class MedicalRecordServiceTest {
 
         when(medicalRecordRepository.delete(firstName, lastName)).thenReturn(true);
 
-        GenericResponseModel response = medicalRecordService.delete(firstName, lastName);
+        GenericResponseDto response = medicalRecordService.delete(firstName, lastName);
 
         assertThat(response.success()).isTrue();
         assertThat(response.details()).isEqualTo(String.format("The medical record for %s %s has been successfully deleted !", firstName, lastName));
@@ -76,7 +76,7 @@ public class MedicalRecordServiceTest {
 
         when(medicalRecordRepository.delete(firstName, lastName)).thenReturn(false);
 
-        GenericResponseModel response = medicalRecordService.delete(firstName, lastName);
+        GenericResponseDto response = medicalRecordService.delete(firstName, lastName);
 
         assertThat(response.success()).isFalse();
         assertThat(response.details()).isEqualTo(String.format("Medical record for %s %s not found", firstName, lastName));

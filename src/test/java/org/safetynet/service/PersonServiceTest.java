@@ -12,9 +12,9 @@ import org.safetynet.dto.PersonsWithAgeRepartitionDto;
 import org.safetynet.entity.MedicalRecordEntity;
 import org.safetynet.entity.PersonEntity;
 import org.safetynet.mapper.MedicalRecordMapper;
-import org.safetynet.mapper.PersonMapperImpl;
-import org.safetynet.model.GenericResponseModel;
-import org.safetynet.model.PersonModel;
+import org.safetynet.mapper.PersonMapper;
+import org.safetynet.dto.GenericResponseDto;
+import org.safetynet.dto.PersonExtendedDto;
 import org.safetynet.repository.FireStationRepository;
 import org.safetynet.repository.MedicalRecordRepository;
 import org.safetynet.repository.PersonRepository;
@@ -47,7 +47,7 @@ public class PersonServiceTest {
     private MedicalRecordMapper medicalRecordMapper;
 
     @Spy
-    private PersonMapperImpl personMapper;
+    private PersonMapper personMapper;
 
     @InjectMocks
     private PersonServiceImpl personService;
@@ -94,7 +94,7 @@ public class PersonServiceTest {
 
         when(personRepository.delete(firstName, lastName)).thenReturn(true);
 
-        GenericResponseModel response = personService.delete(firstName, lastName);
+        GenericResponseDto response = personService.delete(firstName, lastName);
 
         assertThat(response.success()).isTrue();
         assertThat(response.details()).isEqualTo(String.format("%s %s has been successfully deleted !", firstName, lastName));
@@ -107,7 +107,7 @@ public class PersonServiceTest {
 
         when(personRepository.delete(firstName, lastName)).thenReturn(false);
 
-        GenericResponseModel response = personService.delete(firstName, lastName);
+        GenericResponseDto response = personService.delete(firstName, lastName);
 
         assertThat(response.success()).isFalse();
         assertThat(response.details()).isEqualTo(String.format("Error: %s %s not found!", firstName, lastName));
@@ -172,12 +172,12 @@ public class PersonServiceTest {
         List<MedicalRecordEntity> medicalRecordEntities = List.of(
                 MedicalRecordEntity.builder().firstName("John").lastName("Doe").birthdate(currentDate.minusYears(42).format(formatter)).medications(null).allergies(null).build()
         );
-        List<PersonModel> expectedPersons = List.of(new PersonModel("John", "Doe", "123 Test Rd", "email@email.com", 42, "123456789", null, new ArrayList<>()));
+        List<PersonExtendedDto> expectedPersons = List.of(new PersonExtendedDto("John", "Doe", "123 Test Rd", "email@email.com", 42, "123456789", null, new ArrayList<>()));
 
         when(personRepository.findPersonsByAddress("123 Test Rd")).thenReturn(personEntities);
         when(medicalRecordRepository.findMedicalRecordsByPersons(personEntities)).thenReturn(medicalRecordEntities);
 
-        List<PersonModel> result = personService.getPersons("123 Test Rd");
+        List<PersonExtendedDto> result = personService.getPersons("123 Test Rd");
 
         assertThat(result).hasSize(1);
         assertThat(result).isEqualTo(expectedPersons);

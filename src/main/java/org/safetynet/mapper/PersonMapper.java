@@ -6,25 +6,25 @@ import org.safetynet.dto.PersonDto;
 import org.safetynet.dto.PersonWithoutAddressAndEmailDto;
 import org.safetynet.dto.PersonWithoutPhoneDto;
 import org.safetynet.entity.PersonEntity;
-import org.safetynet.model.MedicalHistoryModel;
-import org.safetynet.model.PersonModel;
+import org.safetynet.dto.MedicalHistoryDto;
+import org.safetynet.dto.PersonExtendedDto;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface PersonMapper {
 
-    PersonModel toPersonModel(PersonEntity personEntity, long age, MedicalHistoryModel medicalHistory, List<PersonDto> familyMembers);
+    PersonExtendedDto toPersonModel(PersonEntity personEntity, long age, MedicalHistoryDto medicalHistory, List<PersonDto> familyMembers);
 
     PersonDto toPersonDto(PersonEntity personEntity);
 
-    PersonDto toPersonDto(PersonModel personModel);
+    PersonDto toPersonDto(PersonExtendedDto personExtendedDto);
 
-    ChildDto toChildDto(PersonModel personModel);
+    ChildDto toChildDto(PersonExtendedDto personExtendedDto);
 
-    PersonWithoutAddressAndEmailDto toPersonWithoutAddressAndEmailDto(PersonModel personModel);
+    PersonWithoutAddressAndEmailDto toPersonWithoutAddressAndEmailDto(PersonExtendedDto personExtendedDto);
 
-    PersonWithoutPhoneDto toPersonWithoutPhoneDto(PersonModel personModel);
+    PersonWithoutPhoneDto toPersonWithoutPhoneDto(PersonExtendedDto personExtendedDto);
 
 
 

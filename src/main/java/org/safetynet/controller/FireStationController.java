@@ -5,7 +5,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.safetynet.dto.PersonsWithAgeRepartitionDto;
 import org.safetynet.entity.FireStationEntity;
-import org.safetynet.model.GenericResponseModel;
+import org.safetynet.dto.GenericResponseDto;
 import org.safetynet.service.FireStationService;
 import org.safetynet.service.PersonService;
 import org.springframework.http.HttpStatus;
@@ -40,7 +40,7 @@ public class FireStationController {
     }
 
     @DeleteMapping
-    private ResponseEntity<GenericResponseModel> deleteFireStation(@RequestBody FireStationEntity fireStation) throws IOException {
+    private ResponseEntity<GenericResponseDto> deleteFireStation(@RequestBody FireStationEntity fireStation) throws IOException {
         return new ResponseEntity<>(fireStationService.delete(fireStation), HttpStatus.OK);
     }
 

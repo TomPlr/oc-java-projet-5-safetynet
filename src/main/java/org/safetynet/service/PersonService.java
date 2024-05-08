@@ -4,8 +4,8 @@ import org.safetynet.dto.ChildDto;
 import org.safetynet.dto.PersonDto;
 import org.safetynet.dto.PersonsWithAgeRepartitionDto;
 import org.safetynet.entity.PersonEntity;
-import org.safetynet.model.GenericResponseModel;
-import org.safetynet.model.PersonModel;
+import org.safetynet.dto.GenericResponseDto;
+import org.safetynet.dto.PersonExtendedDto;
 
 import java.io.IOException;
 import java.util.List;
@@ -16,13 +16,13 @@ public interface PersonService {
 
     PersonEntity save(PersonEntity person) throws IOException;
 
-    GenericResponseModel delete(String firstName, String lastName) throws IOException;
+    GenericResponseDto delete(String firstName, String lastName) throws IOException;
 
     PersonDto update(PersonEntity person) throws IOException;
 
-    PersonModel getPerson(String firstName, String lastName) throws IOException;
+    PersonExtendedDto getPerson(String firstName, String lastName) throws IOException;
 
-    List<PersonModel> getPersons(String address) throws IOException;
+    List<PersonExtendedDto> getPersons(String address) throws IOException;
 
     PersonsWithAgeRepartitionDto getPersonsCoveredByFireStation(int fireStationNumber) throws IOException;
 

@@ -3,7 +3,7 @@ package org.safetynet.controller;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.safetynet.entity.MedicalRecordEntity;
-import org.safetynet.model.GenericResponseModel;
+import org.safetynet.dto.GenericResponseDto;
 import org.safetynet.service.MedicalRecordService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +35,7 @@ public class MedicalRecordController {
     }
 
     @DeleteMapping
-    private ResponseEntity<GenericResponseModel> deleteMedicalRecord(@RequestParam String firstName,@RequestParam String lastName) throws IOException{
+    private ResponseEntity<GenericResponseDto> deleteMedicalRecord(@RequestParam String firstName, @RequestParam String lastName) throws IOException{
         return new ResponseEntity<>(medicalRecordService.delete(firstName,lastName), HttpStatus.OK);
     }
 

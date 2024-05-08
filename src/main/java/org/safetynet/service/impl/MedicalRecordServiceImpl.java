@@ -2,8 +2,7 @@ package org.safetynet.service.impl;
 
 import lombok.AllArgsConstructor;
 import org.safetynet.entity.MedicalRecordEntity;
-import org.safetynet.mapper.MedicalRecordMapper;
-import org.safetynet.model.GenericResponseModel;
+import org.safetynet.dto.GenericResponseDto;
 import org.safetynet.repository.MedicalRecordRepository;
 import org.safetynet.service.MedicalRecordService;
 import org.springframework.stereotype.Service;
@@ -33,14 +32,14 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
     }
 
     @Override
-    public GenericResponseModel delete(String firstName, String lastName) throws IOException {
+    public GenericResponseDto delete(String firstName, String lastName) throws IOException {
         final boolean isSuccessfullyDeleted = repository.delete(firstName, lastName);
 
         if (isSuccessfullyDeleted) {
-            return new GenericResponseModel(true, String.format("The medical record for %s %s has been successfully deleted !", firstName, lastName));
+            return new GenericResponseDto(true, String.format("The medical record for %s %s has been successfully deleted !", firstName, lastName));
 
         } else {
-            return new GenericResponseModel(false, String.format("Medical record for %s %s not found", firstName, lastName));
+            return new GenericResponseDto(false, String.format("Medical record for %s %s not found", firstName, lastName));
         }
     }
 }

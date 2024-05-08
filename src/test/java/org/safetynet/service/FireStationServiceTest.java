@@ -6,7 +6,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.safetynet.entity.FireStationEntity;
-import org.safetynet.model.GenericResponseModel;
+import org.safetynet.dto.GenericResponseDto;
 import org.safetynet.repository.FireStationRepository;
 import org.safetynet.service.impl.FireStationServiceImpl;
 
@@ -86,7 +86,7 @@ class FireStationServiceTest {
 
         when(fireStationRepository.delete(fireStation)).thenReturn(true);
 
-        GenericResponseModel response = fireStationService.delete(fireStation);
+        GenericResponseDto response = fireStationService.delete(fireStation);
 
         assertThat(response.success()).isTrue();
         assertThat(response.details())
@@ -98,7 +98,7 @@ class FireStationServiceTest {
         FireStationEntity fireStation = FireStationEntity.builder().address("Address1").station(1).build();
         when(fireStationRepository.delete(fireStation)).thenReturn(false);
 
-        GenericResponseModel response = fireStationService.delete(fireStation);
+        GenericResponseDto response = fireStationService.delete(fireStation);
 
         assertThat(response.success()).isFalse();
         assertThat(response.details())

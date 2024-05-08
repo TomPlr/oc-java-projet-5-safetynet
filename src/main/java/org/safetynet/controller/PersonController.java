@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.safetynet.dto.PersonDto;
 import org.safetynet.entity.PersonEntity;
-import org.safetynet.model.GenericResponseModel;
+import org.safetynet.dto.GenericResponseDto;
 import org.safetynet.service.PersonService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +31,7 @@ public class PersonController {
     }
 
     @DeleteMapping
-    private ResponseEntity<GenericResponseModel> deletePerson(@RequestParam String firstName, @RequestParam String lastName) throws IOException {
+    private ResponseEntity<GenericResponseDto> deletePerson(@RequestParam String firstName, @RequestParam String lastName) throws IOException {
         return new ResponseEntity<>(personService.delete(firstName, lastName), HttpStatus.OK);
     }
 

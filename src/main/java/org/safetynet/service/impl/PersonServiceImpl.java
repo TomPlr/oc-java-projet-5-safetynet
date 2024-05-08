@@ -7,8 +7,8 @@ import org.safetynet.entity.MedicalRecordEntity;
 import org.safetynet.entity.PersonEntity;
 import org.safetynet.mapper.MedicalRecordMapper;
 import org.safetynet.mapper.PersonMapper;
-import org.safetynet.model.GenericResponseModel;
-import org.safetynet.model.PersonModel;
+import org.safetynet.dto.GenericResponseDto;
+import org.safetynet.dto.PersonExtendedDto;
 import org.safetynet.repository.FireStationRepository;
 import org.safetynet.repository.MedicalRecordRepository;
 import org.safetynet.repository.PersonRepository;
@@ -44,13 +44,13 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public GenericResponseModel delete(String firstName, String lastName) {
+    public GenericResponseDto delete(String firstName, String lastName) {
         final boolean isSuccessfullyDeleted = personRepository.delete(firstName, lastName);
 
         if (isSuccessfullyDeleted) {
-            return new GenericResponseModel(true, String.format("%s %s has been successfully deleted !", firstName, lastName));
+            return new GenericResponseDto(true, String.format("%s %s has been successfully deleted !", firstName, lastName));
         } else {
-            return new GenericResponseModel(false, String.format("Error: %s %s not found!", firstName, lastName));
+            return new GenericResponseDto(false, String.format("Error: %s %s not found!", firstName, lastName));
         }
     }
 
@@ -68,9 +68,9 @@ public class PersonServiceImpl implements PersonService {
     public List<ChildDto> getChildrenByAddress(String address) {
         List<ChildDto> children = new ArrayList<>();
 
-        List<PersonModel> persons = getPersons(address);
+        List<PersonExtendedDto> persons = getPersons(address);
 
-        for (PersonModel person : persons) {
+        for (PersonExtendedDto person : persons) {
             if (person.age() < 18){
 
                 List<PersonDto> familyMembers = persons.stream()
@@ -97,7 +97,7 @@ public class PersonServiceImpl implements PersonService {
 
 
     @Override
-    public PersonModel getPerson(String firstName, String lastName){
+    public PersonExtendedDto getPerson(String firstName, String lastName){
 
         PersonEntity personEntity = personRepository.findPersonByName(firstName,lastName);
         MedicalRecordEntity medicalRecord = medicalRecordRepository.findMedicalRecordByName(firstName, lastName);
@@ -107,9 +107,9 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public List<PersonModel> getPersons(String address){
+    public List<PersonExtendedDto> getPersons(String address){
         List<MedicalRecordEntity> medicalRecords = new ArrayList<>();
-        List<PersonModel> persons = new ArrayList<>();
+        List<PersonExtendedDto> persons = new ArrayList<>();
 
         List<PersonEntity> personEntities = personRepository.findPersonsByAddress(address);
 
