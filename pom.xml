@@ -110,7 +110,8 @@
                             <goal>report</goal>
                         </goals>
                     </execution>
-                </executions> <configuration>
+                </executions>
+                <configuration>
                 <excludes>
                     <exclude>org/safetynet/dto/*</exclude>
                     <exclude>org/safetynet/entity/*</exclude>

@@ -27,7 +27,7 @@ public class FireController {
     private final PersonMapper personMapper;
 
     @GetMapping
-    private ResponseEntity<PersonsWithMedicalHistoryByStationDto> getPersonsWithMedicalHistory(@RequestParam String address) throws IOException {
+    public ResponseEntity<PersonsWithMedicalHistoryByStationDto> getPersonsWithMedicalHistory(@RequestParam String address) throws IOException {
         List<PersonWithoutAddressAndEmailDto> persons = personService.getPersons(address)
                 .stream()
                 .map(personMapper::toPersonWithoutAddressAndEmailDto)

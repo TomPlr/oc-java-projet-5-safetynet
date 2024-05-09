@@ -38,19 +38,13 @@ public interface FireStationRepository {
      *
      * @param station int
      */
-    List<String> getAddressesByStation(int station);
+    List<String> findAddressesByStation(int station);
 
     /**
      * Get fire station by address
      *
      * @param address String
      */
-    FireStationEntity getFireStation(String address);
+    FireStationEntity findFireStation(String address);
 
-    /**
-     * Get fire station by station
-     *
-     * @param station int
-     */
-    FireStationEntity getFireStation(int station);
 }

@@ -36,12 +36,13 @@ public class FireStationRepositoryImpl implements FireStationRepository {
     @Override
     public FireStationEntity update(FireStationEntity fireStationEntity) throws NoSuchElementException {
 
-        Optional<FireStationEntity> optionalFireStationEntity = FIRE_STATION_ENTITIES
-                .stream()
+        return FIRE_STATION_ENTITIES.stream()
                 .filter(fireStation -> fireStation.getAddress().equals(fireStationEntity.getAddress()))
-                .findFirst();
-
-        return optionalFireStationEntity
+                .findFirst()
+                .map(fs -> {
+                    fs.setStation(fireStationEntity.getStation());
+                    return fs;
+                })
                 .orElseThrow(() -> new NoSuchElementException("FireStationEntity not found"));
     }
 
@@ -53,7 +54,7 @@ public class FireStationRepositoryImpl implements FireStationRepository {
     }
 
     @Override
-    public List<String> getAddressesByStation(int station) {
+    public List<String> findAddressesByStation(int station) {
         List<String> addresses = new ArrayList<>();
         FIRE_STATION_ENTITIES.stream()
                 .filter(fireStation ->
@@ -65,17 +66,9 @@ public class FireStationRepositoryImpl implements FireStationRepository {
     }
 
     @Override
-    public FireStationEntity getFireStation(String address) {
+    public FireStationEntity findFireStation(String address) {
         return FIRE_STATION_ENTITIES.stream()
                 .filter(fireStationEntity -> fireStationEntity.getAddress().equalsIgnoreCase(address))
-                .findFirst()
-                .orElse(null);
-    }
-
-    @Override
-    public FireStationEntity getFireStation(int station) {
-        return FIRE_STATION_ENTITIES.stream()
-                .filter(fireStationEntity -> fireStationEntity.getStation() == station)
                 .findFirst()
                 .orElse(null);
     }

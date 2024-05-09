@@ -21,22 +21,22 @@ public class PersonController {
     private final PersonService personService;
 
     @GetMapping("/*")
-    private ResponseEntity<List<PersonEntity>> getPersons() throws IOException {
+    public ResponseEntity<List<PersonEntity>> getPersons() throws IOException {
         return new ResponseEntity<>(personService.findAll(), HttpStatus.OK);
     }
 
     @PostMapping
-    private ResponseEntity<PersonEntity> createPerson(@Valid @RequestBody PersonEntity person) throws IOException {
+    public ResponseEntity<PersonEntity> createPerson(@Valid @RequestBody PersonEntity person) throws IOException {
         return new ResponseEntity<>(personService.save(person), HttpStatus.CREATED);
     }
 
     @DeleteMapping
-    private ResponseEntity<GenericResponseDto> deletePerson(@RequestParam String firstName, @RequestParam String lastName) throws IOException {
+    public ResponseEntity<GenericResponseDto> deletePerson(@RequestParam String firstName, @RequestParam String lastName) throws IOException {
         return new ResponseEntity<>(personService.delete(firstName, lastName), HttpStatus.OK);
     }
 
     @PutMapping
-    private ResponseEntity<PersonDto> updatePerson(@RequestBody PersonEntity person) throws IOException {
+    public ResponseEntity<PersonDto> updatePerson(@RequestBody PersonEntity person) throws IOException {
         return new ResponseEntity<>(personService.update(person), HttpStatus.OK);
     }
 }

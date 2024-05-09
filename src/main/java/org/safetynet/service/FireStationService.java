@@ -1,8 +1,8 @@
 package org.safetynet.service;
 
 import jakarta.validation.Valid;
-import org.safetynet.entity.FireStationEntity;
 import org.safetynet.dto.GenericResponseDto;
+import org.safetynet.entity.FireStationEntity;
 
 import java.io.IOException;
 import java.util.List;
@@ -16,8 +16,12 @@ public interface FireStationService {
 
     GenericResponseDto delete(FireStationEntity fireStation) throws IOException;
 
+    /**
+     * Get addresses by fire station
+     *
+     * @param station int
+     */
+    List<String> findAddressesByStation(int station);
+
     int getStation(String address) throws IOException;
-
-    String getStation(int station) throws IOException;
-
 }

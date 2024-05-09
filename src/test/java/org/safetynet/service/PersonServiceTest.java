@@ -2,20 +2,16 @@ package org.safetynet.service;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mapstruct.factory.Mappers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.safetynet.dto.ChildDto;
-import org.safetynet.dto.PersonDto;
-import org.safetynet.dto.PersonsWithAgeRepartitionDto;
+import org.safetynet.dto.*;
 import org.safetynet.entity.MedicalRecordEntity;
 import org.safetynet.entity.PersonEntity;
 import org.safetynet.mapper.MedicalRecordMapper;
 import org.safetynet.mapper.PersonMapper;
-import org.safetynet.dto.GenericResponseDto;
-import org.safetynet.dto.PersonExtendedDto;
-import org.safetynet.repository.FireStationRepository;
 import org.safetynet.repository.MedicalRecordRepository;
 import org.safetynet.repository.PersonRepository;
 import org.safetynet.service.impl.PersonServiceImpl;
@@ -40,14 +36,11 @@ public class PersonServiceTest {
     @Mock
     private MedicalRecordRepository medicalRecordRepository;
 
-    @Mock
-    private FireStationRepository fireStationRepository;
+    @Spy
+    private PersonMapper personMapper = Mappers.getMapper(PersonMapper.class);
 
     @Spy
-    private MedicalRecordMapper medicalRecordMapper;
-
-    @Spy
-    private PersonMapper personMapper;
+    private MedicalRecordMapper medicalRecordMapper = Mappers.getMapper(MedicalRecordMapper.class);
 
     @InjectMocks
     private PersonServiceImpl personService;
@@ -166,13 +159,14 @@ public class PersonServiceTest {
     public void testGetPersons() {
         final LocalDate currentDate = LocalDate.now();
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        MedicalHistoryDto medicalHistoryDto = new MedicalHistoryDto(null, null);
         List<PersonEntity> personEntities = List.of(
                 PersonEntity.builder().firstName("John").lastName("Doe").address("123 Test Rd").city("Test City").zip("42").phone("123456789").email("email@email.com").build()
         );
         List<MedicalRecordEntity> medicalRecordEntities = List.of(
                 MedicalRecordEntity.builder().firstName("John").lastName("Doe").birthdate(currentDate.minusYears(42).format(formatter)).medications(null).allergies(null).build()
         );
-        List<PersonExtendedDto> expectedPersons = List.of(new PersonExtendedDto("John", "Doe", "123 Test Rd", "email@email.com", 42, "123456789", null, new ArrayList<>()));
+        List<PersonExtendedDto> expectedPersons = List.of(new PersonExtendedDto("John", "Doe", "123 Test Rd", "email@email.com", 42, "123456789", medicalHistoryDto, new ArrayList<>()));
 
         when(personRepository.findPersonsByAddress("123 Test Rd")).thenReturn(personEntities);
         when(medicalRecordRepository.findMedicalRecordsByPersons(personEntities)).thenReturn(medicalRecordEntities);
@@ -218,7 +212,7 @@ public class PersonServiceTest {
     }
 
     @Test
-    public void testCalculateAge_when_medicalRecord_exists(){
+    public void testCalculateAge_when_medicalRecord_exists() {
         final LocalDate currentDate = LocalDate.now();
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
         final MedicalRecordEntity medicalRecordEntity = MedicalRecordEntity.builder().firstName("John").lastName("Doe").birthdate(currentDate.minusYears(42).format(formatter)).medications(null).allergies(null).build();
@@ -229,7 +223,7 @@ public class PersonServiceTest {
     }
 
     @Test
-    public void testCalculateAge_when_medicalRecord_doesNotExist(){
+    public void testCalculateAge_when_medicalRecord_doesNotExist() {
         final MedicalRecordEntity medicalRecordEntity = null;
 
         long result = personService.calculateAge(null);

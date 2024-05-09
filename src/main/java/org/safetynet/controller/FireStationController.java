@@ -25,27 +25,27 @@ public class FireStationController {
     private final PersonService personService;
 
     @GetMapping("/*")
-    private ResponseEntity<List<FireStationEntity>> getFireStations() throws IOException, NoSuchElementException {
+    public ResponseEntity<List<FireStationEntity>> getFireStations() throws IOException, NoSuchElementException {
         return new ResponseEntity<>(fireStationService.findAll(), HttpStatus.OK);
     }
 
     @PostMapping
-    private ResponseEntity<FireStationEntity> createFireStation(@Valid @RequestBody FireStationEntity fireStation) throws IOException {
+    public ResponseEntity<FireStationEntity> createFireStation(@Valid @RequestBody FireStationEntity fireStation) throws IOException {
         return new ResponseEntity<>(fireStationService.save(fireStation), HttpStatus.CREATED);
     }
 
     @PutMapping
-    private ResponseEntity<FireStationEntity> updateFireStation(@Valid @RequestBody FireStationEntity fireStation) throws IOException {
-        return new ResponseEntity<>(fireStationService.update(fireStation), HttpStatus.NO_CONTENT);
+    public ResponseEntity<FireStationEntity> updateFireStation(@Valid @RequestBody FireStationEntity fireStation) throws IOException {
+        return new ResponseEntity<>(fireStationService.update(fireStation), HttpStatus.OK);
     }
 
     @DeleteMapping
-    private ResponseEntity<GenericResponseDto> deleteFireStation(@RequestBody FireStationEntity fireStation) throws IOException {
+    public ResponseEntity<GenericResponseDto> deleteFireStation(@RequestBody FireStationEntity fireStation) throws IOException {
         return new ResponseEntity<>(fireStationService.delete(fireStation), HttpStatus.OK);
     }
 
     @GetMapping
-    private ResponseEntity<PersonsWithAgeRepartitionDto> getPersonsCoveredByFireStation(@RequestParam("stationNumber") int stationNumber) throws IOException {
+    public ResponseEntity<PersonsWithAgeRepartitionDto> getPersonsCoveredByFireStation(@RequestParam("stationNumber") int stationNumber) throws IOException {
         return new ResponseEntity<>(personService.getPersonsCoveredByFireStation(stationNumber), HttpStatus.OK);
     }
 }

@@ -3,7 +3,6 @@ package org.safetynet.repository.impl;
 import lombok.AllArgsConstructor;
 import org.safetynet.entity.MedicalRecordEntity;
 import org.safetynet.entity.PersonEntity;
-import org.safetynet.mapper.MedicalRecordMapper;
 import org.safetynet.repository.MedicalRecordRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,8 +16,6 @@ import static org.safetynet.repository.impl.DataLoadJson.MEDICAL_RECORDS_ENTITIE
 @Repository
 @AllArgsConstructor
 public class MedicalRecordRepositoryImpl implements MedicalRecordRepository {
-
-    private final MedicalRecordMapper mapper;
 
     @Override
     public List<MedicalRecordEntity> findAll() {
@@ -42,7 +39,7 @@ public class MedicalRecordRepositoryImpl implements MedicalRecordRepository {
     public MedicalRecordEntity update(MedicalRecordEntity medicalRecordEntity) {
         Optional<MedicalRecordEntity> optionalMedicalRecordEntity = MEDICAL_RECORDS_ENTITIES
                 .stream()
-                .filter(medicalRecord -> medicalRecord.getFirstName().equals(medicalRecordEntity.getFirstName()) || medicalRecord.getLastName().equals(medicalRecordEntity.getLastName()))
+                .filter(medicalRecord -> medicalRecord.getFirstName().equals(medicalRecordEntity.getFirstName()) && medicalRecord.getLastName().equals(medicalRecordEntity.getLastName()))
                 .findFirst();
 
         return optionalMedicalRecordEntity
@@ -78,13 +75,11 @@ public class MedicalRecordRepositoryImpl implements MedicalRecordRepository {
         List<MedicalRecordEntity> medicalRecords = new ArrayList<>();
 
         for (PersonEntity person : persons) {
-            MedicalRecordEntity medicalRecord = MEDICAL_RECORDS_ENTITIES.stream()
+            MEDICAL_RECORDS_ENTITIES.stream()
                     .filter(record -> record.getFirstName().equals(person.getFirstName())
                             && record.getLastName().equals(person.getLastName()))
                     .findFirst()
-                    .orElse(null);
-
-            medicalRecords.add(medicalRecord);
+                    .ifPresent(medicalRecords::add);
         }
 
         return medicalRecords;

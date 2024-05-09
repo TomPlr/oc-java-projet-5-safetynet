@@ -20,22 +20,22 @@ public class MedicalRecordController {
     private final MedicalRecordService medicalRecordService;
 
     @GetMapping("/*")
-    private ResponseEntity<List<MedicalRecordEntity>> getMedicalRecords() throws IOException {
+    public ResponseEntity<List<MedicalRecordEntity>> getMedicalRecords() throws IOException {
         return new ResponseEntity<>(medicalRecordService.findAll(), HttpStatus.OK);
     }
 
     @PostMapping
-    private ResponseEntity<MedicalRecordEntity> createMedicalRecord(@Valid @RequestBody MedicalRecordEntity medicalRecord) throws IOException {
+    public ResponseEntity<MedicalRecordEntity> createMedicalRecord(@Valid @RequestBody MedicalRecordEntity medicalRecord) throws IOException {
         return new ResponseEntity<>(medicalRecordService.save(medicalRecord), HttpStatus.CREATED);
     }
 
     @PutMapping
-    private ResponseEntity<MedicalRecordEntity> updateMedicalRecord(@Valid @RequestBody MedicalRecordEntity medicalRecord) throws IOException {
+    public ResponseEntity<MedicalRecordEntity> updateMedicalRecord(@Valid @RequestBody MedicalRecordEntity medicalRecord) throws IOException {
         return new ResponseEntity<>(medicalRecordService.save(medicalRecord), HttpStatus.OK);
     }
 
     @DeleteMapping
-    private ResponseEntity<GenericResponseDto> deleteMedicalRecord(@RequestParam String firstName, @RequestParam String lastName) throws IOException{
+    public ResponseEntity<GenericResponseDto> deleteMedicalRecord(@RequestParam String firstName, @RequestParam String lastName) throws IOException{
         return new ResponseEntity<>(medicalRecordService.delete(firstName,lastName), HttpStatus.OK);
     }
 

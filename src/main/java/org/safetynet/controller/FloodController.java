@@ -28,12 +28,12 @@ public class FloodController {
     private final PersonMapper personMapper;
 
     @GetMapping
-    private ResponseEntity<Map<String, List<PersonWithoutAddressAndEmailDto>>> getPersonsWithMedicalHistory(@RequestParam int[] stations) throws IOException {
+    public ResponseEntity<Map<String, List<PersonWithoutAddressAndEmailDto>>> getPersonsWithMedicalHistory(@RequestParam int[] stations) throws IOException {
         Map<String, List<PersonWithoutAddressAndEmailDto>> personsByAddress = new HashMap<>();
         List<String> addresses = new ArrayList<>();
 
         for (int station : stations) {
-            addresses.add(fireStationService.getStation(station));
+            addresses.addAll(fireStationService.findAddressesByStation(station));
         }
 
         for (String address : addresses) {

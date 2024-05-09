@@ -6,7 +6,7 @@ import org.safetynet.entity.FireStationEntity;
 import org.safetynet.entity.MedicalRecordEntity;
 import org.safetynet.entity.PersonEntity;
 import org.safetynet.model.JsonDataModel;
-import org.springframework.stereotype.Component;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Repository;
 
 import java.io.File;
@@ -16,17 +16,19 @@ import java.util.List;
 
 @Repository
 public class DataLoadJson {
-    static ObjectMapper objectMapper = new ObjectMapper();
-
     protected static final List<PersonEntity> PERSON_ENTITIES = new ArrayList<>();
     protected static final List<FireStationEntity> FIRE_STATION_ENTITIES = new ArrayList<>();
     protected static final List<MedicalRecordEntity> MEDICAL_RECORDS_ENTITIES = new ArrayList<>();
+    private static String jsonPath;
+    static ObjectMapper objectMapper = new ObjectMapper();
 
-    private static final String JSON_PATH = "src/main/resources/static/data.json";
+    public DataLoadJson(Environment env) {
+        jsonPath = env.getProperty("data.json.resources");
+    }
 
-    public static void init(){
+    public static void init() {
         try {
-            final var json = objectMapper.readValue(new File(JSON_PATH), JsonDataModel.class);
+            final var json = objectMapper.readValue(new File(jsonPath), JsonDataModel.class);
 
             PERSON_ENTITIES.clear();
             FIRE_STATION_ENTITIES.clear();

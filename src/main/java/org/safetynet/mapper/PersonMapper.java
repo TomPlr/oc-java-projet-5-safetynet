@@ -14,7 +14,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface PersonMapper {
 
-    PersonExtendedDto toPersonModel(PersonEntity personEntity, long age, MedicalHistoryDto medicalHistory, List<PersonDto> familyMembers);
+    PersonExtendedDto toPersonExtendedDto(PersonEntity personEntity, long age, MedicalHistoryDto medicalHistory, List<PersonDto> familyMembers);
 
     PersonDto toPersonDto(PersonEntity personEntity);
 
@@ -25,8 +25,6 @@ public interface PersonMapper {
     PersonWithoutAddressAndEmailDto toPersonWithoutAddressAndEmailDto(PersonExtendedDto personExtendedDto);
 
     PersonWithoutPhoneDto toPersonWithoutPhoneDto(PersonExtendedDto personExtendedDto);
-
-
 
 
 }

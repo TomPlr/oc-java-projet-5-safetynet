@@ -90,7 +90,7 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public TreeSet<String> getPersonsPhoneNumberByStation(int station) {
-        List<String> addresses = fireStationRepository.getAddressesByStation(station);
+        List<String> addresses = fireStationRepository.findAddressesByStation(station);
 
         return personRepository.findPersonsPhoneNumbersByAddresses(addresses);
     }
@@ -103,7 +103,7 @@ public class PersonServiceImpl implements PersonService {
         MedicalRecordEntity medicalRecord = medicalRecordRepository.findMedicalRecordByName(firstName, lastName);
         long age = calculateAge(medicalRecord);
 
-        return personMapper.toPersonModel(personEntity, age, medicalRecordMapper.toMedicalHistory(medicalRecord),new ArrayList<>());
+        return personMapper.toPersonExtendedDto(personEntity, age, medicalRecordMapper.toMedicalHistory(medicalRecord),new ArrayList<>());
     }
 
     @Override
@@ -121,7 +121,7 @@ public class PersonServiceImpl implements PersonService {
             MedicalRecordEntity medicalRecord = getMedicalRecordByPerson(personEntity.getFirstName(), personEntity.getLastName(), medicalRecords);
             long age = calculateAge(medicalRecord);
 
-            persons.add(personMapper.toPersonModel(personEntity, age, medicalRecordMapper.toMedicalHistory(medicalRecord),new ArrayList<>()));
+            persons.add(personMapper.toPersonExtendedDto(personEntity, age, medicalRecordMapper.toMedicalHistory(medicalRecord),new ArrayList<>()));
         }
 
         return persons;

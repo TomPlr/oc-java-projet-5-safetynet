@@ -24,7 +24,7 @@ public class PersonInfoController {
     PersonMapper personMapper;
 
     @GetMapping
-    private ResponseEntity<PersonWithoutPhoneDto> getPersonInfos(@RequestParam String firstName, @RequestParam String lastName ) throws IOException {
+    public ResponseEntity<PersonWithoutPhoneDto> getPersonInfos(@RequestParam String firstName, @RequestParam String lastName ) throws IOException {
         return new ResponseEntity<>(personMapper.toPersonWithoutPhoneDto(personService.getPerson(firstName,lastName)), HttpStatus.OK);
     }
 }

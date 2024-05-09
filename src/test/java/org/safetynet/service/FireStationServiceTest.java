@@ -110,19 +110,9 @@ class FireStationServiceTest {
         String address = "Address1";
         FireStationEntity fireStation = FireStationEntity.builder().address("Address1").station(1).build();
 
-        when(fireStationRepository.getFireStation(address)
+        when(fireStationRepository.findFireStation(address)
         ).thenReturn(fireStation);
 
         assertThat(fireStationService.getStation(address)).isEqualTo(fireStation.getStation());
-    }
-
-    @Test
-    public void testGetStation_With_Station() throws IOException {
-        int station = 1;
-        FireStationEntity fireStation = FireStationEntity.builder().address("Address1").station(1).build();
-
-        when(fireStationRepository.getFireStation(station)).thenReturn(fireStation);
-
-        assertThat(fireStationService.getStation(station)).isEqualTo(fireStation.getAddress());
     }
 }
