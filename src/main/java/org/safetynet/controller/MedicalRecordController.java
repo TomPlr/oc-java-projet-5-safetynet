@@ -31,7 +31,7 @@ public class MedicalRecordController {
 
     @PutMapping
     public ResponseEntity<MedicalRecordEntity> updateMedicalRecord(@Valid @RequestBody MedicalRecordEntity medicalRecord) throws IOException {
-        return new ResponseEntity<>(medicalRecordService.save(medicalRecord), HttpStatus.OK);
+        return new ResponseEntity<>(medicalRecordService.update(medicalRecord), HttpStatus.OK);
     }
 
     @DeleteMapping
