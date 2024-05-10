@@ -45,7 +45,7 @@ public class FireStationController {
     }
 
     @GetMapping
-    public ResponseEntity<PersonsWithAgeRepartitionDto> getPersonsCoveredByFireStation(@RequestParam("stationNumber") int stationNumber) throws IOException {
-        return new ResponseEntity<>(personService.getPersonsCoveredByFireStation(stationNumber), HttpStatus.OK);
+    public ResponseEntity<PersonsWithAgeRepartitionDto> findPersonsCoveredByFireStation(@RequestParam("stationNumber") int stationNumber) throws IOException {
+        return new ResponseEntity<>(personService.findPersonsCoveredByFireStation(stationNumber), HttpStatus.OK);
     }
 }

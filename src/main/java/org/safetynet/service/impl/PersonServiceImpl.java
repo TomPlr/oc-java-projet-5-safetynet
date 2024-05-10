@@ -60,15 +60,15 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public PersonsWithAgeRepartitionDto getPersonsCoveredByFireStation(int fireStationNumber) {
+    public PersonsWithAgeRepartitionDto findPersonsCoveredByFireStation(int fireStationNumber) {
         return personRepository.findPersonsByStationNumber(fireStationNumber);
     }
 
     @Override
-    public List<ChildDto> getChildrenByAddress(String address) {
+    public List<ChildDto> findChildrenByAddress(String address) {
         List<ChildDto> children = new ArrayList<>();
 
-        List<PersonExtendedDto> persons = getPersons(address);
+        List<PersonExtendedDto> persons = findPersons(address);
 
         for (PersonExtendedDto person : persons) {
             if (person.age() < 18){
@@ -89,7 +89,7 @@ public class PersonServiceImpl implements PersonService {
 
 
     @Override
-    public TreeSet<String> getPersonsPhoneNumberByStation(int station) {
+    public TreeSet<String> findPersonsPhoneNumberByStation(int station) {
         List<String> addresses = fireStationRepository.findAddressesByStation(station);
 
         return personRepository.findPersonsPhoneNumbersByAddresses(addresses);
@@ -97,7 +97,7 @@ public class PersonServiceImpl implements PersonService {
 
 
     @Override
-    public PersonExtendedDto getPerson(String firstName, String lastName){
+    public PersonExtendedDto findPerson(String firstName, String lastName){
 
         PersonEntity personEntity = personRepository.findPersonByName(firstName,lastName);
         MedicalRecordEntity medicalRecord = medicalRecordRepository.findMedicalRecordByName(firstName, lastName);
@@ -107,7 +107,7 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public List<PersonExtendedDto> getPersons(String address){
+    public List<PersonExtendedDto> findPersons(String address){
         List<MedicalRecordEntity> medicalRecords = new ArrayList<>();
         List<PersonExtendedDto> persons = new ArrayList<>();
 
@@ -129,7 +129,7 @@ public class PersonServiceImpl implements PersonService {
 
 
     @Override
-    public TreeSet<String> getPersonsEmail(String city) throws IOException {
+    public TreeSet<String> findPersonsEmail(String city) throws IOException {
         return personRepository.findEmailsByCity(city);
     }
 

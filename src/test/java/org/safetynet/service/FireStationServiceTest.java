@@ -106,13 +106,13 @@ class FireStationServiceTest {
     }
 
     @Test
-    public void testGetStation_With_Address() throws IOException {
+    public void testFindStation_With_Address() throws IOException {
         String address = "Address1";
         FireStationEntity fireStation = FireStationEntity.builder().address("Address1").station(1).build();
 
         when(fireStationRepository.findFireStation(address)
         ).thenReturn(fireStation);
 
-        assertThat(fireStationService.getStation(address)).isEqualTo(fireStation.getStation());
+        assertThat(fireStationService.findStation(address)).isEqualTo(fireStation.getStation());
     }
 }

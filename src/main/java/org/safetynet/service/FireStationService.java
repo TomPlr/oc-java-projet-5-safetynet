@@ -23,5 +23,5 @@ public interface FireStationService {
      */
     List<String> findAddressesByStation(int station);
 
-    int getStation(String address) throws IOException;
+    int findStation(String address) throws IOException;
 }

@@ -28,7 +28,7 @@ public class FloodController {
     private final PersonMapper personMapper;
 
     @GetMapping
-    public ResponseEntity<Map<String, List<PersonWithoutAddressAndEmailDto>>> getPersonsWithMedicalHistory(@RequestParam int[] stations) throws IOException {
+    public ResponseEntity<Map<String, List<PersonWithoutAddressAndEmailDto>>> findPersonsWithMedicalHistory(@RequestParam int[] stations) throws IOException {
         Map<String, List<PersonWithoutAddressAndEmailDto>> personsByAddress = new HashMap<>();
         List<String> addresses = new ArrayList<>();
 
@@ -37,7 +37,7 @@ public class FloodController {
         }
 
         for (String address : addresses) {
-            List<PersonWithoutAddressAndEmailDto> persons = personService.getPersons(address).stream().map(personMapper::toPersonWithoutAddressAndEmailDto).toList();
+            List<PersonWithoutAddressAndEmailDto> persons = personService.findPersons(address).stream().map(personMapper::toPersonWithoutAddressAndEmailDto).toList();
             personsByAddress.put(address, persons);
         }
 

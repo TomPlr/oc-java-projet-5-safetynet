@@ -34,7 +34,7 @@ class FireStationRepositoryTest {
     }
 
     @Test
-    public void testSave(){
+    public void testSave() {
         FireStationEntity fireStationEntity = FireStationEntity.builder().station(1).address("123 Test Rd").build();
 
         FireStationEntity expectedFireStationEntities = fireStationRepository.save(fireStationEntity);
@@ -43,7 +43,7 @@ class FireStationRepositoryTest {
     }
 
     @Test
-    public void testUpdate_shouldReturnUpdatedEntity(){
+    public void testUpdate_shouldReturnUpdatedEntity() {
         FireStationEntity fireStationEntity = FireStationEntity.builder().station(10).address("1509 Culver St").build();
 
         FireStationEntity expectedResult = fireStationRepository.update(fireStationEntity);
@@ -53,7 +53,7 @@ class FireStationRepositoryTest {
 
 
     @Test
-    public void testDelete_shouldReturnTrue(){
+    public void testDelete_shouldReturnTrue() {
         FireStationEntity fireStationEntity = FireStationEntity.builder().station(3).address("1509 Culver St").build();
         boolean expectedResult = fireStationRepository.delete(fireStationEntity);
 
@@ -61,7 +61,7 @@ class FireStationRepositoryTest {
     }
 
     @Test
-    public void testDelete_shouldReturnFalse(){
+    public void testDelete_shouldReturnFalse() {
         FireStationEntity fireStationEntity = FireStationEntity.builder().station(1).address("123 Test Rd").build();
         boolean expectedResult = fireStationRepository.delete(fireStationEntity);
 
@@ -69,9 +69,8 @@ class FireStationRepositoryTest {
     }
 
     @Test
-    public void findAddressesByStation_shouldReturnAddresses(){
-
-        List<String> addresses = List.of("908 73rd St","644 Gershwin Cir","947 E. Rose Dr");
+    public void findAddressesByStation_shouldReturnAddresses() {
+        List<String> addresses = List.of("908 73rd St", "644 Gershwin Cir", "947 E. Rose Dr");
 
         List<String> expectedAddresses = fireStationRepository.findAddressesByStation(1);
 
@@ -79,7 +78,7 @@ class FireStationRepositoryTest {
     }
 
     @Test
-    public void findFireStationByAddress_shouldReturnFireStation(){
+    public void findFireStationByAddress_shouldReturnFireStation() {
         FireStationEntity expectedFireStationEntity = FireStationEntity.builder().station(1).address("908 73rd St").build();
 
         FireStationEntity result = fireStationRepository.findFireStation("908 73rd St");

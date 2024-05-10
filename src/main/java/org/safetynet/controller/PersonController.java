@@ -2,9 +2,9 @@ package org.safetynet.controller;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.safetynet.dto.GenericResponseDto;
 import org.safetynet.dto.PersonDto;
 import org.safetynet.entity.PersonEntity;
-import org.safetynet.dto.GenericResponseDto;
 import org.safetynet.service.PersonService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

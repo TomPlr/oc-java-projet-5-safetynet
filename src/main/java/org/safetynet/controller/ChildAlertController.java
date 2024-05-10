@@ -21,7 +21,7 @@ public class ChildAlertController {
     private final PersonService personService;
 
     @GetMapping
-    public ResponseEntity<List<ChildDto>> getChildrenByAddress(@RequestParam String address) throws IOException {
-        return new ResponseEntity<>(personService.getChildrenByAddress(address), HttpStatus.OK);
+    public ResponseEntity<List<ChildDto>> findChildrenByAddress(@RequestParam String address) throws IOException {
+        return new ResponseEntity<>(personService.findChildrenByAddress(address), HttpStatus.OK);
     }
 }

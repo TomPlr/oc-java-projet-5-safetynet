@@ -107,21 +107,21 @@ public class PersonServiceTest {
     }
 
     @Test
-    public void testGetPersonsCoveredByFireStation_when_firestation_exists() {
+    public void testFindPersonsCoveredByFireStation_when_firestation_exists() {
         int fireStationNumber = 1;
         List<PersonDto> personDtoList = List.of(mock(PersonDto.class), mock(PersonDto.class));
         PersonsWithAgeRepartitionDto expectedResult = new PersonsWithAgeRepartitionDto(personDtoList, 2, 0);
 
         when(personRepository.findPersonsByStationNumber(1)).thenReturn(expectedResult);
 
-        PersonsWithAgeRepartitionDto result = personService.getPersonsCoveredByFireStation(fireStationNumber);
+        PersonsWithAgeRepartitionDto result = personService.findPersonsCoveredByFireStation(fireStationNumber);
 
         assertThat(result).isEqualTo(expectedResult);
     }
 
 
     @Test
-    public void testGetChildrenByAddress() {
+    public void testFindChildrenByAddress() {
         final LocalDate currentDate = LocalDate.now();
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
         List<PersonEntity> personEntities = List.of(
@@ -136,14 +136,14 @@ public class PersonServiceTest {
         when(personRepository.findPersonsByAddress("123 Test St")).thenReturn(personEntities);
         when(medicalRecordRepository.findMedicalRecordsByPersons(personEntities)).thenReturn(medicalRecordEntities);
 
-        List<ChildDto> result = personService.getChildrenByAddress("123 Test St");
+        List<ChildDto> result = personService.findChildrenByAddress("123 Test St");
 
         assertThat(result).hasSize(1);
         assertThat(result.get(0).familyMembers()).hasSize(1);
     }
 
     @Test
-    public void testGetPerson() {
+    public void testFindPerson() {
         List<String> addresses = List.of("123 Test Rd");
         TreeSet<String> personsPhoneNumbers = new TreeSet<>();
         personsPhoneNumbers.add("123456789");
@@ -156,7 +156,7 @@ public class PersonServiceTest {
     }
 
     @Test
-    public void testGetPersons() {
+    public void testFindPersons() {
         final LocalDate currentDate = LocalDate.now();
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
         MedicalHistoryDto medicalHistoryDto = new MedicalHistoryDto(null, null);
@@ -171,7 +171,7 @@ public class PersonServiceTest {
         when(personRepository.findPersonsByAddress("123 Test Rd")).thenReturn(personEntities);
         when(medicalRecordRepository.findMedicalRecordsByPersons(personEntities)).thenReturn(medicalRecordEntities);
 
-        List<PersonExtendedDto> result = personService.getPersons("123 Test Rd");
+        List<PersonExtendedDto> result = personService.findPersons("123 Test Rd");
 
         assertThat(result).hasSize(1);
         assertThat(result).isEqualTo(expectedPersons);
@@ -179,14 +179,14 @@ public class PersonServiceTest {
 
 
     @Test
-    public void testGetPersonEmail() throws IOException {
+    public void testFindPersonEmail() throws IOException {
         String city = "Test City";
         TreeSet<String> personsEmail = new TreeSet<>();
         personsEmail.add("email@email.com");
 
         when(personRepository.findEmailsByCity(city)).thenReturn(personsEmail);
 
-        TreeSet<String> result = personService.getPersonsEmail(city);
+        TreeSet<String> result = personService.findPersonsEmail(city);
 
         assertThat(result).isEqualTo(personsEmail);
     }

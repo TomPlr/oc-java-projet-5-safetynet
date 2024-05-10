@@ -20,16 +20,16 @@ public interface PersonService {
 
     PersonDto update(PersonEntity person) throws IOException;
 
-    PersonExtendedDto getPerson(String firstName, String lastName) throws IOException;
+    PersonExtendedDto findPerson(String firstName, String lastName) throws IOException;
 
-    List<PersonExtendedDto> getPersons(String address) throws IOException;
+    List<PersonExtendedDto> findPersons(String address) throws IOException;
 
-    PersonsWithAgeRepartitionDto getPersonsCoveredByFireStation(int fireStationNumber) throws IOException;
+    PersonsWithAgeRepartitionDto findPersonsCoveredByFireStation(int fireStationNumber) throws IOException;
 
-    List<ChildDto> getChildrenByAddress(String address) throws IOException;
+    List<ChildDto> findChildrenByAddress(String address) throws IOException;
 
-    TreeSet<String> getPersonsPhoneNumberByStation(int station) throws IOException;
+    TreeSet<String> findPersonsPhoneNumberByStation(int station) throws IOException;
 
-    TreeSet<String> getPersonsEmail(String city) throws IOException;
+    TreeSet<String> findPersonsEmail(String city) throws IOException;
 
 }

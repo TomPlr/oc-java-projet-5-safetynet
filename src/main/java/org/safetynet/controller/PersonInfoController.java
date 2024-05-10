@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.TreeSet;
 
 @RestController
 @RequestMapping("personInfo")
@@ -24,7 +22,7 @@ public class PersonInfoController {
     PersonMapper personMapper;
 
     @GetMapping
-    public ResponseEntity<PersonWithoutPhoneDto> getPersonInfos(@RequestParam String firstName, @RequestParam String lastName ) throws IOException {
-        return new ResponseEntity<>(personMapper.toPersonWithoutPhoneDto(personService.getPerson(firstName,lastName)), HttpStatus.OK);
+    public ResponseEntity<PersonWithoutPhoneDto> findPersonInfos(@RequestParam String firstName, @RequestParam String lastName ) throws IOException {
+        return new ResponseEntity<>(personMapper.toPersonWithoutPhoneDto(personService.findPerson(firstName,lastName)), HttpStatus.OK);
     }
 }

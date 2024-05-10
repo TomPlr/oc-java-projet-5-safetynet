@@ -27,12 +27,12 @@ public class FireController {
     private final PersonMapper personMapper;
 
     @GetMapping
-    public ResponseEntity<PersonsWithMedicalHistoryByStationDto> getPersonsWithMedicalHistory(@RequestParam String address) throws IOException {
-        List<PersonWithoutAddressAndEmailDto> persons = personService.getPersons(address)
+    public ResponseEntity<PersonsWithMedicalHistoryByStationDto> findPersonsWithMedicalHistory(@RequestParam String address) throws IOException {
+        List<PersonWithoutAddressAndEmailDto> persons = personService.findPersons(address)
                 .stream()
                 .map(personMapper::toPersonWithoutAddressAndEmailDto)
                 .toList();
 
-        return new ResponseEntity<>(new PersonsWithMedicalHistoryByStationDto(persons, fireStationService.getStation(address)), HttpStatus.OK);
+        return new ResponseEntity<>(new PersonsWithMedicalHistoryByStationDto(persons, fireStationService.findStation(address)), HttpStatus.OK);
     }
 }
