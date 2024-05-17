@@ -24,28 +24,28 @@ public class FireStationController {
     private final FireStationService fireStationService;
     private final PersonService personService;
 
-    @GetMapping("/*")
-    public ResponseEntity<List<FireStationEntity>> getFireStations() throws IOException, NoSuchElementException {
+    @GetMapping
+    public ResponseEntity<List<FireStationEntity>> getFireStations()  {
         return new ResponseEntity<>(fireStationService.findAll(), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<FireStationEntity> createFireStation(@Valid @RequestBody FireStationEntity fireStation) throws IOException {
+    public ResponseEntity<FireStationEntity> createFireStation(@Valid @RequestBody FireStationEntity fireStation)  {
         return new ResponseEntity<>(fireStationService.save(fireStation), HttpStatus.CREATED);
     }
 
     @PutMapping
-    public ResponseEntity<FireStationEntity> updateFireStation(@Valid @RequestBody FireStationEntity fireStation) throws IOException {
+    public ResponseEntity<FireStationEntity> updateFireStation(@Valid @RequestBody FireStationEntity fireStation) {
         return new ResponseEntity<>(fireStationService.update(fireStation), HttpStatus.OK);
     }
 
     @DeleteMapping
-    public ResponseEntity<GenericResponseDto> deleteFireStation(@RequestBody FireStationEntity fireStation) throws IOException {
+    public ResponseEntity<GenericResponseDto> deleteFireStation(@RequestBody FireStationEntity fireStation)  {
         return new ResponseEntity<>(fireStationService.delete(fireStation), HttpStatus.OK);
     }
 
-    @GetMapping
-    public ResponseEntity<PersonsWithAgeRepartitionDto> findPersonsCoveredByFireStation(@RequestParam("stationNumber") int stationNumber) throws IOException {
+    @GetMapping(params = "stationNumber")
+    public ResponseEntity<PersonsWithAgeRepartitionDto> findPersonsCoveredByFireStation(@RequestParam("stationNumber") int stationNumber)  {
         return new ResponseEntity<>(personService.findPersonsCoveredByFireStation(stationNumber), HttpStatus.OK);
     }
 }

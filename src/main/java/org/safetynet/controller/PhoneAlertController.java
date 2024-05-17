@@ -20,7 +20,7 @@ public class PhoneAlertController {
     private final PersonService personService;
 
     @GetMapping
-    public ResponseEntity<TreeSet<String>> findPersons(@RequestParam int station) throws IOException {
+    public ResponseEntity<TreeSet<String>> findPersons(@RequestParam int station) {
         return new ResponseEntity<>(personService.findPersonsPhoneNumberByStation(station), HttpStatus.OK);
     }
 }

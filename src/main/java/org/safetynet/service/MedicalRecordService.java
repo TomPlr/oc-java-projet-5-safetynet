@@ -7,11 +7,11 @@ import java.io.IOException;
 import java.util.List;
 
 public interface MedicalRecordService {
-    List<MedicalRecordEntity> findAll() throws IOException;
+    List<MedicalRecordEntity> findAll();
 
-    MedicalRecordEntity save(MedicalRecordEntity medicalRecord) throws IOException;
+    MedicalRecordEntity save(MedicalRecordEntity medicalRecord) ;
 
-    MedicalRecordEntity update(MedicalRecordEntity medicalRecord) throws IOException;
+    MedicalRecordEntity update(MedicalRecordEntity medicalRecord) ;
 
-    GenericResponseDto delete(String firstName, String lastName) throws IOException;
+    GenericResponseDto delete(String firstName, String lastName) ;
 }

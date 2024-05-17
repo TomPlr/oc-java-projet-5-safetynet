@@ -17,22 +17,22 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
     private final MedicalRecordRepository repository;
 
     @Override
-    public List<MedicalRecordEntity> findAll() throws IOException {
+    public List<MedicalRecordEntity> findAll()  {
         return repository.findAll();
     }
 
     @Override
-    public MedicalRecordEntity save(MedicalRecordEntity medicalRecord) throws IOException {
+    public MedicalRecordEntity save(MedicalRecordEntity medicalRecord)  {
         return repository.save(medicalRecord);
     }
 
     @Override
-    public MedicalRecordEntity update(MedicalRecordEntity medicalRecord) throws IOException {
+    public MedicalRecordEntity update(MedicalRecordEntity medicalRecord)  {
         return repository.update(medicalRecord);
     }
 
     @Override
-    public GenericResponseDto delete(String firstName, String lastName) throws IOException {
+    public GenericResponseDto delete(String firstName, String lastName)  {
         final boolean isSuccessfullyDeleted = repository.delete(firstName, lastName);
 
         if (isSuccessfullyDeleted) {

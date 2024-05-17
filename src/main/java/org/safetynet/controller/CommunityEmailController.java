@@ -20,7 +20,7 @@ public class CommunityEmailController {
     PersonService personService;
 
     @GetMapping
-    public ResponseEntity<TreeSet<String>> findEmails(@RequestParam String city) throws IOException {
+    public ResponseEntity<TreeSet<String>> findEmails(@RequestParam String city) {
         return new ResponseEntity<>(personService.findPersonsEmail(city), HttpStatus.OK);
     }
 

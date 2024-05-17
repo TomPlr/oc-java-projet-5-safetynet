@@ -8,13 +8,13 @@ import java.io.IOException;
 import java.util.List;
 
 public interface FireStationService {
-    List<FireStationEntity> findAll() throws IOException;
+    List<FireStationEntity> findAll() ;
 
-    FireStationEntity save(@Valid FireStationEntity fireStation) throws IOException;
+    FireStationEntity save(@Valid FireStationEntity fireStation) ;
 
-    FireStationEntity update(FireStationEntity fireStation) throws IOException;
+    FireStationEntity update(FireStationEntity fireStation) ;
 
-    GenericResponseDto delete(FireStationEntity fireStation) throws IOException;
+    GenericResponseDto delete(FireStationEntity fireStation) ;
 
     /**
      * Get addresses by fire station
@@ -23,5 +23,5 @@ public interface FireStationService {
      */
     List<String> findAddressesByStation(int station);
 
-    int findStation(String address) throws IOException;
+    int findStation(String address);
 }

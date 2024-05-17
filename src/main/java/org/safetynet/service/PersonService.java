@@ -12,24 +12,24 @@ import java.util.List;
 import java.util.TreeSet;
 
 public interface PersonService {
-    List<PersonEntity> findAll() throws IOException;
+    List<PersonEntity> findAll() ;
 
-    PersonEntity save(PersonEntity person) throws IOException;
+    PersonEntity save(PersonEntity person) ;
 
-    GenericResponseDto delete(String firstName, String lastName) throws IOException;
+    GenericResponseDto delete(String firstName, String lastName) ;
 
-    PersonDto update(PersonEntity person) throws IOException;
+    PersonDto update(PersonEntity person);
 
-    PersonExtendedDto findPerson(String firstName, String lastName) throws IOException;
+    PersonExtendedDto findPerson(String firstName, String lastName) ;
 
-    List<PersonExtendedDto> findPersons(String address) throws IOException;
+    List<PersonExtendedDto> findPersons(String address);
 
-    PersonsWithAgeRepartitionDto findPersonsCoveredByFireStation(int fireStationNumber) throws IOException;
+    PersonsWithAgeRepartitionDto findPersonsCoveredByFireStation(int fireStationNumber);
 
-    List<ChildDto> findChildrenByAddress(String address) throws IOException;
+    List<ChildDto> findChildrenByAddress(String address);
 
-    TreeSet<String> findPersonsPhoneNumberByStation(int station) throws IOException;
+    TreeSet<String> findPersonsPhoneNumberByStation(int station) ;
 
-    TreeSet<String> findPersonsEmail(String city) throws IOException;
+    TreeSet<String> findPersonsEmail(String city);
 
 }

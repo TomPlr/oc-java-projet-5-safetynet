@@ -28,7 +28,7 @@ public class FloodController {
     private final PersonMapper personMapper;
 
     @GetMapping
-    public ResponseEntity<Map<String, List<PersonWithoutAddressAndEmailDto>>> findPersonsWithMedicalHistory(@RequestParam int[] stations) throws IOException {
+    public ResponseEntity<Map<String, List<PersonWithoutAddressAndEmailDto>>> findPersonsWithMedicalHistory(@RequestParam int[] stations)  {
         Map<String, List<PersonWithoutAddressAndEmailDto>> personsByAddress = new HashMap<>();
         List<String> addresses = new ArrayList<>();
 

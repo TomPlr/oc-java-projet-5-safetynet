@@ -18,23 +18,23 @@ public class FireStationServiceImpl implements FireStationService {
     private FireStationRepository repository;
 
     @Override
-    public List<FireStationEntity> findAll() throws IOException {
+    public List<FireStationEntity> findAll()  {
         return repository.findAll();
     }
 
     @Override
-    public FireStationEntity save(@Valid FireStationEntity fireStation) throws IOException {
+    public FireStationEntity save(@Valid FireStationEntity fireStation)  {
         return repository.save(fireStation);
     }
 
     @Override
-    public FireStationEntity update(FireStationEntity fireStation) throws IOException {
+    public FireStationEntity update(FireStationEntity fireStation)  {
         return repository.update(fireStation);
 
     }
 
     @Override
-    public GenericResponseDto delete(FireStationEntity fireStation) throws IOException {
+    public GenericResponseDto delete(FireStationEntity fireStation)  {
         final boolean isSuccessfullyDeleted = repository.delete(fireStation);
 
         if (isSuccessfullyDeleted) {
@@ -54,7 +54,7 @@ public class FireStationServiceImpl implements FireStationService {
     }
 
     @Override
-    public int findStation(String address) throws IOException {
+    public int findStation(String address) {
         return repository.findFireStation(address).getStation();
     }
 }

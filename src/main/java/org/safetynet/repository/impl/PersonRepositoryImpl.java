@@ -93,7 +93,7 @@ public class PersonRepositoryImpl implements PersonRepository {
     @Override
     public List<PersonEntity> findPersonsByAddress(String address) {
         return PERSON_ENTITIES.stream()
-                .filter(personEntity -> address.contains(personEntity.getAddress()))
+                .filter(personEntity -> address.equalsIgnoreCase(personEntity.getAddress()))
                 .toList();
     }
 

@@ -22,7 +22,7 @@ public class PersonInfoController {
     PersonMapper personMapper;
 
     @GetMapping
-    public ResponseEntity<PersonWithoutPhoneDto> findPersonInfos(@RequestParam String firstName, @RequestParam String lastName ) throws IOException {
+    public ResponseEntity<PersonWithoutPhoneDto> findPersonInfos(@RequestParam String firstName, @RequestParam String lastName ) {
         return new ResponseEntity<>(personMapper.toPersonWithoutPhoneDto(personService.findPerson(firstName,lastName)), HttpStatus.OK);
     }
 }

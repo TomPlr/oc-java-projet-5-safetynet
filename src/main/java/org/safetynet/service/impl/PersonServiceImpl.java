@@ -129,7 +129,7 @@ public class PersonServiceImpl implements PersonService {
 
 
     @Override
-    public TreeSet<String> findPersonsEmail(String city) throws IOException {
+    public TreeSet<String> findPersonsEmail(String city)  {
         return personRepository.findEmailsByCity(city);
     }
 
