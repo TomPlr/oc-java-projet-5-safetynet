@@ -16,6 +16,6 @@ public class FireStationEntity {
     @NotBlank(message = "Address is mandatory")
     private String address;
 
-    @Min(1)
+    @Min(value = 1,message = "Station number must be equal or up to 1")
     private int station;
 }

@@ -1,6 +1,7 @@
 package org.safetynet.controller;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.safetynet.dto.ChildDto;
 import org.safetynet.service.PersonService;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/childAlert")
 @AllArgsConstructor
@@ -21,6 +23,10 @@ public class ChildAlertController {
 
     @GetMapping
     public ResponseEntity<List<ChildDto>> findChildrenByAddress(@RequestParam final String address) {
-        return new ResponseEntity<>(personService.findChildrenByAddress(address), HttpStatus.OK);
+        log.info("Find children by address : {}", address);
+        List<ChildDto> children = personService.findChildrenByAddress(address);
+        log.info("Found {}", (children != null) ? children.size() : "0");
+
+        return new ResponseEntity<>(children, HttpStatus.OK);
     }
 }

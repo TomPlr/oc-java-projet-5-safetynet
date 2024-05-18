@@ -2,20 +2,18 @@ package org.safetynet.service.impl;
 
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.safetynet.dto.*;
 import org.safetynet.entity.MedicalRecordEntity;
 import org.safetynet.entity.PersonEntity;
 import org.safetynet.mapper.MedicalRecordMapper;
 import org.safetynet.mapper.PersonMapper;
-import org.safetynet.dto.GenericResponseDto;
-import org.safetynet.dto.PersonExtendedDto;
 import org.safetynet.repository.FireStationRepository;
 import org.safetynet.repository.MedicalRecordRepository;
 import org.safetynet.repository.PersonRepository;
 import org.safetynet.service.PersonService;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -23,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class PersonServiceImpl implements PersonService {
@@ -71,7 +70,7 @@ public class PersonServiceImpl implements PersonService {
         List<PersonExtendedDto> persons = findPersons(address);
 
         for (PersonExtendedDto person : persons) {
-            if (person.age() < 18){
+            if (person.age() < 18) {
 
                 List<PersonDto> familyMembers = persons.stream()
                         .filter(personModel -> !person.equals(personModel))
@@ -87,7 +86,6 @@ public class PersonServiceImpl implements PersonService {
     }
 
 
-
     @Override
     public TreeSet<String> findPersonsPhoneNumberByStation(int station) {
         List<String> addresses = fireStationRepository.findAddressesByStation(station);
@@ -97,17 +95,17 @@ public class PersonServiceImpl implements PersonService {
 
 
     @Override
-    public PersonExtendedDto findPerson(String firstName, String lastName){
+    public PersonExtendedDto findPerson(String firstName, String lastName) {
 
-        PersonEntity personEntity = personRepository.findPersonByName(firstName,lastName);
+        PersonEntity personEntity = personRepository.findPersonByName(firstName, lastName);
         MedicalRecordEntity medicalRecord = medicalRecordRepository.findMedicalRecordByName(firstName, lastName);
         long age = calculateAge(medicalRecord);
 
-        return personMapper.toPersonExtendedDto(personEntity, age, medicalRecordMapper.toMedicalHistory(medicalRecord),new ArrayList<>());
+        return personMapper.toPersonExtendedDto(personEntity, age, medicalRecordMapper.toMedicalHistory(medicalRecord), new ArrayList<>());
     }
 
     @Override
-    public List<PersonExtendedDto> findPersons(String address){
+    public List<PersonExtendedDto> findPersons(String address) {
         List<MedicalRecordEntity> medicalRecords = new ArrayList<>();
         List<PersonExtendedDto> persons = new ArrayList<>();
 
@@ -121,7 +119,7 @@ public class PersonServiceImpl implements PersonService {
             MedicalRecordEntity medicalRecord = getMedicalRecordByPerson(personEntity.getFirstName(), personEntity.getLastName(), medicalRecords);
             long age = calculateAge(medicalRecord);
 
-            persons.add(personMapper.toPersonExtendedDto(personEntity, age, medicalRecordMapper.toMedicalHistory(medicalRecord),new ArrayList<>()));
+            persons.add(personMapper.toPersonExtendedDto(personEntity, age, medicalRecordMapper.toMedicalHistory(medicalRecord), new ArrayList<>()));
         }
 
         return persons;
@@ -129,7 +127,7 @@ public class PersonServiceImpl implements PersonService {
 
 
     @Override
-    public TreeSet<String> findPersonsEmail(String city)  {
+    public TreeSet<String> findPersonsEmail(String city) {
         return personRepository.findEmailsByCity(city);
     }
 
@@ -142,9 +140,16 @@ public class PersonServiceImpl implements PersonService {
 
     public long calculateAge(MedicalRecordEntity medicalRecord) {
         if (medicalRecord == null) {
+            log.debug("Unable to calculate age because no medical history has been found.");
             return 0;
         }
+        log.debug("Age calculation processing...");
+
         LocalDate birthdate = LocalDate.parse(medicalRecord.getBirthdate(), DateTimeFormatter.ofPattern("MM/dd/yyyy"));
-        return birthdate.until(LocalDate.now(), ChronoUnit.YEARS);
+        LocalDate now = LocalDate.now();
+        long age = birthdate.until(now, ChronoUnit.YEARS);
+
+        log.debug("If birthdate is {} and current date is {}, calculated age is {}", birthdate, now, age);
+        return age;
     }
 }

@@ -14,10 +14,10 @@ import java.util.List;
 @Builder
 public class MedicalRecordEntity {
 
-    @NotBlank
+    @NotBlank(message = "Firstname is mandatory")
     private String firstName;
 
-    @NotBlank
+    @NotBlank(message = "Lastname is mandatory")
     private String lastName;
 
     private String birthdate;

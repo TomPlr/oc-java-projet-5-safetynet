@@ -82,7 +82,7 @@ public class PersonRepositoryTest {
     public void findPersonsByStationNumber_shouldReturnPersonsWithAgeRepartitionDto() {
         PersonsWithAgeRepartitionDto result = personRepository.findPersonsByStationNumber(1);
 
-        assertThat(result.Persons()).hasSize(6);
+        assertThat(result.persons()).hasSize(6);
         assertThat(result.totalUnderOrEqual18()).isEqualTo(1);
         assertThat(result.totalOver18()).isEqualTo(5);
     }

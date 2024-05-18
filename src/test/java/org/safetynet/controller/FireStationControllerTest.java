@@ -6,10 +6,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.safetynet.mapper.PersonMapper;
 import org.safetynet.service.FireStationService;
 import org.safetynet.service.PersonService;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -17,6 +17,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
+@ContextConfiguration(locations = "classpath:logback-test.xml")
 public class FireStationControllerTest {
 
     @Mock
@@ -63,7 +64,7 @@ public class FireStationControllerTest {
 
     @Test
     public void testFindPersonsCoveredByFireStation() throws Exception {
-        mockMvc.perform(get("/firestation").contentType(MediaType.APPLICATION_JSON).param("stationNumber","1"))
+        mockMvc.perform(get("/firestation").contentType(MediaType.APPLICATION_JSON).param("stationNumber", "1"))
                 .andExpect(status().isOk())
                 .andReturn();
     }

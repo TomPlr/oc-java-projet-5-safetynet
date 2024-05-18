@@ -32,8 +32,8 @@ public class PhoneAlertControllerTest {
 
     @Test
 
-    public void testFindPersons() throws Exception {
-        mockMvc.perform(get("/phoneAlert").contentType(MediaType.APPLICATION_JSON).param("station", "1"))
+    public void testFindPersonsPhoneNumbers() throws Exception {
+        mockMvc.perform(get("/phoneAlert").contentType(MediaType.APPLICATION_JSON).param("firestation","1"))
                 .andExpect(status().isOk())
                 .andReturn();
 
