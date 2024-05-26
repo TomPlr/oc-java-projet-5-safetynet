@@ -1,7 +1,9 @@
 package org.safetynet.repository.impl;
 
 import lombok.AllArgsConstructor;
+import org.safetynet.dto.FireStationDto;
 import org.safetynet.entity.FireStationEntity;
+import org.safetynet.mapper.FireStationMapper;
 import org.safetynet.repository.FireStationRepository;
 import org.springframework.stereotype.Repository;
 
@@ -16,41 +18,51 @@ import static org.safetynet.repository.impl.DataLoadJson.*;
 @AllArgsConstructor
 public class FireStationRepositoryImpl implements FireStationRepository {
 
+FireStationMapper fireStationMapper;
+
     @Override
-    public List<FireStationEntity> findAll() {
-        return FIRE_STATION_ENTITIES;
+    public List<FireStationDto> findAll() {
+        return FIRE_STATION_ENTITIES.stream().map(fireStationEntity -> fireStationMapper.toFireStationDto(fireStationEntity)).toList();
     }
 
     @Override
-    public FireStationEntity save(FireStationEntity fireStationEntity) throws NoSuchElementException {
-        FIRE_STATION_ENTITIES.add(fireStationEntity);
+    public FireStationDto save(FireStationDto fireStationDto) throws NoSuchElementException {
+        FireStationEntity fireStationEntity = fireStationMapper.toFireStationEntity(fireStationDto);
 
-        Optional<FireStationEntity> optionalFireStation = FIRE_STATION_ENTITIES
+        boolean isPresent = FIRE_STATION_ENTITIES.stream().anyMatch(fireStation -> fireStation.getAddress().equalsIgnoreCase(fireStationEntity.getAddress()) && fireStation.getStation() == fireStationEntity.getStation());
+        if (!isPresent) {
+            FIRE_STATION_ENTITIES.add(fireStationEntity);
+        } else {
+            throw new NoSuchElementException("Fire station already exists");
+        }
+
+        Optional<FireStationDto> optionalFireStation = FIRE_STATION_ENTITIES
                 .stream()
-                .filter(fireStation -> fireStation.equals(fireStationEntity))
+                .filter(fireStationEntity::equals)
+                .map(fireStation -> fireStationMapper.toFireStationDto(fireStation))
                 .findFirst();
 
-        return optionalFireStation.orElseThrow(() -> new NoSuchElementException("FireStationEntity not found"));
+        return optionalFireStation.orElseThrow(() -> new NoSuchElementException("Fire station has not been saved."));
     }
 
     @Override
-    public FireStationEntity update(FireStationEntity fireStationEntity) throws NoSuchElementException {
+    public FireStationDto update(FireStationDto fireStationDto) throws NoSuchElementException {
 
         return FIRE_STATION_ENTITIES.stream()
-                .filter(fireStation -> fireStation.getAddress().equals(fireStationEntity.getAddress()))
+                .filter(fireStation -> fireStation.getAddress().equals(fireStationDto.address()))
                 .findFirst()
                 .map(fs -> {
-                    fs.setStation(fireStationEntity.getStation());
-                    return fs;
+                    fs.setStation(fireStationDto.station());
+                    return fireStationMapper.toFireStationDto(fs);
                 })
-                .orElseThrow(() -> new NoSuchElementException("FireStationEntity not found"));
+                .orElseThrow(() -> new NoSuchElementException("No fire station have been found at this address : " + fireStationDto.address()));
     }
 
     @Override
-    public boolean delete(FireStationEntity fireStationEntity) throws NoSuchElementException {
+    public boolean delete(FireStationDto fireStationDto) throws NoSuchElementException {
         return FIRE_STATION_ENTITIES
                 .removeIf(fireStation ->
-                        fireStation.getAddress().equals(fireStationEntity.getAddress()) && fireStation.getStation() == fireStationEntity.getStation());
+                        fireStation.getAddress().equals(fireStationDto.address()) && fireStation.getStation() == fireStationDto.station());
     }
 
     @Override
@@ -66,9 +78,10 @@ public class FireStationRepositoryImpl implements FireStationRepository {
     }
 
     @Override
-    public FireStationEntity findFireStation(String address) {
+    public FireStationDto findFireStation(String address) {
         return FIRE_STATION_ENTITIES.stream()
                 .filter(fireStationEntity -> fireStationEntity.getAddress().equalsIgnoreCase(address))
+                .map(fireStationEntity -> fireStationMapper.toFireStationDto(fireStationEntity))
                 .findFirst()
                 .orElse(null);
     }

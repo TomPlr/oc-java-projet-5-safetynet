@@ -1,20 +1,20 @@
 package org.safetynet.service;
 
 import jakarta.validation.Valid;
+import org.safetynet.dto.FireStationDto;
 import org.safetynet.dto.GenericResponseDto;
 import org.safetynet.entity.FireStationEntity;
 
-import java.io.IOException;
 import java.util.List;
 
 public interface FireStationService {
-    List<FireStationEntity> findAll() ;
+    List<FireStationDto> findAll() ;
 
-    FireStationEntity save(@Valid FireStationEntity fireStation) ;
+    FireStationDto save(@Valid FireStationDto fireStation) ;
 
-    FireStationEntity update(FireStationEntity fireStation) ;
+    FireStationDto update(FireStationDto fireStation) ;
 
-    GenericResponseDto delete(FireStationEntity fireStation) ;
+    GenericResponseDto delete(FireStationDto fireStation) ;
 
     /**
      * Get addresses by fire station

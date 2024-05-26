@@ -4,6 +4,7 @@ package org.safetynet.controller;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.safetynet.dto.FireStationDto;
 import org.safetynet.dto.GenericResponseDto;
 import org.safetynet.dto.PersonsWithAgeRepartitionDto;
 import org.safetynet.entity.FireStationEntity;
@@ -25,31 +26,31 @@ public class FireStationController {
     private final PersonService personService;
 
     @GetMapping
-    public ResponseEntity<List<FireStationEntity>> getFireStations() {
+    public ResponseEntity<List<FireStationDto>> getFireStations() {
         log.info("Getting fire stations...");
-        List<FireStationEntity> findAll = fireStationService.findAll();
+        List<FireStationDto> findAll = fireStationService.findAll();
         log.info("Found {} fire stations.", findAll.size());
         return new ResponseEntity<>(findAll, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<FireStationEntity> createFireStation(@Valid @RequestBody FireStationEntity fireStation) {
+    public ResponseEntity<FireStationDto> createFireStation(@Valid @RequestBody FireStationDto fireStation) {
         log.info("Creating new fire station...");
-        FireStationEntity fireStationEntity = fireStationService.save(fireStation);
-        log.info("Created new fire station: {}", fireStationEntity);
-        return new ResponseEntity<>(fireStationEntity, HttpStatus.CREATED);
+        FireStationDto fireStationDto = fireStationService.save(fireStation);
+        log.info("Created new fire station: {}", fireStationDto);
+        return new ResponseEntity<>(fireStationDto, HttpStatus.CREATED);
     }
 
     @PutMapping
-    public ResponseEntity<FireStationEntity> updateFireStation(@Valid @RequestBody FireStationEntity fireStation) {
+    public ResponseEntity<FireStationDto> updateFireStation(@Valid @RequestBody FireStationDto fireStation) {
         log.info("Updating fire station...");
-        FireStationEntity fireStationEntity = fireStationService.save(fireStation);
-        log.info("Updated new fire station: {}", fireStationEntity);
-        return new ResponseEntity<>(fireStationEntity, HttpStatus.OK);
+        FireStationDto fireStationDto = fireStationService.update(fireStation);
+        log.info("Updated new fire station: {}", fireStationDto);
+        return new ResponseEntity<>(fireStationDto, HttpStatus.OK);
     }
 
     @DeleteMapping
-    public ResponseEntity<GenericResponseDto> deleteFireStation(@RequestBody FireStationEntity fireStation) {
+    public ResponseEntity<GenericResponseDto> deleteFireStation(@RequestBody FireStationDto fireStation) {
         log.info("Deleting fire station...");
         GenericResponseDto genericResponseDto = fireStationService.delete(fireStation);
         log.info("{}", (genericResponseDto != null) ? genericResponseDto.details() : "no details");
