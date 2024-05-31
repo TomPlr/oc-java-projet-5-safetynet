@@ -5,6 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.safetynet.dto.MedicalRecordDto;
 import org.safetynet.entity.MedicalRecordEntity;
 import org.safetynet.dto.GenericResponseDto;
 import org.safetynet.repository.MedicalRecordRepository;
@@ -27,37 +28,42 @@ public class MedicalRecordServiceTest {
 
     @Test
     public void testFindAll() throws IOException {
-        List<MedicalRecordEntity> expectedMedicalRecordEntities = Arrays.asList(MedicalRecordEntity.builder().firstName("Test").lastName("Test").birthdate("01/01/1970").medications(null).allergies(null).build(), MedicalRecordEntity.builder().firstName("Test2").lastName("Test2").birthdate("02/01/1970").medications(null).allergies(null).build());
+        final List<MedicalRecordDto> expectedMedicalRecordDtos = List.of(
+                new MedicalRecordDto("John","Doe", "01/01/1970",null,null),
+                new MedicalRecordDto("John","Doe", "02/02/1970",null,null)
+        );
 
-        when(medicalRecordRepository.findAll()).thenReturn(expectedMedicalRecordEntities);
+        when(medicalRecordRepository.findAll()).thenReturn(expectedMedicalRecordDtos);
 
-        List<MedicalRecordEntity> medicalRecordEntities = medicalRecordService.findAll();
+        List<MedicalRecordDto> result = medicalRecordService.findAll();
 
-        assertThat(medicalRecordEntities).isEqualTo(expectedMedicalRecordEntities);
+        assertThat(result).isEqualTo(expectedMedicalRecordDtos);
     }
 
     @Test
-    public void testSave() throws IOException {
-        MedicalRecordEntity medicalRecordEntity = MedicalRecordEntity.builder().firstName("Test").lastName("Test").birthdate("01/01/1970").medications(null).allergies(null).build();
+    public void testSave() {
+        final MedicalRecordDto expectedMedicalRecordDto = new MedicalRecordDto("John","Doe","01/01/1970" ,null,null);
 
-        when(medicalRecordRepository.save(medicalRecordEntity)).thenReturn(medicalRecordEntity);
+        when(medicalRecordRepository.save(expectedMedicalRecordDto)).thenReturn(expectedMedicalRecordDto);
 
-        assertThat(medicalRecordService.save(medicalRecordEntity)).isEqualTo(medicalRecordEntity);
+        MedicalRecordDto result = medicalRecordService.save(expectedMedicalRecordDto);
+
+        assertThat(result).isEqualTo(expectedMedicalRecordDto);
     }
 
     @Test
-    public void testUpdate() throws IOException {
-        MedicalRecordEntity medicalRecordEntity = MedicalRecordEntity.builder().firstName("Test").lastName("Test").birthdate("01/01/1970").medications(null).allergies(null).build();
+    public void testUpdate() {
+        final MedicalRecordDto expectedMedicalRecordDto =  new MedicalRecordDto("John","Doe","01/01/1970" ,null,null);
 
-        when(medicalRecordRepository.save(medicalRecordEntity)).thenReturn(medicalRecordEntity);
+        when(medicalRecordRepository.update(expectedMedicalRecordDto)).thenReturn(expectedMedicalRecordDto);
 
-        medicalRecordService.update(medicalRecordEntity);
+        MedicalRecordDto result = medicalRecordService.update(expectedMedicalRecordDto);
 
-        assertThat(medicalRecordService.save(medicalRecordEntity)).isEqualTo(medicalRecordEntity);
+        assertThat(result).isEqualTo(expectedMedicalRecordDto);
     }
 
     @Test
-    public void testDelete_return_success_when_medicalRecord_is_valid() throws IOException {
+    public void testDelete_return_success_when_medicalRecord_is_valid()  {
         String firstName = "Test";
         String lastName = "Test";
 

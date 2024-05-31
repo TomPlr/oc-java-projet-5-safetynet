@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.safetynet.dto.GenericResponseDto;
 import org.safetynet.dto.PersonDto;
+import org.safetynet.dto.PersonLiteDto;
 import org.safetynet.entity.PersonEntity;
 import org.safetynet.service.PersonService;
 import org.springframework.http.HttpStatus;
@@ -22,19 +23,19 @@ public class PersonController {
     private final PersonService personService;
 
     @GetMapping()
-    public ResponseEntity<List<PersonEntity>> getPersons() {
+    public ResponseEntity<List<PersonDto>> getPersons() {
         log.info("Getting all persons...");
-        List<PersonEntity> personEntities = personService.findAll();
-        log.info("Found {} persons.", personEntities.size());
-        return new ResponseEntity<>(personEntities, HttpStatus.OK);
+        List<PersonDto> personDtos = personService.findAll();
+        log.info("Found {} persons.", personDtos.size());
+        return new ResponseEntity<>(personDtos, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<PersonEntity> createPerson(@Valid @RequestBody PersonEntity person) {
+    public ResponseEntity<PersonDto> createPerson(@Valid @RequestBody PersonDto person) {
         log.info("Creating a new person...");
-        PersonEntity personEntity = personService.save(person);
+        PersonDto personDto = personService.save(person);
         log.info("New person created!");
-        return new ResponseEntity<>(personEntity, HttpStatus.CREATED);
+        return new ResponseEntity<>(personDto, HttpStatus.CREATED);
     }
 
     @DeleteMapping
@@ -46,10 +47,10 @@ public class PersonController {
     }
 
     @PutMapping
-    public ResponseEntity<PersonDto> updatePerson(@RequestBody PersonEntity person) {
+    public ResponseEntity<PersonLiteDto> updatePerson(@RequestBody PersonDto person) {
         log.info("Updating a person...");
-        PersonDto personDto = personService.update(person);
+        PersonLiteDto personLiteDto = personService.update(person);
         log.info("Person updated!");
-        return new ResponseEntity<>(personDto, HttpStatus.OK);
+        return new ResponseEntity<>(personLiteDto, HttpStatus.OK);
     }
 }

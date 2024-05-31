@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.safetynet.SafetyNetApplicationTests;
 import org.safetynet.dto.PersonDto;
+import org.safetynet.dto.PersonLiteDto;
 import org.safetynet.dto.PersonsWithAgeRepartitionDto;
 import org.safetynet.entity.PersonEntity;
 import org.safetynet.repository.impl.DataLoadJson;
@@ -31,23 +32,24 @@ public class PersonRepositoryTest {
     }
 
     @Test
-    public void findAllTest() {
-        List<PersonEntity> personEntities = personRepository.findAll();
+    public void testFindAll() {
+        final List<PersonDto> personDtos = personRepository.findAll();
 
-        assertThat(personEntities).hasSize(23);
+        assertThat(personDtos).hasSize(23);
     }
 
     @Test
-    public void save_shouldReturnSavedPerson() {
-        PersonEntity personEntity = PersonEntity.builder().firstName("Test").lastName("Test").address("123 Test Rd").city("Test City").zip("42").phone("123456789").email("email@email.com").build();
+    public void testSave() {
+        final PersonDto personDto =
+                new PersonDto("John", "Doe", "123 Test Rd", "Test City", "42", "123456789", "email@email.com");
 
-        PersonEntity result = personRepository.save(personEntity);
+        PersonDto result = personRepository.save(personDto);
 
-        assertThat(result).isEqualTo(personEntity);
+        assertThat(result).isEqualTo(personDto);
     }
 
     @Test
-    public void delete_shouldReturnTrue() {
+    public void testDelete_return_true_if_person_exists() {
         boolean result = personRepository.delete("John", "Boyd");
 
         assertThat(result).isTrue();
@@ -55,31 +57,33 @@ public class PersonRepositoryTest {
     }
 
     @Test
-    public void delete_shouldReturnFalseIfPersonDoesNotExist() {
+    public void testDelete_return_false_if_person_does_not_exist() {
         boolean result = personRepository.delete("John", "Test");
 
         assertThat(result).isFalse();
     }
 
     @Test
-    public void update_shouldUpdatedPersonDto() {
-        PersonEntity personEntity = PersonEntity.builder().firstName("John").lastName("Boyd").address("123 Test St").build();
+    public void testUpdate_return_updated_person_if_person_exists() {
+        final PersonDto personDto =
+                new PersonDto("John", "Boyd", "123 Test Rd", "Test City", "42", "123456789", "email@email.com");
 
-        PersonDto result = personRepository.update(personEntity);
+        PersonLiteDto result = personRepository.update(personDto);
 
-        assertThat(result.address()).isEqualTo(personEntity.getAddress());
+        assertThat(result.address()).isEqualTo(personDto.address());
     }
 
     @Test
-    public void update_shouldThrowExceptionIfPersonDoesNotExist() {
-        PersonEntity personEntity = PersonEntity.builder().firstName("John").lastName("Test").address("123 Test St").build();
+    public void testUpdate_throw_exception_if_person_does_not_exist() {
+        final PersonDto personDto =
+                new PersonDto("John", "Doe", "123 Test Rd", "Test City", "42", "123456789", "email@email.com");
 
-        assertThatThrownBy(() -> personRepository.update(personEntity))
+        assertThatThrownBy(() -> personRepository.update(personDto))
                 .isInstanceOf(NoSuchElementException.class);
     }
 
     @Test
-    public void findPersonsByStationNumber_shouldReturnPersonsWithAgeRepartitionDto() {
+    public void testFindPersonsByStationNumber() {
         PersonsWithAgeRepartitionDto result = personRepository.findPersonsByStationNumber(1);
 
         assertThat(result.persons()).hasSize(6);
@@ -88,14 +92,14 @@ public class PersonRepositoryTest {
     }
 
     @Test
-    public void findPersonsByAddress_shouldReturnPersonEntities() {
-        List<PersonEntity> result = personRepository.findPersonsByAddress("1509 Culver St");
+    public void testFindPersonsByAddress() {
+        List<PersonDto> result = personRepository.findPersonsByAddress("1509 Culver St");
 
         assertThat(result).hasSize(5);
     }
 
     @Test
-    public void findPersonsPhoneNumbersByAddresses_shouldReturnPhoneNumbers() {
+    public void testFindPersonsPhoneNumbersByAddresses() {
         List<String> phoneNumbers = List.of("841-874-6513", "841-874-6512", "841-874-6544");
         List<String> addresses = List.of("1509 Culver St");
 
@@ -105,22 +109,22 @@ public class PersonRepositoryTest {
     }
 
     @Test
-    public void findPersonByName_shouldReturnPersonEntity() {
-        PersonEntity result = personRepository.findPersonByName("John", "Boyd");
+    public void testFindPersonByName_return_person_if_person_exists() {
+        PersonDto result = personRepository.findPersonByName("John", "Boyd");
 
         assertThat(result).isNotNull();
     }
 
     @Test
-    public void findPersonByName_shouldReturnNullIfPersonDoesntExist() {
-        PersonEntity result = personRepository.findPersonByName("John", "Test");
+    public void testFindPersonByName_return_null_if_person_does_not_exist() {
+        PersonDto result = personRepository.findPersonByName("John", "Test");
 
         assertThat(result).isNull();
     }
 
     @Test
-    public void findEmailsByCity_shouldReturnEmails(){
-        TreeSet<String> result= personRepository.findEmailsByCity("Culver");
+    public void findEmailsByCity_shouldReturnEmails() {
+        TreeSet<String> result = personRepository.findEmailsByCity("Culver");
 
         assertThat(result).hasSize(15);
     }

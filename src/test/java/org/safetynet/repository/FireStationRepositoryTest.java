@@ -3,6 +3,7 @@ package org.safetynet.repository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.safetynet.SafetyNetApplicationTests;
+import org.safetynet.dto.FireStationDto;
 import org.safetynet.entity.FireStationEntity;
 import org.safetynet.repository.impl.DataLoadJson;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,42 +29,44 @@ class FireStationRepositoryTest {
 
     @Test
     public void findAllTest() {
-        List<FireStationEntity> expectedFireStationEntities = fireStationRepository.findAll();
+        List<FireStationDto> expectedFireStationDto = fireStationRepository.findAll();
 
-        assertThat(expectedFireStationEntities).hasSize(13);
+        assertThat(expectedFireStationDto).hasSize(13);
     }
 
     @Test
     public void testSave() {
-        FireStationEntity fireStationEntity = FireStationEntity.builder().station(1).address("123 Test Rd").build();
+        FireStationDto expectedFireStation = new FireStationDto("Address1",1);
 
-        FireStationEntity expectedFireStationEntities = fireStationRepository.save(fireStationEntity);
+        FireStationDto result = fireStationRepository.save(expectedFireStation);
 
-        assertThat(expectedFireStationEntities).isEqualTo(fireStationEntity);
+        assertThat(result).isEqualTo(expectedFireStation);
     }
 
     @Test
-    public void testUpdate_shouldReturnUpdatedEntity() {
-        FireStationEntity fireStationEntity = FireStationEntity.builder().station(10).address("1509 Culver St").build();
+    public void testUpdate_return_updated_firestation() {
+        FireStationDto expectedFireStation = new FireStationDto("1509 Culver St",10);
 
-        FireStationEntity expectedResult = fireStationRepository.update(fireStationEntity);
+        FireStationDto expectedResult = fireStationRepository.update(expectedFireStation);
 
-        assertThat(expectedResult.getStation()).isEqualTo(10);
+        assertThat(expectedResult.station()).isEqualTo(10);
     }
 
 
     @Test
-    public void testDelete_shouldReturnTrue() {
-        FireStationEntity fireStationEntity = FireStationEntity.builder().station(3).address("1509 Culver St").build();
-        boolean expectedResult = fireStationRepository.delete(fireStationEntity);
+    public void testDelete_return_true() {
+        FireStationDto expectedFireStation = new FireStationDto("1509 Culver St",3);
 
-        assertThat(expectedResult).isTrue();
+        boolean result = fireStationRepository.delete(expectedFireStation);
+
+        assertThat(result).isTrue();
     }
 
     @Test
-    public void testDelete_shouldReturnFalse() {
-        FireStationEntity fireStationEntity = FireStationEntity.builder().station(1).address("123 Test Rd").build();
-        boolean expectedResult = fireStationRepository.delete(fireStationEntity);
+    public void testDelete_return_false() {
+        FireStationDto expectedFireStation = new FireStationDto("123 Test Rd",1);
+
+        boolean expectedResult = fireStationRepository.delete(expectedFireStation);
 
         assertThat(expectedResult).isFalse();
     }
@@ -81,10 +84,10 @@ class FireStationRepositoryTest {
     public void findFireStationByAddress_shouldReturnFireStation() {
         FireStationEntity expectedFireStationEntity = FireStationEntity.builder().station(1).address("908 73rd St").build();
 
-        FireStationEntity result = fireStationRepository.findFireStation("908 73rd St");
+        FireStationDto result = fireStationRepository.findFireStation("908 73rd St");
 
-        assertThat(result.getAddress()).isEqualTo(expectedFireStationEntity.getAddress());
-        assertThat(result.getStation()).isEqualTo(expectedFireStationEntity.getStation());
+        assertThat(result.address()).isEqualTo(expectedFireStationEntity.getAddress());
+        assertThat(result.station()).isEqualTo(expectedFireStationEntity.getStation());
 
     }
 

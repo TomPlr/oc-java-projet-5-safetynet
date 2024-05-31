@@ -4,7 +4,6 @@ package org.safetynet.service.impl;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.safetynet.dto.*;
-import org.safetynet.entity.MedicalRecordEntity;
 import org.safetynet.entity.PersonEntity;
 import org.safetynet.mapper.MedicalRecordMapper;
 import org.safetynet.mapper.PersonMapper;
@@ -33,12 +32,12 @@ public class PersonServiceImpl implements PersonService {
     private MedicalRecordMapper medicalRecordMapper;
 
     @Override
-    public List<PersonEntity> findAll() {
+    public List<PersonDto> findAll() {
         return personRepository.findAll();
     }
 
     @Override
-    public PersonEntity save(PersonEntity person) {
+    public PersonDto save(PersonDto person) {
         return personRepository.save(person);
     }
 
@@ -54,7 +53,7 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public PersonDto update(PersonEntity person) {
+    public PersonLiteDto update(PersonDto person) {
         return personRepository.update(person);
     }
 
@@ -72,9 +71,9 @@ public class PersonServiceImpl implements PersonService {
         for (PersonExtendedDto person : persons) {
             if (person.age() < 18) {
 
-                List<PersonDto> familyMembers = persons.stream()
-                        .filter(personModel -> !person.equals(personModel))
-                        .map(personModel -> personMapper.toPersonDto(personModel))
+                List<PersonLiteDto> familyMembers = persons.stream()
+                        .filter(personLiteDto -> !person.equals(personLiteDto))
+                        .map(personLiteDto -> personMapper.toPersonLiteDto(personLiteDto))
                         .toList();
 
                 person.familyMembers().addAll(familyMembers);
@@ -97,29 +96,29 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public PersonExtendedDto findPerson(String firstName, String lastName) {
 
-        PersonEntity personEntity = personRepository.findPersonByName(firstName, lastName);
-        MedicalRecordEntity medicalRecord = medicalRecordRepository.findMedicalRecordByName(firstName, lastName);
+        PersonDto personDto = personRepository.findPersonByName(firstName, lastName);
+        MedicalRecordDto medicalRecord = medicalRecordRepository.findMedicalRecordByName(firstName, lastName);
         long age = calculateAge(medicalRecord);
 
-        return personMapper.toPersonExtendedDto(personEntity, age, medicalRecordMapper.toMedicalHistory(medicalRecord), new ArrayList<>());
+        return personMapper.toPersonExtendedDto(personDto, age, medicalRecordMapper.toMedicalHistory(medicalRecord), new ArrayList<>());
     }
 
     @Override
     public List<PersonExtendedDto> findPersons(String address) {
-        List<MedicalRecordEntity> medicalRecords = new ArrayList<>();
+        List<MedicalRecordDto> medicalRecords = new ArrayList<>();
         List<PersonExtendedDto> persons = new ArrayList<>();
 
-        List<PersonEntity> personEntities = personRepository.findPersonsByAddress(address);
+        List<PersonDto> personDtos = personRepository.findPersonsByAddress(address);
 
-        if (!personEntities.isEmpty()) {
-            medicalRecords = medicalRecordRepository.findMedicalRecordsByPersons(personEntities);
+        if (!personDtos.isEmpty()) {
+            medicalRecords = medicalRecordRepository.findMedicalRecordsByPersons(personDtos);
         }
 
-        for (PersonEntity personEntity : personEntities) {
-            MedicalRecordEntity medicalRecord = getMedicalRecordByPerson(personEntity.getFirstName(), personEntity.getLastName(), medicalRecords);
+        for (PersonDto personDto : personDtos) {
+            MedicalRecordDto medicalRecord = getMedicalRecordByPerson(personDto.firstName(), personDto.lastName(), medicalRecords);
             long age = calculateAge(medicalRecord);
 
-            persons.add(personMapper.toPersonExtendedDto(personEntity, age, medicalRecordMapper.toMedicalHistory(medicalRecord), new ArrayList<>()));
+            persons.add(personMapper.toPersonExtendedDto(personDto, age, medicalRecordMapper.toMedicalHistory(medicalRecord), new ArrayList<>()));
         }
 
         return persons;
@@ -131,21 +130,21 @@ public class PersonServiceImpl implements PersonService {
         return personRepository.findEmailsByCity(city);
     }
 
-    public MedicalRecordEntity getMedicalRecordByPerson(String firstName, String lastName, List<MedicalRecordEntity> medicalRecords) {
+    public MedicalRecordDto getMedicalRecordByPerson(String firstName, String lastName, List<MedicalRecordDto> medicalRecords) {
         return medicalRecords.stream()
-                .filter(medicalRecordEntity -> medicalRecordEntity.getLastName().equalsIgnoreCase(lastName) && medicalRecordEntity.getFirstName().equalsIgnoreCase(firstName))
+                .filter(medicalRecordDto -> medicalRecordDto.lastName().equalsIgnoreCase(lastName) && medicalRecordDto.firstName().equalsIgnoreCase(firstName))
                 .findFirst()
                 .orElse(null);
     }
 
-    public long calculateAge(MedicalRecordEntity medicalRecord) {
+    public long calculateAge(MedicalRecordDto medicalRecord) {
         if (medicalRecord == null) {
             log.debug("Unable to calculate age because no medical history has been found.");
             return 0;
         }
         log.debug("Age calculation processing...");
 
-        LocalDate birthdate = LocalDate.parse(medicalRecord.getBirthdate(), DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+        LocalDate birthdate = LocalDate.parse(medicalRecord.birthdate(), DateTimeFormatter.ofPattern("MM/dd/yyyy"));
         LocalDate now = LocalDate.now();
         long age = birthdate.until(now, ChronoUnit.YEARS);
 

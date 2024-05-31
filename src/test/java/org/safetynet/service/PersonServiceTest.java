@@ -48,36 +48,36 @@ public class PersonServiceTest {
 
     @Test
     public void testFindAll() {
-        List<PersonEntity> expectedPersonEntities = List.of(PersonEntity.builder().firstName("Test1").lastName("Test1").address("123 Test Rd").city("Test City").zip("42").phone("123456789").email("email@email.com").build());
+        List<PersonDto> expectedPersonDtos = List.of(new PersonDto("Test1","Test1","123 Test Rd","Test City","42","123456789","email@email.com"));
 
-        when(personRepository.findAll()).thenReturn(expectedPersonEntities);
+        when(personRepository.findAll()).thenReturn(expectedPersonDtos);
 
-        List<PersonEntity> actualPersonEntities = personService.findAll();
+        List<PersonDto> result = personService.findAll();
 
-        assertThat(actualPersonEntities).isEqualTo(expectedPersonEntities);
+        assertThat(result).isEqualTo(expectedPersonDtos);
     }
 
     @Test
     public void testSave() {
-        PersonEntity personEntity = mock(PersonEntity.class);
+        PersonDto expectedPersonDto = mock(PersonDto.class);
 
-        when(personRepository.save(personEntity)).thenReturn(personEntity);
+        when(personRepository.save(expectedPersonDto)).thenReturn(expectedPersonDto);
 
-        PersonEntity actualPersonEntity = personService.save(personEntity);
+        PersonDto result = personService.save(expectedPersonDto);
 
-        assertThat(actualPersonEntity).isEqualTo(personEntity);
+        assertThat(result).isEqualTo(expectedPersonDto);
     }
 
     @Test
     public void testUpdate() {
-        PersonEntity personEntity = mock(PersonEntity.class);
         PersonDto expectedPersonDto = mock(PersonDto.class);
+        PersonLiteDto expectedPersonLiteDto = mock(PersonLiteDto.class);
 
-        when(personRepository.update(personEntity)).thenReturn(expectedPersonDto);
+        when(personRepository.update(expectedPersonDto)).thenReturn(expectedPersonLiteDto);
 
-        PersonDto result = personService.update(personEntity);
+        PersonLiteDto result = personService.update(expectedPersonDto);
 
-        assertThat(result).isEqualTo(expectedPersonDto);
+        assertThat(result).isEqualTo(expectedPersonLiteDto);
     }
 
     @Test
@@ -109,7 +109,7 @@ public class PersonServiceTest {
     @Test
     public void testFindPersonsCoveredByFireStation_when_firestation_exists() {
         int fireStationNumber = 1;
-        List<PersonDto> personDtoList = List.of(mock(PersonDto.class), mock(PersonDto.class));
+        List<PersonLiteDto> personDtoList = List.of(mock(PersonLiteDto.class), mock(PersonLiteDto.class));
         PersonsWithAgeRepartitionDto expectedResult = new PersonsWithAgeRepartitionDto(personDtoList, 2, 0);
 
         when(personRepository.findPersonsByStationNumber(1)).thenReturn(expectedResult);
@@ -124,17 +124,17 @@ public class PersonServiceTest {
     public void testFindChildrenByAddress() {
         final LocalDate currentDate = LocalDate.now();
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-        List<PersonEntity> personEntities = List.of(
-                PersonEntity.builder().firstName("John").lastName("Doe").address("123 Test Rd").city("Test City").zip("42").phone("123456789").email("email@email.com").build(),
-                PersonEntity.builder().firstName("Jane").lastName("Doe").address("123 Test Rd").city("Test City").zip("42").phone("123456789").email("email@email.com").build()
+        List<PersonDto> personDtos = List.of(
+                new PersonDto("John","Doe","123 Test Rd","Test City","42","123456789","email@email.com"),
+                new PersonDto("Jane","Doe","123 Test Rd","Test City","42","123456789","email@email.com")
         );
-        List<MedicalRecordEntity> medicalRecordEntities = List.of(
-                MedicalRecordEntity.builder().firstName("John").lastName("Doe").birthdate(currentDate.minusYears(5).format(formatter)).medications(null).allergies(null).build(),
-                MedicalRecordEntity.builder().firstName("Jane").lastName("Doe").birthdate(currentDate.minusYears(40).format(formatter)).medications(null).allergies(null).build()
+        List<MedicalRecordDto> medicalRecordDtos = List.of(
+                new MedicalRecordDto("John","Doe", currentDate.minusYears(5).format(formatter),null,null),
+                new MedicalRecordDto("Jane","Doe", currentDate.minusYears(40).format(formatter),null,null)
         );
 
-        when(personRepository.findPersonsByAddress("123 Test St")).thenReturn(personEntities);
-        when(medicalRecordRepository.findMedicalRecordsByPersons(personEntities)).thenReturn(medicalRecordEntities);
+        when(personRepository.findPersonsByAddress("123 Test St")).thenReturn(personDtos);
+        when(medicalRecordRepository.findMedicalRecordsByPersons(personDtos)).thenReturn(medicalRecordDtos);
 
         List<ChildDto> result = personService.findChildrenByAddress("123 Test St");
 
@@ -160,16 +160,17 @@ public class PersonServiceTest {
         final LocalDate currentDate = LocalDate.now();
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
         MedicalHistoryDto medicalHistoryDto = new MedicalHistoryDto(null, null);
-        List<PersonEntity> personEntities = List.of(
-                PersonEntity.builder().firstName("John").lastName("Doe").address("123 Test Rd").city("Test City").zip("42").phone("123456789").email("email@email.com").build()
+        List<PersonDto> personDtos = List.of(
+                new PersonDto("John","Doe","123 Test Rd","Test City","42","123456789","email@email.com")
+
         );
-        List<MedicalRecordEntity> medicalRecordEntities = List.of(
-                MedicalRecordEntity.builder().firstName("John").lastName("Doe").birthdate(currentDate.minusYears(42).format(formatter)).medications(null).allergies(null).build()
+        List<MedicalRecordDto> medicalRecordDtos = List.of(
+                new MedicalRecordDto("John","Doe", currentDate.minusYears(42).format(formatter),null,null)
         );
         List<PersonExtendedDto> expectedPersons = List.of(new PersonExtendedDto("John", "Doe", "123 Test Rd", "email@email.com", 42, "123456789", medicalHistoryDto, new ArrayList<>()));
 
-        when(personRepository.findPersonsByAddress("123 Test Rd")).thenReturn(personEntities);
-        when(medicalRecordRepository.findMedicalRecordsByPersons(personEntities)).thenReturn(medicalRecordEntities);
+        when(personRepository.findPersonsByAddress("123 Test Rd")).thenReturn(personDtos);
+        when(medicalRecordRepository.findMedicalRecordsByPersons(personDtos)).thenReturn(medicalRecordDtos);
 
         List<PersonExtendedDto> result = personService.findPersons("123 Test Rd");
 
@@ -179,7 +180,7 @@ public class PersonServiceTest {
 
 
     @Test
-    public void testFindPersonEmail() throws IOException {
+    public void testFindPersonEmail()  {
         String city = "Test City";
         TreeSet<String> personsEmail = new TreeSet<>();
         personsEmail.add("email@email.com");
@@ -195,37 +196,35 @@ public class PersonServiceTest {
     public void testGetMedicalRecordsByPerson() {
         final LocalDate currentDate = LocalDate.now();
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-        final List<MedicalRecordEntity> medicalRecordEntities = List.of(
-                MedicalRecordEntity.builder().firstName("John").lastName("Doe").birthdate(currentDate.minusYears(42).format(formatter)).medications(null).allergies(null).build(),
-                MedicalRecordEntity.builder().firstName("Jane").lastName("Doe").birthdate(currentDate.minusYears(24).format(formatter)).medications(null).allergies(null).build()
+        List<MedicalRecordDto> medicalRecordDtos = List.of(
+                new MedicalRecordDto("John","Doe", currentDate.minusYears(42).format(formatter),null,null),
+                new MedicalRecordDto("John","Doe", currentDate.minusYears(24).format(formatter),null,null)
         );
         final String firstName = "John";
         final String lastName = "Doe";
 
-        final MedicalRecordEntity expectedMedicalRecordEntity = MedicalRecordEntity.builder().firstName("John").lastName("Doe").birthdate(currentDate.minusYears(42).format(formatter)).medications(null).allergies(null).build();
+        final MedicalRecordDto expectedMedicalRecordDto =  new MedicalRecordDto("John","Doe", currentDate.minusYears(42).format(formatter),null,null);
 
-        MedicalRecordEntity result = personService.getMedicalRecordByPerson(firstName, lastName, medicalRecordEntities);
+        MedicalRecordDto result = personService.getMedicalRecordByPerson(firstName, lastName, medicalRecordDtos);
 
-        assertThat(result.getFirstName()).isEqualTo(expectedMedicalRecordEntity.getFirstName());
-        assertThat(result.getLastName()).isEqualTo(expectedMedicalRecordEntity.getLastName());
-        assertThat(result.getBirthdate()).isEqualTo(expectedMedicalRecordEntity.getBirthdate());
+        assertThat(result.firstName()).isEqualTo(expectedMedicalRecordDto.firstName());
+        assertThat(result.lastName()).isEqualTo(expectedMedicalRecordDto.lastName());
+        assertThat(result.birthdate()).isEqualTo(expectedMedicalRecordDto.birthdate());
     }
 
     @Test
     public void testCalculateAge_when_medicalRecord_exists() {
         final LocalDate currentDate = LocalDate.now();
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-        final MedicalRecordEntity medicalRecordEntity = MedicalRecordEntity.builder().firstName("John").lastName("Doe").birthdate(currentDate.minusYears(42).format(formatter)).medications(null).allergies(null).build();
+        final MedicalRecordDto medicalRecordDto =  new MedicalRecordDto("John","Doe", currentDate.minusYears(42).format(formatter),null,null);
 
-        long result = personService.calculateAge(medicalRecordEntity);
+        long result = personService.calculateAge(medicalRecordDto);
 
         assertThat(result).isEqualTo(42L);
     }
 
     @Test
     public void testCalculateAge_when_medicalRecord_doesNotExist() {
-        final MedicalRecordEntity medicalRecordEntity = null;
-
         long result = personService.calculateAge(null);
 
         assertThat(result).isEqualTo(0);

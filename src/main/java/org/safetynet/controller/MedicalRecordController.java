@@ -3,6 +3,7 @@ package org.safetynet.controller;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.safetynet.dto.MedicalRecordDto;
 import org.safetynet.entity.MedicalRecordEntity;
 import org.safetynet.dto.GenericResponseDto;
 import org.safetynet.service.MedicalRecordService;
@@ -22,27 +23,27 @@ public class MedicalRecordController {
     private final MedicalRecordService medicalRecordService;
 
     @GetMapping
-    public ResponseEntity<List<MedicalRecordEntity>> findMedicalRecords()  {
+    public ResponseEntity<List<MedicalRecordDto>> findMedicalRecords()  {
         log.info("Getting medical records...");
-        List<MedicalRecordEntity> medicalRecords = medicalRecordService.findAll();
+        List<MedicalRecordDto> medicalRecords = medicalRecordService.findAll();
         log.info("Found {} medical records", medicalRecords.size());
         return new ResponseEntity<>(medicalRecords, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<MedicalRecordEntity> createMedicalRecord(@Valid @RequestBody MedicalRecordEntity medicalRecord)  {
+    public ResponseEntity<MedicalRecordDto> createMedicalRecord(@Valid @RequestBody MedicalRecordDto medicalRecord)  {
         log.info("Creating medical record...");
-        MedicalRecordEntity medicalRecordEntity = medicalRecordService.save(medicalRecord);
-        log.info("Created medical record: {}", medicalRecordEntity);
-        return new ResponseEntity<>(medicalRecordEntity, HttpStatus.CREATED);
+        MedicalRecordDto medicalRecordDto = medicalRecordService.save(medicalRecord);
+        log.info("Created medical record: {}", medicalRecordDto);
+        return new ResponseEntity<>(medicalRecordDto, HttpStatus.CREATED);
     }
 
     @PutMapping
-    public ResponseEntity<MedicalRecordEntity> updateMedicalRecord(@Valid @RequestBody MedicalRecordEntity medicalRecord) {
+    public ResponseEntity<MedicalRecordDto> updateMedicalRecord(@Valid @RequestBody MedicalRecordDto medicalRecord) {
         log.info("Updating medical record...");
-        MedicalRecordEntity medicalRecordEntity = medicalRecordService.update(medicalRecord);
-        log.info("Updated medical record: {}", medicalRecordEntity);
-        return new ResponseEntity<>(medicalRecordEntity, HttpStatus.OK);
+        MedicalRecordDto medicalRecordDto = medicalRecordService.update(medicalRecord);
+        log.info("Updated medical record: {}", medicalRecordDto);
+        return new ResponseEntity<>(medicalRecordDto, HttpStatus.OK);
     }
 
     @DeleteMapping

@@ -1,13 +1,12 @@
 package org.safetynet.service.impl;
 
 import lombok.AllArgsConstructor;
-import org.safetynet.entity.MedicalRecordEntity;
+import org.safetynet.dto.MedicalRecordDto;
 import org.safetynet.dto.GenericResponseDto;
 import org.safetynet.repository.MedicalRecordRepository;
 import org.safetynet.service.MedicalRecordService;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -17,17 +16,17 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
     private final MedicalRecordRepository repository;
 
     @Override
-    public List<MedicalRecordEntity> findAll()  {
+    public List<MedicalRecordDto> findAll()  {
         return repository.findAll();
     }
 
     @Override
-    public MedicalRecordEntity save(MedicalRecordEntity medicalRecord)  {
+    public MedicalRecordDto save(MedicalRecordDto medicalRecord)  {
         return repository.save(medicalRecord);
     }
 
     @Override
-    public MedicalRecordEntity update(MedicalRecordEntity medicalRecord)  {
+    public MedicalRecordDto update(MedicalRecordDto medicalRecord)  {
         return repository.update(medicalRecord);
     }
 

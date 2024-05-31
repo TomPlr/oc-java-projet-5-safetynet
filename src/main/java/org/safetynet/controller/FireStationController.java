@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.safetynet.dto.FireStationDto;
 import org.safetynet.dto.GenericResponseDto;
 import org.safetynet.dto.PersonsWithAgeRepartitionDto;
-import org.safetynet.entity.FireStationEntity;
 import org.safetynet.service.FireStationService;
 import org.safetynet.service.PersonService;
 import org.springframework.http.HttpStatus;

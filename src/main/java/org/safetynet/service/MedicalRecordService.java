@@ -1,17 +1,16 @@
 package org.safetynet.service;
 
-import org.safetynet.entity.MedicalRecordEntity;
+import org.safetynet.dto.MedicalRecordDto;
 import org.safetynet.dto.GenericResponseDto;
 
-import java.io.IOException;
 import java.util.List;
 
 public interface MedicalRecordService {
-    List<MedicalRecordEntity> findAll();
+    List<MedicalRecordDto> findAll();
 
-    MedicalRecordEntity save(MedicalRecordEntity medicalRecord) ;
+    MedicalRecordDto save(MedicalRecordDto medicalRecord) ;
 
-    MedicalRecordEntity update(MedicalRecordEntity medicalRecord) ;
+    MedicalRecordDto update(MedicalRecordDto medicalRecord) ;
 
     GenericResponseDto delete(String firstName, String lastName) ;
 }

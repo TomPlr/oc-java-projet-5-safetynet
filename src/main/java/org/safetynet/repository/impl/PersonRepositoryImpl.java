@@ -2,6 +2,7 @@ package org.safetynet.repository.impl;
 
 import lombok.AllArgsConstructor;
 import org.safetynet.dto.PersonDto;
+import org.safetynet.dto.PersonLiteDto;
 import org.safetynet.dto.PersonsWithAgeRepartitionDto;
 import org.safetynet.entity.FireStationEntity;
 import org.safetynet.entity.MedicalRecordEntity;
@@ -25,17 +26,22 @@ public class PersonRepositoryImpl implements PersonRepository {
     private final PersonMapper mapper;
 
     @Override
-    public List<PersonEntity> findAll() {
-        return PERSON_ENTITIES;
+    public List<PersonDto> findAll() {
+        return PERSON_ENTITIES.stream().map(mapper::toPersonDto).toList();
     }
 
     @Override
-    public PersonEntity save(PersonEntity personEntity) {
+    public PersonDto save(PersonDto personDto) {
+        PersonEntity personEntity = mapper.toPersonEntity(personDto);
         PERSON_ENTITIES.add(personEntity);
 
-        Optional<PersonEntity> optionalPersonEntity = PERSON_ENTITIES.stream().filter(person -> person.equals(personEntity)).findFirst();
+        Optional<PersonDto> optionalPersonDto = PERSON_ENTITIES
+                .stream()
+                .filter(person -> person.equals(personEntity))
+                .map(mapper::toPersonDto)
+                .findFirst();
 
-        return optionalPersonEntity.orElseThrow(() -> new NoSuchElementException("Person not found"));
+        return optionalPersonDto.orElseThrow(() -> new NoSuchElementException("Person not found"));
     }
 
     @Override
@@ -45,18 +51,21 @@ public class PersonRepositoryImpl implements PersonRepository {
 
 
     @Override
-    public PersonDto update(PersonEntity personEntity) {
-        Optional<PersonEntity> optionalPersonEntity = PERSON_ENTITIES.stream().filter(person -> personEntity.getFirstName().equalsIgnoreCase(person.getFirstName()) && personEntity.getLastName().equalsIgnoreCase(person.getLastName())).findFirst();
+    public PersonLiteDto update(PersonDto personDto) {
+        Optional<PersonEntity> optionalPersonEntity = PERSON_ENTITIES
+                .stream()
+                .filter(person -> personDto.firstName().equalsIgnoreCase(person.getFirstName()) && personDto.lastName().equalsIgnoreCase(person.getLastName()))
+                .findFirst();
 
 
         return optionalPersonEntity.map(person -> {
-            person.setAddress(personEntity.getAddress());
-            person.setCity(personEntity.getCity());
-            person.setEmail(personEntity.getEmail());
-            person.setZip(personEntity.getZip());
-            person.setPhone(personEntity.getPhone());
+            person.setAddress(personDto.address());
+            person.setCity(personDto.city());
+            person.setEmail(personDto.email());
+            person.setZip(personDto.zip());
+            person.setPhone(personDto.phone());
 
-            return mapper.toPersonDto(person);
+            return mapper.toPersonLiteDto(person);
         }).orElseThrow(() -> new NoSuchElementException("Person not found"));
     }
 
@@ -70,9 +79,9 @@ public class PersonRepositoryImpl implements PersonRepository {
 
         List<String> fireStationsAddresses = FIRE_STATION_ENTITIES.stream().filter(fireStationEntity -> fireStationEntity.getStation() == stationNumber).map(FireStationEntity::getAddress).toList();
 
-        List<PersonDto> persons = PERSON_ENTITIES.stream().filter(personEntity -> fireStationsAddresses.contains(personEntity.getAddress())).map(mapper::toPersonDto).toList();
+        List<PersonLiteDto> persons = PERSON_ENTITIES.stream().filter(personEntity -> fireStationsAddresses.contains(personEntity.getAddress())).map(mapper::toPersonLiteDto).toList();
 
-        for (PersonDto person : persons) {
+        for (PersonLiteDto person : persons) {
             MedicalRecordEntity medicalRecord = MEDICAL_RECORDS_ENTITIES.stream().filter(record -> record.getFirstName().equals(person.firstName()) && record.getLastName().equals(person.lastName())).findFirst().orElse(null);
 
             if (medicalRecord != null) {
@@ -91,9 +100,10 @@ public class PersonRepositoryImpl implements PersonRepository {
     }
 
     @Override
-    public List<PersonEntity> findPersonsByAddress(String address) {
+    public List<PersonDto> findPersonsByAddress(String address) {
         return PERSON_ENTITIES.stream()
                 .filter(personEntity -> address.equalsIgnoreCase(personEntity.getAddress()))
+                .map(mapper::toPersonDto)
                 .toList();
     }
 
@@ -109,9 +119,10 @@ public class PersonRepositoryImpl implements PersonRepository {
     }
 
     @Override
-    public PersonEntity findPersonByName(String firstName, String lastName) {
+    public PersonDto findPersonByName(String firstName, String lastName) {
         return PERSON_ENTITIES.stream()
                 .filter(person -> person.getFirstName().equalsIgnoreCase(firstName) && person.getLastName().equalsIgnoreCase(lastName))
+                .map(mapper::toPersonDto)
                 .findFirst()
                 .orElse(null);
     }

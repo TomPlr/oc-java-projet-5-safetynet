@@ -1,8 +1,10 @@
 package org.safetynet.repository.impl;
 
 import lombok.AllArgsConstructor;
+import org.safetynet.dto.MedicalRecordDto;
+import org.safetynet.dto.PersonDto;
 import org.safetynet.entity.MedicalRecordEntity;
-import org.safetynet.entity.PersonEntity;
+import org.safetynet.mapper.MedicalRecordMapper;
 import org.safetynet.repository.MedicalRecordRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,40 +19,45 @@ import static org.safetynet.repository.impl.DataLoadJson.MEDICAL_RECORDS_ENTITIE
 @AllArgsConstructor
 public class MedicalRecordRepositoryImpl implements MedicalRecordRepository {
 
+    MedicalRecordMapper medicalRecordMapper;
+
     @Override
-    public List<MedicalRecordEntity> findAll() {
-        return MEDICAL_RECORDS_ENTITIES;
+    public List<MedicalRecordDto> findAll() {
+        return MEDICAL_RECORDS_ENTITIES.stream().map(medicalRecord -> medicalRecordMapper.toMedicalRecordDto(medicalRecord)).toList();
     }
 
     @Override
-    public MedicalRecordEntity save(MedicalRecordEntity medicalRecordEntity) {
+    public MedicalRecordDto save(MedicalRecordDto medicalRecordDto) {
+        MedicalRecordEntity medicalRecordEntity = medicalRecordMapper.toMedicalRecordEntity(medicalRecordDto);
+
         MEDICAL_RECORDS_ENTITIES.add(medicalRecordEntity);
 
-        Optional<MedicalRecordEntity> optionalMedicalRecord = MEDICAL_RECORDS_ENTITIES
+        Optional<MedicalRecordDto> optionalMedicalRecord = MEDICAL_RECORDS_ENTITIES
                 .stream()
                 .filter(medicalRecord -> medicalRecord.equals(medicalRecordEntity))
+                .map(medicalRecord -> medicalRecordMapper.toMedicalRecordDto(medicalRecord))
                 .findFirst();
 
 
-        return optionalMedicalRecord.orElseThrow(() -> new NoSuchElementException("MedicalRecordEntity not found"));
+        return optionalMedicalRecord.orElseThrow(() -> new NoSuchElementException("Medical record not found"));
     }
 
     @Override
-    public MedicalRecordEntity update(MedicalRecordEntity medicalRecordEntity) {
+    public MedicalRecordDto update(MedicalRecordDto medicalRecordDto) {
         Optional<MedicalRecordEntity> optionalMedicalRecordEntity = MEDICAL_RECORDS_ENTITIES
                 .stream()
-                .filter(medicalRecord -> medicalRecord.getFirstName().equals(medicalRecordEntity.getFirstName()) && medicalRecord.getLastName().equals(medicalRecordEntity.getLastName()))
+                .filter(medicalRecord -> medicalRecord.getFirstName().equals(medicalRecordDto.firstName()) && medicalRecord.getLastName().equals(medicalRecordDto.lastName()))
                 .findFirst();
 
         return optionalMedicalRecordEntity
                 .map(medicalRecord -> {
-                    medicalRecord.setMedications(medicalRecordEntity.getMedications());
-                    medicalRecord.setBirthdate(medicalRecordEntity.getBirthdate());
-                    medicalRecord.setAllergies(medicalRecordEntity.getAllergies());
+                    medicalRecord.setMedications(medicalRecordDto.medications());
+                    medicalRecord.setBirthdate(medicalRecordDto.birthdate());
+                    medicalRecord.setAllergies(medicalRecordDto.allergies());
 
-                    return medicalRecord;
+                    return medicalRecordMapper.toMedicalRecordDto(medicalRecord);
                 })
-                .orElseThrow(() -> new NoSuchElementException("MedicalRecordEntity not found"));
+                .orElseThrow(() -> new NoSuchElementException("Medical record not found"));
 
     }
 
@@ -62,23 +69,25 @@ public class MedicalRecordRepositoryImpl implements MedicalRecordRepository {
     }
 
     @Override
-    public MedicalRecordEntity findMedicalRecordByName(String firstName, String lastName) {
+    public MedicalRecordDto findMedicalRecordByName(String firstName, String lastName) {
         return MEDICAL_RECORDS_ENTITIES.stream()
                 .filter(record -> record.getFirstName().equals(firstName)
                         && record.getLastName().equals(lastName))
                 .findFirst()
+                .map(medicalRecord -> medicalRecordMapper.toMedicalRecordDto(medicalRecord))
                 .orElse(null);
     }
 
     @Override
-    public List<MedicalRecordEntity> findMedicalRecordsByPersons(List<PersonEntity> persons) {
-        List<MedicalRecordEntity> medicalRecords = new ArrayList<>();
+    public List<MedicalRecordDto> findMedicalRecordsByPersons(List<PersonDto> persons) {
+        List<MedicalRecordDto> medicalRecords = new ArrayList<>();
 
-        for (PersonEntity person : persons) {
+        for (PersonDto person : persons) {
             MEDICAL_RECORDS_ENTITIES.stream()
-                    .filter(record -> record.getFirstName().equals(person.getFirstName())
-                            && record.getLastName().equals(person.getLastName()))
+                    .filter(record -> record.getFirstName().equals(person.firstName())
+                            && record.getLastName().equals(person.lastName()))
                     .findFirst()
+                    .map(medicalRecord -> medicalRecordMapper.toMedicalRecordDto(medicalRecord))
                     .ifPresent(medicalRecords::add);
         }
 

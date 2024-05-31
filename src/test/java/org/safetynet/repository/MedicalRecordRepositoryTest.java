@@ -3,6 +3,8 @@ package org.safetynet.repository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.safetynet.SafetyNetApplicationTests;
+import org.safetynet.dto.MedicalRecordDto;
+import org.safetynet.dto.PersonDto;
 import org.safetynet.entity.MedicalRecordEntity;
 import org.safetynet.entity.PersonEntity;
 import org.safetynet.repository.impl.DataLoadJson;
@@ -27,72 +29,78 @@ public class MedicalRecordRepositoryTest {
     }
 
     @Test
-    public void findAll_shouldReturnAllMedicalRecords() {
-        List<MedicalRecordEntity> medicalRecordRepositories = medicalRecordRepository.findAll();
+    public void testFindAll() {
+        List<MedicalRecordDto> medicalRecordDtos = medicalRecordRepository.findAll();
 
-        assertThat(medicalRecordRepositories).hasSize(23);
+        assertThat(medicalRecordDtos).hasSize(23);
     }
 
     @Test
-    public void save_shouldSaveMedicalRecord() {
-        MedicalRecordEntity medicalRecordEntity = MedicalRecordEntity.builder().firstName("Test").lastName("Test").build();
+    public void testSave() {
+        final MedicalRecordDto expectedMedicalRecordDto =  new MedicalRecordDto("John","Doe","01/01/1970" ,null,null);
 
-        MedicalRecordEntity result = medicalRecordRepository.save(medicalRecordEntity);
+        MedicalRecordDto result = medicalRecordRepository.save(expectedMedicalRecordDto);
 
-        assertThat(result).isEqualTo(medicalRecordEntity);
+        assertThat(result).isEqualTo(expectedMedicalRecordDto);
     }
 
     @Test
-    public void update_shouldSaveMedicalRecord() {
-        MedicalRecordEntity medicalRecordEntity = MedicalRecordEntity.builder().firstName("John").lastName("Boyd").birthdate("0").build();
+    public void testUpdate() {
+        final MedicalRecordDto expectedMedicalRecordDto =  new MedicalRecordDto("John","Boyd","01/01/1970" ,null,null);
 
-        MedicalRecordEntity result = medicalRecordRepository.update(medicalRecordEntity);
+        MedicalRecordDto result = medicalRecordRepository.update(expectedMedicalRecordDto);
 
-        assertThat(result).isNotNull();
+        assertThat(result.birthdate()).isEqualTo("01/01/1970");
     }
 
     @Test
-    public void delete_shouldReturnTrueIfMedicalRecordEntityExists() {
+    public void testDelete_return_true_if_medical_record_exists() {
         boolean result = medicalRecordRepository.delete("John", "Boyd");
 
         assertThat(result).isTrue();
     }
 
     @Test
-    public void delete_shouldReturnFalseIfMedicalRecordEntityDoesNotExist() {
-        boolean result = medicalRecordRepository.delete("Test", "Test");
+    public void testDelete_return_false_if_medical_record_does_not_exist() {
+        boolean result = medicalRecordRepository.delete("John", "Doe");
 
         assertThat(result).isFalse();
     }
 
     @Test
-    public void findMedicalRecordByName_shouldReturnMedicalRecordEntity() {
-        MedicalRecordEntity result = medicalRecordRepository.findMedicalRecordByName("John", "Boyd");
+    public void testFindMedicalRecordByName_return_medical_record_if_person_exists() {
+        MedicalRecordDto result = medicalRecordRepository.findMedicalRecordByName("John", "Boyd");
 
         assertThat(result).isNotNull();
     }
 
     @Test
-    public void findMedicalRecordByName_shouldReturnNullIfMedicalRecordEntityDoesNotExist() {
-        MedicalRecordEntity result = medicalRecordRepository.findMedicalRecordByName("John", "Test");
+    public void testFindMedicalRecordByName_return_null_if_person_does_not_exist() {
+        MedicalRecordDto result = medicalRecordRepository.findMedicalRecordByName("John", "Test");
 
         assertThat(result).isNull();
     }
 
     @Test
-    public void findMedicalRecordsByPersons_shouldReturnMedicalRecordEntities() {
-        List<PersonEntity> personEntities = List.of(PersonEntity.builder().firstName("John").lastName("Boyd").address("1509 Culver St").city("Culver").zip("97451").phone("841-874-6512").email("jaboyd@email.com").build());
+    public void testFindMedicalRecordsByPersons_return_medical_records_if_person_exists() {
+        List<PersonDto> personDtos = List.of(
+                new PersonDto("John","Boyd","1509 Culver St","Culver","97451","841-874-6512","jaboyd@email.com")
 
-        List<MedicalRecordEntity> result = medicalRecordRepository.findMedicalRecordsByPersons(personEntities);
+        );
+
+        List<MedicalRecordDto> result = medicalRecordRepository.findMedicalRecordsByPersons(personDtos);
 
         assertThat(result).hasSize(1);
     }
 
     @Test
-    public void findMedicalRecordsByPersons_shouldReturnNullIfMedicalRecordEntityDoesNotExist() {
-        List<PersonEntity> personEntities = List.of(PersonEntity.builder().firstName("Test").lastName("Test").address("123 Test Rd").city("Test City").zip("42").phone("123456789").email("email@email.com").build());
+    public void testFindMedicalRecordsByPersons_return_null_if_person_does_not_exist() {
+        List<PersonDto> personDtos = List.of(
+                new PersonDto("John","Doe","1509 Culver St","Culver","97451","841-874-6512","jaboyd@email.com")
 
-        List<MedicalRecordEntity> result = medicalRecordRepository.findMedicalRecordsByPersons(personEntities);
+        );
+
+        List<MedicalRecordDto> result = medicalRecordRepository.findMedicalRecordsByPersons(personDtos);
 
         assertThat(result).hasSize(0);
     }

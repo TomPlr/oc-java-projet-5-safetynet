@@ -1,5 +1,7 @@
 package org.safetynet.repository;
 
+import org.safetynet.dto.MedicalRecordDto;
+import org.safetynet.dto.PersonDto;
 import org.safetynet.entity.MedicalRecordEntity;
 import org.safetynet.entity.PersonEntity;
 
@@ -9,25 +11,25 @@ public interface MedicalRecordRepository {
     /**
      * Get list of all persons
      *
-     * @return List<MedicalRecordEntity>
+     * @return List<MedicalRecordDto>
      */
-    List<MedicalRecordEntity> findAll();
+    List<MedicalRecordDto> findAll();
 
     /**
      * Create a new medical record
      *
-     * @param medicalRecordEntity medicalRecordEntity
-     * @return
+     * @param medicalRecord MedicalRecordDto
+     * @return MedicalRecordDto
      */
-    MedicalRecordEntity save(MedicalRecordEntity medicalRecordEntity);
+    MedicalRecordDto save(MedicalRecordDto medicalRecord);
 
     /**
      * Update a medical record
      *
-     * @param medicalRecordEntity MedicalRecordEntity
-     * @return
+     * @param medicalRecord MedicalRecordDto
+     * @return MedicalRecordDto
      */
-    MedicalRecordEntity update(MedicalRecordEntity medicalRecordEntity);
+    MedicalRecordDto update(MedicalRecordDto medicalRecord);
 
     /**
      * Delete a medical record
@@ -43,13 +45,14 @@ public interface MedicalRecordRepository {
      * @param  firstName String
      * @param lastName String
      *
+     * @return MedicalRecordDto
      */
-    MedicalRecordEntity findMedicalRecordByName(String firstName, String lastName);
+    MedicalRecordDto findMedicalRecordByName(String firstName, String lastName);
 
     /**
      * Get medical records of a list of persons
      *
      * @param persons List<PersonEntity>
      */
-    List<MedicalRecordEntity> findMedicalRecordsByPersons(List<PersonEntity> persons);
+    List<MedicalRecordDto> findMedicalRecordsByPersons(List<PersonDto> persons);
 }

@@ -1,6 +1,7 @@
 package org.safetynet.repository;
 
 import org.safetynet.dto.PersonDto;
+import org.safetynet.dto.PersonLiteDto;
 import org.safetynet.dto.PersonsWithAgeRepartitionDto;
 import org.safetynet.entity.PersonEntity;
 
@@ -14,21 +15,21 @@ public interface PersonRepository {
      *
      * @return List<PersonEntity>
      */
-    List<PersonEntity> findAll();
+    List<PersonDto> findAll();
 
     /**
      * Create a new person
      *
-     * @param personEntity PersonEntity
+     * @param personDto PersonDto
      */
-    PersonEntity save(PersonEntity personEntity);
+    PersonDto save(PersonDto personDto);
 
     /**
      * Update a person
      *
-     * @param personEntity PersonEntity
+     * @param personDto PersonDto
      */
-    PersonDto update(PersonEntity personEntity);
+    PersonLiteDto update(PersonDto personDto);
 
     /**
      * Delete a person
@@ -50,7 +51,7 @@ public interface PersonRepository {
      *
      * @param address String
      */
-    List<PersonEntity> findPersonsByAddress(String address);
+    List<PersonDto> findPersonsByAddress(String address);
 
     /**
      * Get a list of phone numbers by fire station
@@ -65,7 +66,7 @@ public interface PersonRepository {
      * @param firstName String
      * @param lastName  String
      */
-    PersonEntity findPersonByName(String firstName, String lastName);
+    PersonDto findPersonByName(String firstName, String lastName);
 
     /**
      * Get persons' email by city
