@@ -2,40 +2,33 @@ package org.safetynet.controller;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Spy;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.safetynet.mapper.PersonMapper;
-import org.safetynet.service.FireStationService;
-import org.safetynet.service.PersonService;
+import org.safetynet.SafetyNetApplicationTests;
+import org.safetynet.repository.impl.DataLoadJson;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import static org.hamcrest.Matchers.everyItem;
+import static org.hamcrest.Matchers.hasKey;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest(classes = {SafetyNetApplicationTests.class})
+@TestPropertySource(locations = {"classpath:application-test.properties"})
 public class FloodControllerTest {
 
-    @Mock
-    private PersonService personService;
-
-    @Mock
-    private FireStationService fireStationService;
-
-    @Spy
-    private PersonMapper personMapper;
-
-    @InjectMocks
+    @Autowired
     private FloodController floodController;
 
     private MockMvc mockMvc;
 
     @BeforeEach
     void setup() {
+        DataLoadJson.init();
         mockMvc = MockMvcBuilders.standaloneSetup(floodController).build();
     }
 
@@ -43,6 +36,8 @@ public class FloodControllerTest {
     public void testFindPersonsWithMedicalHistory() throws Exception {
 
         mockMvc.perform(get("/flood").contentType(MediaType.APPLICATION_JSON).param("stations", "1"))
+                .andExpect(jsonPath("$.length()").value(3))
+                .andExpect(jsonPath("$.*.*", everyItem(hasKey("medicalHistory"))))
                 .andExpect(status().isOk())
                 .andReturn();
 

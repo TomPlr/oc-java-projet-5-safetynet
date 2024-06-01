@@ -6,12 +6,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.safetynet.dto.FireStationDto;
-import org.safetynet.entity.FireStationEntity;
 import org.safetynet.dto.GenericResponseDto;
 import org.safetynet.repository.FireStationRepository;
 import org.safetynet.service.impl.FireStationServiceImpl;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,10 +27,10 @@ class FireStationServiceTest {
 
 
     @Test
-    public void testFindAll()  {
+    public void testFindAll() {
         List<FireStationDto> expectedFireStations = Arrays.asList(
-                new FireStationDto("Address1",1),
-                new FireStationDto("Address2",2)
+                new FireStationDto("Address1", 1),
+                new FireStationDto("Address2", 2)
         );
 
         when(fireStationRepository.findAll()).thenReturn(expectedFireStations);
@@ -43,8 +41,8 @@ class FireStationServiceTest {
     }
 
     @Test
-    public void testSave_return_true_when_fireStationEntity_is_Valid(){
-        FireStationDto fireStation = new FireStationDto("Address1",1);
+    public void testSave_return_true_when_fireStationEntity_is_Valid() {
+        FireStationDto fireStation = new FireStationDto("Address1", 1);
 
         when(fireStationRepository.save(fireStation)).thenReturn(fireStation);
 
@@ -55,7 +53,7 @@ class FireStationServiceTest {
 
     @Test
     public void testSave_return_false_when_fireStationEntity_is_invalid() {
-        FireStationDto fireStation = new FireStationDto("Address1",1);
+        FireStationDto fireStation = new FireStationDto("Address1", 1);
 
         when(fireStationRepository.save(fireStation)).thenThrow(IllegalArgumentException.class);
 
@@ -64,8 +62,8 @@ class FireStationServiceTest {
     }
 
     @Test
-    public void testDelete_return_true()  {
-        FireStationDto fireStation = new FireStationDto("Address1",1);
+    public void testDelete_return_true() {
+        FireStationDto fireStation = new FireStationDto("Address1", 1);
 
         when(fireStationRepository.delete(fireStation)).thenReturn(true);
 
@@ -75,16 +73,16 @@ class FireStationServiceTest {
     }
 
     @Test
-    public void testUpdate()  {
-        FireStationDto fireStation = new FireStationDto("Address1",1);
+    public void testUpdate() {
+        FireStationDto fireStation = new FireStationDto("Address1", 1);
         when(fireStationRepository.update(fireStation)).thenReturn(fireStation);
 
         assertThat(fireStationService.update(fireStation)).isEqualTo(fireStation);
     }
 
     @Test
-    public void testDelete_return_success_when_fireStationEntity_is_valid()  {
-        FireStationDto fireStation = new FireStationDto("Address1",1);
+    public void testDelete_return_success_when_fireStationEntity_is_valid() {
+        FireStationDto fireStation = new FireStationDto("Address1", 1);
 
         when(fireStationRepository.delete(fireStation)).thenReturn(true);
 
@@ -96,8 +94,8 @@ class FireStationServiceTest {
     }
 
     @Test
-    public void testDelete_return_error_when_fireStationEntity_is_invalid()  {
-        FireStationDto fireStation = new FireStationDto("Address1",1);
+    public void testDelete_return_error_when_fireStationEntity_is_invalid() {
+        FireStationDto fireStation = new FireStationDto("Address1", 1);
         when(fireStationRepository.delete(fireStation)).thenReturn(false);
 
         GenericResponseDto response = fireStationService.delete(fireStation);
@@ -109,7 +107,7 @@ class FireStationServiceTest {
 
     @Test
     public void testFindStation_With_Address() {
-        FireStationDto fireStation = new FireStationDto("Address1",1);
+        FireStationDto fireStation = new FireStationDto("Address1", 1);
         String address = "Address1";
 
         when(fireStationRepository.findFireStation(address)

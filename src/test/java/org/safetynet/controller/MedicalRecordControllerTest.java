@@ -2,50 +2,65 @@ package org.safetynet.controller;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.safetynet.service.MedicalRecordService;
+import org.safetynet.SafetyNetApplicationTests;
+import org.safetynet.repository.impl.DataLoadJson;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest(classes = {SafetyNetApplicationTests.class})
+@TestPropertySource(locations = {"classpath:application-test.properties"})
 public class MedicalRecordControllerTest {
 
-    @Mock
-    private MedicalRecordService medicalRecordService;
-
-    @InjectMocks
+    @Autowired
     private MedicalRecordController medicalRecordController;
 
     private MockMvc mockMvc;
 
+
     @BeforeEach
     void setup() {
+        DataLoadJson.init();
         mockMvc = MockMvcBuilders.standaloneSetup(medicalRecordController).build();
+    }
+
+    @Test
+    public void testFetchAllMedicalRecords() throws Exception {
+
+        mockMvc.perform(get("/medicalRecord"))
+                .andExpect(jsonPath("$.length()").value(23))
+                .andExpect(status().isOk());
     }
 
     @Test
     public void testCreateMedicalRecord() throws Exception {
 
-        mockMvc.perform(post("/medicalRecord/").contentType(MediaType.APPLICATION_JSON).content("{\"firstName\":\"Test\",\"lastName\":\"Test\"}"))
-                .andExpect(status().isCreated()).andReturn();
+        mockMvc.perform(post("/medicalRecord").contentType(MediaType.APPLICATION_JSON).content("{\"firstName\":\"Test\",\"lastName\":\"Test\"}"))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.firstName").value("Test"))
+                .andExpect(jsonPath("$.lastName").value("Test"))
+                .andReturn();
     }
 
     @Test
     public void testUpdateMedicalRecord() throws Exception {
-        mockMvc.perform(put("/medicalRecord/").contentType(MediaType.APPLICATION_JSON).content("{\"firstName\":\"Test\",\"lastName\":\"Test\"}"))
-                .andExpect(status().isOk()).andReturn();
+        mockMvc.perform(put("/medicalRecord/").contentType(MediaType.APPLICATION_JSON).content("{\"firstName\":\"John\",\"lastName\":\"Boyd\",\"birthdate\":\"01/01/1970\" }"))
+                .andExpect(status().isOk())
+                .andReturn();
     }
 
     @Test
     public void testDeleteMedicalRecord() throws Exception {
-        mockMvc.perform(delete("/medicalRecord/").contentType(MediaType.APPLICATION_JSON).param("firstName", "Test").param("lastName", "Test"))
-                .andExpect(status().isOk()).andReturn();
+        mockMvc.perform(delete("/medicalRecord/").contentType(MediaType.APPLICATION_JSON).param("firstName", "John").param("lastName", "Boyd"))
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(status().isOk())
+                .andReturn();
     }
 }

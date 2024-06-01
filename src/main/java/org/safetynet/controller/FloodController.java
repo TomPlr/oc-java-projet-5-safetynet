@@ -43,7 +43,9 @@ public class FloodController {
             personsByAddress.put(address, persons);
         }
 
-        log.info("Found {} persons with their medical history.", personsByAddress.size());
+        log.info("Found {} persons with their medical history.", personsByAddress.values().stream()
+                .mapToLong(List::size)
+                .sum());
 
         return new ResponseEntity<>(personsByAddress, HttpStatus.OK);
     }

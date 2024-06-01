@@ -8,15 +8,12 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.safetynet.dto.*;
-import org.safetynet.entity.MedicalRecordEntity;
-import org.safetynet.entity.PersonEntity;
 import org.safetynet.mapper.MedicalRecordMapper;
 import org.safetynet.mapper.PersonMapper;
 import org.safetynet.repository.MedicalRecordRepository;
 import org.safetynet.repository.PersonRepository;
 import org.safetynet.service.impl.PersonServiceImpl;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -48,7 +45,7 @@ public class PersonServiceTest {
 
     @Test
     public void testFindAll() {
-        List<PersonDto> expectedPersonDtos = List.of(new PersonDto("Test1","Test1","123 Test Rd","Test City","42","123456789","email@email.com"));
+        List<PersonDto> expectedPersonDtos = List.of(new PersonDto("Test1", "Test1", "123 Test Rd", "Test City", "42", "123456789", "email@email.com"));
 
         when(personRepository.findAll()).thenReturn(expectedPersonDtos);
 
@@ -125,12 +122,12 @@ public class PersonServiceTest {
         final LocalDate currentDate = LocalDate.now();
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
         List<PersonDto> personDtos = List.of(
-                new PersonDto("John","Doe","123 Test Rd","Test City","42","123456789","email@email.com"),
-                new PersonDto("Jane","Doe","123 Test Rd","Test City","42","123456789","email@email.com")
+                new PersonDto("John", "Doe", "123 Test Rd", "Test City", "42", "123456789", "email@email.com"),
+                new PersonDto("Jane", "Doe", "123 Test Rd", "Test City", "42", "123456789", "email@email.com")
         );
         List<MedicalRecordDto> medicalRecordDtos = List.of(
-                new MedicalRecordDto("John","Doe", currentDate.minusYears(5).format(formatter),null,null),
-                new MedicalRecordDto("Jane","Doe", currentDate.minusYears(40).format(formatter),null,null)
+                new MedicalRecordDto("John", "Doe", currentDate.minusYears(5).format(formatter), null, null),
+                new MedicalRecordDto("Jane", "Doe", currentDate.minusYears(40).format(formatter), null, null)
         );
 
         when(personRepository.findPersonsByAddress("123 Test St")).thenReturn(personDtos);
@@ -161,11 +158,11 @@ public class PersonServiceTest {
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
         MedicalHistoryDto medicalHistoryDto = new MedicalHistoryDto(null, null);
         List<PersonDto> personDtos = List.of(
-                new PersonDto("John","Doe","123 Test Rd","Test City","42","123456789","email@email.com")
+                new PersonDto("John", "Doe", "123 Test Rd", "Test City", "42", "123456789", "email@email.com")
 
         );
         List<MedicalRecordDto> medicalRecordDtos = List.of(
-                new MedicalRecordDto("John","Doe", currentDate.minusYears(42).format(formatter),null,null)
+                new MedicalRecordDto("John", "Doe", currentDate.minusYears(42).format(formatter), null, null)
         );
         List<PersonExtendedDto> expectedPersons = List.of(new PersonExtendedDto("John", "Doe", "123 Test Rd", "email@email.com", 42, "123456789", medicalHistoryDto, new ArrayList<>()));
 
@@ -180,7 +177,7 @@ public class PersonServiceTest {
 
 
     @Test
-    public void testFindPersonEmail()  {
+    public void testFindPersonEmail() {
         String city = "Test City";
         TreeSet<String> personsEmail = new TreeSet<>();
         personsEmail.add("email@email.com");
@@ -197,13 +194,13 @@ public class PersonServiceTest {
         final LocalDate currentDate = LocalDate.now();
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
         List<MedicalRecordDto> medicalRecordDtos = List.of(
-                new MedicalRecordDto("John","Doe", currentDate.minusYears(42).format(formatter),null,null),
-                new MedicalRecordDto("John","Doe", currentDate.minusYears(24).format(formatter),null,null)
+                new MedicalRecordDto("John", "Doe", currentDate.minusYears(42).format(formatter), null, null),
+                new MedicalRecordDto("John", "Doe", currentDate.minusYears(24).format(formatter), null, null)
         );
         final String firstName = "John";
         final String lastName = "Doe";
 
-        final MedicalRecordDto expectedMedicalRecordDto =  new MedicalRecordDto("John","Doe", currentDate.minusYears(42).format(formatter),null,null);
+        final MedicalRecordDto expectedMedicalRecordDto = new MedicalRecordDto("John", "Doe", currentDate.minusYears(42).format(formatter), null, null);
 
         MedicalRecordDto result = personService.getMedicalRecordByPerson(firstName, lastName, medicalRecordDtos);
 
@@ -216,7 +213,7 @@ public class PersonServiceTest {
     public void testCalculateAge_when_medicalRecord_exists() {
         final LocalDate currentDate = LocalDate.now();
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-        final MedicalRecordDto medicalRecordDto =  new MedicalRecordDto("John","Doe", currentDate.minusYears(42).format(formatter),null,null);
+        final MedicalRecordDto medicalRecordDto = new MedicalRecordDto("John", "Doe", currentDate.minusYears(42).format(formatter), null, null);
 
         long result = personService.calculateAge(medicalRecordDto);
 

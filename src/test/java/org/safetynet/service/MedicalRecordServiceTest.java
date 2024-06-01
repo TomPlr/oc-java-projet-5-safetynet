@@ -5,14 +5,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.safetynet.dto.MedicalRecordDto;
-import org.safetynet.entity.MedicalRecordEntity;
 import org.safetynet.dto.GenericResponseDto;
+import org.safetynet.dto.MedicalRecordDto;
 import org.safetynet.repository.MedicalRecordRepository;
 import org.safetynet.service.impl.MedicalRecordServiceImpl;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,8 +27,8 @@ public class MedicalRecordServiceTest {
     @Test
     public void testFindAll() throws IOException {
         final List<MedicalRecordDto> expectedMedicalRecordDtos = List.of(
-                new MedicalRecordDto("John","Doe", "01/01/1970",null,null),
-                new MedicalRecordDto("John","Doe", "02/02/1970",null,null)
+                new MedicalRecordDto("John", "Doe", "01/01/1970", null, null),
+                new MedicalRecordDto("John", "Doe", "02/02/1970", null, null)
         );
 
         when(medicalRecordRepository.findAll()).thenReturn(expectedMedicalRecordDtos);
@@ -42,7 +40,7 @@ public class MedicalRecordServiceTest {
 
     @Test
     public void testSave() {
-        final MedicalRecordDto expectedMedicalRecordDto = new MedicalRecordDto("John","Doe","01/01/1970" ,null,null);
+        final MedicalRecordDto expectedMedicalRecordDto = new MedicalRecordDto("John", "Doe", "01/01/1970", null, null);
 
         when(medicalRecordRepository.save(expectedMedicalRecordDto)).thenReturn(expectedMedicalRecordDto);
 
@@ -53,7 +51,7 @@ public class MedicalRecordServiceTest {
 
     @Test
     public void testUpdate() {
-        final MedicalRecordDto expectedMedicalRecordDto =  new MedicalRecordDto("John","Doe","01/01/1970" ,null,null);
+        final MedicalRecordDto expectedMedicalRecordDto = new MedicalRecordDto("John", "Doe", "01/01/1970", null, null);
 
         when(medicalRecordRepository.update(expectedMedicalRecordDto)).thenReturn(expectedMedicalRecordDto);
 
@@ -63,7 +61,7 @@ public class MedicalRecordServiceTest {
     }
 
     @Test
-    public void testDelete_return_success_when_medicalRecord_is_valid()  {
+    public void testDelete_return_success_when_medicalRecord_is_valid() {
         String firstName = "Test";
         String lastName = "Test";
 
