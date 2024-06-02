@@ -4,7 +4,6 @@ package org.safetynet.service.impl;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.safetynet.dto.*;
-import org.safetynet.entity.PersonEntity;
 import org.safetynet.mapper.MedicalRecordMapper;
 import org.safetynet.mapper.PersonMapper;
 import org.safetynet.repository.FireStationRepository;
@@ -115,7 +114,7 @@ public class PersonServiceImpl implements PersonService {
         }
 
         for (PersonDto personDto : personDtos) {
-            MedicalRecordDto medicalRecord = getMedicalRecordByPerson(personDto.firstName(), personDto.lastName(), medicalRecords);
+            MedicalRecordDto medicalRecord = findMedicalRecordByPerson(personDto.firstName(), personDto.lastName(), medicalRecords);
             long age = calculateAge(medicalRecord);
 
             persons.add(personMapper.toPersonExtendedDto(personDto, age, medicalRecordMapper.toMedicalHistory(medicalRecord), new ArrayList<>()));
@@ -130,7 +129,7 @@ public class PersonServiceImpl implements PersonService {
         return personRepository.findEmailsByCity(city);
     }
 
-    public MedicalRecordDto getMedicalRecordByPerson(String firstName, String lastName, List<MedicalRecordDto> medicalRecords) {
+    public MedicalRecordDto findMedicalRecordByPerson(String firstName, String lastName, List<MedicalRecordDto> medicalRecords) {
         return medicalRecords.stream()
                 .filter(medicalRecordDto -> medicalRecordDto.lastName().equalsIgnoreCase(lastName) && medicalRecordDto.firstName().equalsIgnoreCase(firstName))
                 .findFirst()

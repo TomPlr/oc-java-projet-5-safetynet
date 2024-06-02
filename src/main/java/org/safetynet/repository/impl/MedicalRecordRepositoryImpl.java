@@ -51,9 +51,9 @@ public class MedicalRecordRepositoryImpl implements MedicalRecordRepository {
 
         return optionalMedicalRecordEntity
                 .map(medicalRecord -> {
-                    medicalRecord.setMedications(medicalRecordDto.medications());
-                    medicalRecord.setBirthdate(medicalRecordDto.birthdate());
-                    medicalRecord.setAllergies(medicalRecordDto.allergies());
+                    Optional.ofNullable(medicalRecordDto.medications()).ifPresent(medicalRecord::setMedications);
+                    Optional.ofNullable(medicalRecordDto.birthdate()).ifPresent(medicalRecord::setBirthdate);
+                    Optional.ofNullable(medicalRecordDto.allergies()).ifPresent(medicalRecord::setAllergies);
 
                     return medicalRecordMapper.toMedicalRecordDto(medicalRecord);
                 })

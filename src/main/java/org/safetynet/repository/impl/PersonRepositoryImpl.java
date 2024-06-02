@@ -59,11 +59,11 @@ public class PersonRepositoryImpl implements PersonRepository {
 
 
         return optionalPersonEntity.map(person -> {
-            person.setAddress(personDto.address());
-            person.setCity(personDto.city());
-            person.setEmail(personDto.email());
-            person.setZip(personDto.zip());
-            person.setPhone(personDto.phone());
+            Optional.ofNullable(personDto.address()).ifPresent(person::setAddress);
+            Optional.ofNullable(personDto.city()).ifPresent(person::setCity);
+            Optional.ofNullable(personDto.email()).ifPresent(person::setEmail);
+            Optional.ofNullable(personDto.zip()).ifPresent(person::setZip);
+            Optional.ofNullable(personDto.phone()).ifPresent(person::setPhone);
 
             return mapper.toPersonLiteDto(person);
         }).orElseThrow(() -> new NoSuchElementException("Person not found"));

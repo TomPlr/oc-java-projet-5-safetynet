@@ -190,7 +190,7 @@ public class PersonServiceTest {
     }
 
     @Test
-    public void testGetMedicalRecordsByPerson() {
+    public void testFindMedicalRecordsByPerson() {
         final LocalDate currentDate = LocalDate.now();
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
         List<MedicalRecordDto> medicalRecordDtos = List.of(
@@ -202,7 +202,7 @@ public class PersonServiceTest {
 
         final MedicalRecordDto expectedMedicalRecordDto = new MedicalRecordDto("John", "Doe", currentDate.minusYears(42).format(formatter), null, null);
 
-        MedicalRecordDto result = personService.getMedicalRecordByPerson(firstName, lastName, medicalRecordDtos);
+        MedicalRecordDto result = personService.findMedicalRecordByPerson(firstName, lastName, medicalRecordDtos);
 
         assertThat(result.firstName()).isEqualTo(expectedMedicalRecordDto.firstName());
         assertThat(result.lastName()).isEqualTo(expectedMedicalRecordDto.lastName());
