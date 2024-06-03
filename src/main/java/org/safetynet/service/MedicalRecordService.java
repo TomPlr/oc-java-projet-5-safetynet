@@ -1,16 +1,40 @@
 package org.safetynet.service;
 
-import org.safetynet.dto.MedicalRecordDto;
 import org.safetynet.dto.GenericResponseDto;
+import org.safetynet.dto.MedicalRecordDto;
 
 import java.util.List;
 
 public interface MedicalRecordService {
+    /**
+     * Find all medical records
+     *
+     * @return MedicalRecordDto
+     */
     List<MedicalRecordDto> findAll();
 
-    MedicalRecordDto save(MedicalRecordDto medicalRecord) ;
+    /**
+     * Save a new medical record
+     *
+     * @param medicalRecord MedicalRecordDto
+     * @return MedicalRecordDto
+     */
+    MedicalRecordDto save(MedicalRecordDto medicalRecord);
 
-    MedicalRecordDto update(MedicalRecordDto medicalRecord) ;
+    /**
+     * Update a medical record
+     *
+     * @param medicalRecord MedicalRecordDto
+     * @return MedicalRecordDto
+     */
+    MedicalRecordDto update(MedicalRecordDto medicalRecord);
 
-    GenericResponseDto delete(String firstName, String lastName) ;
+    /**
+     * Delete a medical record
+     *
+     * @param firstName String
+     * @param lastName  String
+     * @return GenericResponseDto
+     */
+    GenericResponseDto delete(String firstName, String lastName);
 }

@@ -6,8 +6,7 @@ import org.safetynet.entity.FireStationEntity;
 
 @Mapper(componentModel = "spring")
 public interface FireStationMapper {
-
     FireStationDto toFireStationDto(FireStationEntity fireStationEntity);
-    FireStationEntity toFireStationEntity(FireStationDto fireStationDto);
 
+    FireStationEntity toFireStationEntity(FireStationDto fireStationDto);
 }

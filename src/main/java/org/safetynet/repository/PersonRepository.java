@@ -13,7 +13,7 @@ public interface PersonRepository {
     /**
      * Get list of all persons
      *
-     * @return List<PersonEntity>
+     * @return List<PersonDto>
      */
     List<PersonDto> findAll();
 
@@ -21,6 +21,7 @@ public interface PersonRepository {
      * Create a new person
      *
      * @param personDto PersonDto
+     * @return PersonDto
      */
     PersonDto save(PersonDto personDto);
 
@@ -28,6 +29,7 @@ public interface PersonRepository {
      * Update a person
      *
      * @param personDto PersonDto
+     * @return PersonLiteDto
      */
     PersonLiteDto update(PersonDto personDto);
 
@@ -36,6 +38,7 @@ public interface PersonRepository {
      *
      * @param firstName String
      * @param lastName  String
+     * @return boolean
      */
     boolean delete(String firstName, String lastName);
 
@@ -43,6 +46,7 @@ public interface PersonRepository {
      * Get a list of persons covered by a specific station
      *
      * @param fireStationNumber int
+     * @return PersonsWithAgeRepartitionDto
      */
     PersonsWithAgeRepartitionDto findPersonsByStationNumber(int fireStationNumber);
 
@@ -50,6 +54,7 @@ public interface PersonRepository {
      * Get a list of person living at a specific address
      *
      * @param address String
+     * @return List<PersonDto>
      */
     List<PersonDto> findPersonsByAddress(String address);
 
@@ -57,6 +62,7 @@ public interface PersonRepository {
      * Get a list of phone numbers by fire station
      *
      * @param addresses List<String>
+     * @return TreeSet<String>
      */
     TreeSet<String> findPersonsPhoneNumbersByAddresses(List<String> addresses);
 
@@ -65,6 +71,7 @@ public interface PersonRepository {
      *
      * @param firstName String
      * @param lastName  String
+     * @return PersonDto
      */
     PersonDto findPersonByName(String firstName, String lastName);
 
@@ -72,6 +79,7 @@ public interface PersonRepository {
      * Get persons' email by city
      *
      * @param city String
+     * @return TreeSet<String>
      */
     TreeSet<String> findEmailsByCity(String city);
 
