@@ -29,8 +29,8 @@ public class FloodController {
     private final PersonMapper personMapper;
 
     @GetMapping
-    public ResponseEntity<Map<String, List<PersonWithoutAddressAndEmailDto>>> findPersonsWithMedicalHistory(@RequestParam int[] stations) {
-        log.info("Retrieving persons with their medical history...");
+    public ResponseEntity<Map<String, List<PersonWithoutAddressAndEmailDto>>> findPersonsByAddress(@RequestParam int[] stations) {
+        log.info("Retrieving addresses by station numbers...");
         Map<String, List<PersonWithoutAddressAndEmailDto>> personsByAddress = new HashMap<>();
         List<String> addresses = new ArrayList<>();
 
@@ -38,12 +38,13 @@ public class FloodController {
             addresses.addAll(fireStationService.findAddressesByStation(station));
         }
 
+        log.info("Retrieving persons by address...");
         for (String address : addresses) {
             List<PersonWithoutAddressAndEmailDto> persons = personService.findPersons(address).stream().map(personMapper::toPersonWithoutAddressAndEmailDto).toList();
             personsByAddress.put(address, persons);
         }
 
-        log.info("Found {} persons with their medical history.", personsByAddress.values().stream()
+        log.info("Found {} persons in total.", personsByAddress.values().stream()
                 .mapToLong(List::size)
                 .sum());
 

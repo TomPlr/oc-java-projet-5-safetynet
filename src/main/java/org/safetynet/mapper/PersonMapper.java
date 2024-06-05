@@ -23,6 +23,4 @@ public interface PersonMapper {
     PersonWithoutAddressAndEmailDto toPersonWithoutAddressAndEmailDto(PersonExtendedDto personExtendedDto);
 
     PersonWithoutPhoneDto toPersonWithoutPhoneDto(PersonExtendedDto personExtendedDto);
-
-
 }

@@ -12,15 +12,8 @@ import lombok.extern.jackson.Jacksonized;
 @Setter
 @Builder
 public class PersonEntity {
-
-	@NotBlank(message = "First name is mandatory")
-	@Setter(AccessLevel.NONE)
 	private String firstName;
-
-	@NotBlank(message = "Last name is mandatory")
-	@Setter(AccessLevel.NONE)
 	private String lastName;
-
 	private String address;
 	private String city;
 	private String zip;

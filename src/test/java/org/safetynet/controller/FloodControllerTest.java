@@ -33,7 +33,7 @@ public class FloodControllerTest {
     }
 
     @Test
-    public void testFindPersonsWithMedicalHistory() throws Exception {
+    public void testFindPersonsByAddress() throws Exception {
 
         mockMvc.perform(get("/flood").contentType(MediaType.APPLICATION_JSON).param("stations", "1"))
                 .andExpect(jsonPath("$.length()").value(3))
